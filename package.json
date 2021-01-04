@@ -4,7 +4,8 @@
   "description": "My therapy journal",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "predeploy": "cd client && npm run build",
+    "deploy": "gh-pages -d client/build"
   },
   "repository": {
     "type": "git",
