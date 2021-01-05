@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/lincoln-howard-jr/journal/static/css/main.72be9a9e.chunk.css",
-    "main.js": "/lincoln-howard-jr/journal/static/js/main.7b55569d.chunk.js",
-    "main.js.map": "/lincoln-howard-jr/journal/static/js/main.7b55569d.chunk.js.map",
-    "runtime-main.js": "/lincoln-howard-jr/journal/static/js/runtime-main.87b9abcd.js",
-    "runtime-main.js.map": "/lincoln-howard-jr/journal/static/js/runtime-main.87b9abcd.js.map",
-    "static/js/2.0444acff.chunk.js": "/lincoln-howard-jr/journal/static/js/2.0444acff.chunk.js",
-    "static/js/2.0444acff.chunk.js.map": "/lincoln-howard-jr/journal/static/js/2.0444acff.chunk.js.map",
-    "index.html": "/lincoln-howard-jr/journal/index.html",
-    "static/css/main.72be9a9e.chunk.css.map": "/lincoln-howard-jr/journal/static/css/main.72be9a9e.chunk.css.map",
-    "static/js/2.0444acff.chunk.js.LICENSE.txt": "/lincoln-howard-jr/journal/static/js/2.0444acff.chunk.js.LICENSE.txt",
-    "static/media/book.65cd22a3.svg": "/lincoln-howard-jr/journal/static/media/book.65cd22a3.svg",
-    "static/media/plus.a86e5868.svg": "/lincoln-howard-jr/journal/static/media/plus.a86e5868.svg",
-    "static/media/settings.d2739024.svg": "/lincoln-howard-jr/journal/static/media/settings.d2739024.svg",
-    "static/media/skill.23054f65.svg": "/lincoln-howard-jr/journal/static/media/skill.23054f65.svg"
+    "main.css": "/journal/static/css/main.72be9a9e.chunk.css",
+    "main.js": "/journal/static/js/main.7b55569d.chunk.js",
+    "main.js.map": "/journal/static/js/main.7b55569d.chunk.js.map",
+    "runtime-main.js": "/journal/static/js/runtime-main.bf081229.js",
+    "runtime-main.js.map": "/journal/static/js/runtime-main.bf081229.js.map",
+    "static/js/2.0444acff.chunk.js": "/journal/static/js/2.0444acff.chunk.js",
+    "static/js/2.0444acff.chunk.js.map": "/journal/static/js/2.0444acff.chunk.js.map",
+    "index.html": "/journal/index.html",
+    "static/css/main.72be9a9e.chunk.css.map": "/journal/static/css/main.72be9a9e.chunk.css.map",
+    "static/js/2.0444acff.chunk.js.LICENSE.txt": "/journal/static/js/2.0444acff.chunk.js.LICENSE.txt",
+    "static/media/book.65cd22a3.svg": "/journal/static/media/book.65cd22a3.svg",
+    "static/media/plus.a86e5868.svg": "/journal/static/media/plus.a86e5868.svg",
+    "static/media/settings.d2739024.svg": "/journal/static/media/settings.d2739024.svg",
+    "static/media/skill.23054f65.svg": "/journal/static/media/skill.23054f65.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.87b9abcd.js",
+    "static/js/runtime-main.bf081229.js",
     "static/js/2.0444acff.chunk.js",
     "static/css/main.72be9a9e.chunk.css",
     "static/js/main.7b55569d.chunk.js"
