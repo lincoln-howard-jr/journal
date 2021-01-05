@@ -4,9 +4,10 @@ import NavBook from './img/book.svg'
 import NavSettings from './img/settings.svg'
 import './App.css'
 import { useState, useEffect, useRef } from 'react'
-import {register, getCurrentUser, login, entries, retrieveAccessToken} from './auth';
+import {register, getCurrentUser, login, retrieveAccessToken, active} from './auth';
 import Write from './pages/Write'
 import Journal from './pages/Journal'
+import Skills from './pages/Skills'
 
 const attributions = {
   'calendar.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>',
@@ -37,6 +38,10 @@ function App({install, swStatus}) {
       setLoggedIn (false);
     }
   }
+
+  useEffect (() => {
+    setLoggedIn (!!active)
+  }, [active])
 
   useEffect (() => {
     login_fn ()
@@ -76,10 +81,11 @@ function App({install, swStatus}) {
     <>
     <header>
       <h1>{titles [page]}</h1>
-      {/* {!swStatus && <button onClick={install}>Install!</button>} */}
+      {!swStatus && <button onClick={install}>Install!</button>}
     </header>
     <Write display={page === 'write' ? 'grid' : 'none'} />
     <Journal display={page === 'journal' ? 'grid' : 'none'} />
+    <Skills display={page === 'skills' ? 'grid' : 'none'} />
     <nav>
       <ul>
         <li></li>
