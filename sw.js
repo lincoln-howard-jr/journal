@@ -1,6 +1,6 @@
 const shouldCache = (url, method) => {
-  console.log (url, method)
-  return url.startsWith ('http://localhost:3000', 'https://fonts.gstatic.com', 'https://fonts.googleapis.com', 'https://lincoln-howard-jr.github.io/journal') || (url.startsWith ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod') && method.toLowerCase () === 'get');
+  let yes = ['http://localhost:3000', 'https://fonts.gstatic.com', 'https://fonts.googleapis.com', 'https://lincoln-howard-jr.github.io/journal'].filter (start => url.startsWith (start)).length > 0;
+  return yes || (url.startsWith ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod') && method.toLowerCase () === 'get');
 }
 // on install
 self.addEventListener ('install', event => {
