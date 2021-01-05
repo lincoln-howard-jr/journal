@@ -57,16 +57,19 @@ const EntryHeader = ({date, isOpen, open, close}) => {
 
 const EntryContents = ({entries, open}) => entries.map (entry => {
   return open ? (
-    <div key={`entry-${entry.id}`}>
+    <section key={`entry-${entry.id}`}>
+      <h3>{getTime (entry.start)}</h3>
       {
         entry.questions.map ((q, i) => (
-          <p>
-            <b>{q} </b>
-            {entry.answers [i]}
-          </p>
+          <section>
+            <p>
+              <b>{q} </b>
+              {entry.answers [i]}
+            </p>
+          </section>
         ))
       }
-    </div>
+    </section>
   ) : (<div></div>)
 })
 
@@ -79,6 +82,7 @@ function Journal({display}) {
       let req = await api.get ();
       let arr = await req.json ();
       arr = arr.map (el => Object.assign (el, {start: new Date (el.start), end: new Date (el.end)}));
+      arr.sort ((a, b) => b.start - a.start);
       let dict = arr.reduce ((acc, val) => {
         findIndex (acc, 'date', dateShortHand (val.start), {date: printDate (val.start)}).push (val);
         return acc;

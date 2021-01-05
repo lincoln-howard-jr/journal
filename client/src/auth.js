@@ -107,3 +107,24 @@ export const entries = {
     });
   }
 }
+export const skills = {
+  get get () {
+    return () => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/skills', {
+      method: 'get',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    });
+  },
+  get post () {
+    return body => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/skills', {
+      method: 'post',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify (body)
+    });
+  }
+}
+export const active = accessToken;
