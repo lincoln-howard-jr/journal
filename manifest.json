@@ -26,14 +26,14 @@
       "short_name": "Skills",
       "description": "View your coping skills reference sheet",
       "url": "/skills",
-      "icons": [{"src":"icons/Therapy Journal Icon 192x192.svg","sizes":"192x192"}]
+      "icons": [{"src":"/journal/icons/Therapy Journal Icon 192x192.svg","sizes":"192x192"}]
     },
     {
       "name": "Review Your Journal",
       "short_name": "Journal",
       "description": "Read and reflect on your previous journal entries",
       "url": "/journal",
-      "icons": [{"src":"icons/Therapy Journal Icon 192x192.svg","sizes":"192x192"}]
+      "icons": [{"src":"/journal/icons/Therapy Journal Icon 192x192.svg","sizes":"192x192"}]
     }
   ]
 }
