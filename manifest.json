@@ -15,7 +15,7 @@
       "purpose": "maskable any"
     }
   ],
-  "scope": "/",
+  "scope": "/journal",
   "start_url": "/journal",
   "display": "standalone",
   "theme_color": "#000000",
