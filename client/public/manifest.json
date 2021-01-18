@@ -3,20 +3,37 @@
   "name": "My Therapy Journal",
   "icons": [
     {
-      "src": "icons/manifest-icon-192.png",
+      "src": "/journal/icons/manifest-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "icons/manifest-icon-512.png",
+      "src": "/journal/icons/manifest-icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"
     }
   ],
-  "start_url": ".",
+  "scope": "/",
+  "start_url": "/journal",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "shortcuts": [
+    {
+      "name": "Coping Skills Reference",
+      "short_name": "Skills",
+      "description": "View your coping skills reference sheet",
+      "url": "/journal?page=skills",
+      "icons": [{"src":"/journal/icons/Therapy Journal Icon 192x192.svg","sizes":"192x192"}]
+    },
+    {
+      "name": "Review Your Journal",
+      "short_name": "Journal",
+      "description": "Read and reflect on your previous journal entries",
+      "url": "/journal?page=journal",
+      "icons": [{"src":"/journal/icons/Therapy Journal Icon 192x192.svg","sizes":"192x192"}]
+    }
+  ]
 }

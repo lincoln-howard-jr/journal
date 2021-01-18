@@ -1,6 +1,8 @@
 const shouldCache = (url, method) => {
-  console.log (url, method)
-  return url.startsWith ('http://localhost:3000', 'https://fonts.gstatic.com', 'https://fonts.googleapis.com', 'https://lincoln-howard-jr.github.io/journal') || (url.startsWith ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod') && method.toLowerCase () === 'get');
+  if (method !== 'get') return false;
+  let yes = ['http://localhost:3000', 'https://fonts.gstatic.com', 'https://fonts.googleapis.com', 'https://lincoln-howard-jr.github.io/journal', 'https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod'].filter (start => url.startsWith (start));
+  console.log (url, method, yes);
+  return yes.length > 0;
 }
 // on install
 self.addEventListener ('install', event => {
@@ -27,7 +29,7 @@ self.addEventListener('fetch', event => {
   event.waitUntil (
     caches.open ('v1').then (function (cache) {
       if (!shouldCache (event.request.url, event.request.method)) return;
-      return fetch(event.request).then (function (response) {
+      return fetch (event.request).then (function (response) {
         return cache.put (event.request, response);
       });
     })

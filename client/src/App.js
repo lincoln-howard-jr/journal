@@ -2,121 +2,126 @@ import NavSkills from './img/skill.svg'
 import NavPlus from './img/plus.svg'
 import NavBook from './img/book.svg'
 import NavSettings from './img/settings.svg'
-import './App.css'
-import { useState, useEffect, useRef } from 'react'
-import {register, getCurrentUser, login, retrieveAccessToken, active} from './auth';
+import { useState, useRef } from 'react'
+import useAuth from './hooks/useAuth';
 import Write from './pages/Write'
 import Journal from './pages/Journal'
 import Skills from './pages/Skills'
+import Settings from './pages/Settings'
+import './App.css'
+import useSettings from './hooks/useSettings'
 
-const attributions = {
-  'calendar.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>',
-  'pen.svg': 'Icons made by <a href="https://www.flaticon.com/authors/icongeek26" title="Icongeek26">Icongeek26</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'book.svg': 'Icons made by <a href="https://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski">Zlatko Najdenovski</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'plus.svg': 'Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'list.svg': 'Icons made by <a href="https://www.flaticon.com/authors/phatplus" title="phatplus">phatplus</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'skill.svg': 'Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'settings.svg': 'Icons made by <a href="https://www.flaticon.com/authors/srip" title="srip">srip</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>'
-}
 
 const titles = {
-  write: 'Check In',
-  journal: 'Therapy Journal',
-  settings: 'Customize',
-  skills: 'Coping Skills'
+  'write': 'Check In',
+  'journal': 'Therapy Journal',
+  'settings': 'Customize',
+  'skills': 'Coping Skills'
 }
 
 function App({install, swStatus}) {
-  const [page, setPage] = useState ('write');
-  const [loggedIn, setLoggedIn] = useState (null);
-  const login_fn = async () => {
+  const {user, login, register, logout} = useAuth ();
+  const settings = useSettings ();
+  let initialPage = new URLSearchParams(window.location.search).get ('page') || 'write';
+  const [page, setPage] = useState (initialPage);
+  const [prompt, setPrompt] = useState (false);
+  const numRef = useRef ();
+  const codeRef = useRef ();
+  const [answer, setAnswer] = useState (v => console.log (v));
+  const promptForCode = _answer => {
+    setPrompt (true);
+    setAnswer (() => () => {console.log ('answering!'); _answer (codeRef.current.value)});
+  }
+  const [codeSent, setCodeSent] = useState (false);
+  const onCodeSent = () => {
+    setCodeSent (true);
+  }
+  const onRegisterClick = async () => {
     try {
-      await getCurrentUser ()
-      await retrieveAccessToken ();
-      setLoggedIn (true);
+      let raw = numRef.current.value;
+      let phoneNumber = `+1${raw.replaceAll ('-', '')}`;
+      await register (phoneNumber, promptForCode, onCodeSent);
     } catch (e) {
-      setLoggedIn (false);
+
     }
   }
-
-  useEffect (() => {
-    setLoggedIn (!!active)
-  }, [active])
-
-  useEffect (() => {
-    login_fn ()
-  }, []);
-
-  const numRef = useRef ();
-  const pwdRef = useRef ();
-  const onLogInClick = () => {
-    let passwd = pwdRef.current.value;
-    let raw = numRef.current.value;
-    let phoneNumber = `+1${raw.replaceAll ('-', '')}`;
-    login (phoneNumber, passwd);
+  const onLogInClick = async () => {
+    try {
+      let raw = numRef.current.value;
+      let phoneNumber = `+1${raw.replaceAll ('-', '')}`;
+      await login (phoneNumber, promptForCode, onCodeSent);
+    } catch (e) {
+    }
   }
-  const onRegisterClick = () => {
-    let passwd = pwdRef.current.value;
-    let raw = numRef.current.value;
-    let phoneNumber = `+1${raw.replaceAll ('-', '')}`;
-    register (phoneNumber, passwd);
+  // loading animation
+  const [loadingAnimation, setLoadingAnimation] = useState ('none');
+  const freeze = () => {
+    setLoadingAnimation ('grid');
+    return function unfreeze () {setLoadingAnimation ('none')}
   }
-  if (!loggedIn) return (
+  if (!user) return (
     <>
+      <div id="loading-animation" style={{display: loadingAnimation}}></div>
       <header>
         <h1>Therapy Journal</h1>
       </header>
       <main>
-        <h2>can i get ur number?</h2>
-        <div>
-          <input ref={numRef} />
-          <p>(and password)</p>
-          <input type="password" ref={pwdRef} />
+        <h2>{codeSent ? 'code is sending!' : 'can i get ur number?'}</h2>
+        <div className="phone-number-input">
+          <input type="tel" placeholder="123-456-7890" ref={numRef} disabled={!!prompt} />
         </div>
-        <div><button onClick={onLogInClick}>Log In</button><button onClick={onRegisterClick}>Register</button></div>
+        {
+          prompt &&
+          <div className="phone-number-input">
+            <input autoComplete="one-time-code" placeholder="Secret Code" ref={codeRef} />
+          </div>
+        }
+        <div className="phone-number-input">
+          { 
+            !prompt &&
+            <span>
+              <button onClick={onLogInClick}>Get Login Code</button>
+              <button onClick={onRegisterClick}>Register</button>
+            </span>
+          }
+          { prompt && <><button onClick={answer}>Submit!</button></> }
+        </div>
       </main>
     </>
   );
   return (
     <>
-    <header>
-      <h1>{titles [page]}</h1>
-      {!swStatus && <button onClick={install}>Install!</button>}
-    </header>
-    <Write display={page === 'write' ? 'grid' : 'none'} />
-    <Journal display={page === 'journal' ? 'grid' : 'none'} />
-    <Skills display={page === 'skills' ? 'grid' : 'none'} />
-    <nav>
-      <ul>
-        <li></li>
-        <li className={page === 'calendar' ? 'active' : ''} onClick={() => {setPage ('skills')}}>
-          <img alt="" width="32" height="32" src={NavSkills} />
-          <label>Skills</label>
-        </li>
-        <li className={page === 'write' ? 'active' : ''} onClick={() => {setPage ('write')}}>
-          <img alt="" width="32" height="32" src={NavPlus} />
-          <label>Write</label>
-        </li>
-        <li className={page === 'journal' ? 'active' : ''} onClick={() => {setPage ('journal')}}>
-          <img alt="" width="32" height="32" src={NavBook} />
-          <label>Journal</label>
-        </li>
-        <li className={page === 'settings' ? 'active' : ''} onClick={() => {setPage ('settings')}}>
-          <img alt="" width="32" height="32" src={NavSettings} />
-          <label>Settings</label>
-        </li>
-        <li></li>
-      </ul>
-    </nav>
-    <div id="attributions">
-      <h2>Attributions</h2>
-      <ul>
-        {Object.keys (attributions).map (k => (
-          <li key={`attribiution-${k}`}>{k} - {attributions [k]}</li>
-        ))}
-      </ul>
-    </div>
-  </>
+      <div id="loading-animation" style={{display: loadingAnimation}}></div>
+      <header>
+        <h1>{titles [page]}</h1>
+      </header>
+      <Write settings={settings} user={user} freeze={freeze} display={page === 'write' ? 'grid' : 'none'} />
+      <Journal user={user} freeze={freeze} display={page === 'journal' ? 'grid' : 'none'} />
+      <Skills user={user} freeze={freeze} display={page === 'skills' ? 'grid' : 'none'} />
+      <Settings settings={settings} logout={logout} user={user} freeze={freeze} display={page === 'settings' ? 'grid' : 'none'} install={install} swStatus={swStatus} />
+      <nav>
+        <ul>
+          <li></li>
+          <li className={page === 'skills' ? 'active' : ''} onClick={() => {setPage ('skills')}}>
+            <img alt="" width="32" height="32" src={NavSkills} />
+            <label>Skills</label>
+          </li>
+          <li className={page === 'write' ? 'active' : ''} onClick={() => {setPage ('write')}}>
+            <img alt="" width="32" height="32" src={NavPlus} />
+            <label>Write</label>
+          </li>
+          <li className={page === 'journal' ? 'active' : ''} onClick={() => {setPage ('journal')}}>
+            <img alt="" width="32" height="32" src={NavBook} />
+            <label>Journal</label>
+          </li>
+          <li className={page === 'settings' ? 'active' : ''} onClick={() => {setPage ('settings')}}>
+            <img alt="" width="32" height="32" src={NavSettings} />
+            <label>Settings</label>
+          </li>
+          <li></li>
+        </ul>
+      </nav>
+    </>
   );
 }
 

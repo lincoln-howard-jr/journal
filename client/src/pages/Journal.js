@@ -60,6 +60,7 @@ const EntryContents = ({entries, open}) => entries.map (entry => {
     <section key={`entry-${entry.id}`}>
       <h3>{getTime (entry.start)}</h3>
       {
+        entry.entryType !== 'freeform' &&
         entry.questions.map ((q, i) => (
           <section>
             <p>
@@ -68,6 +69,12 @@ const EntryContents = ({entries, open}) => entries.map (entry => {
             </p>
           </section>
         ))
+      }
+      {
+        entry.entryType === 'freeform' &&
+        <section>
+          <p>{entry.freeform}</p>
+        </section>
       }
     </section>
   ) : (<div></div>)
