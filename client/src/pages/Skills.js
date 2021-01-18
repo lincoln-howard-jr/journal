@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react'
-import {skills as api, active} from '../auth'
+import React, { useEffect, useRef, useState } from 'react'
+import {skills as api} from '../auth'
 import Pen from '../img/pen.svg'
 
 const findIndex = (indexedArr, key, value, meta={}) => {
@@ -10,7 +10,7 @@ const findIndex = (indexedArr, key, value, meta={}) => {
   return index.list;
 }
 
-function Skills ({display}) {
+function Skills ({display, freeze}) {
   const [skills, setSkills] = useState ([]);
   const [mode, setMode] = useState ('reference');
   const catRef = useRef ();
@@ -30,18 +30,24 @@ function Skills ({display}) {
   }
   useEffect (() => {
     getSkills ();
-  }, [active]);
+  }, []);
   const openEditor = () => {
     setMode ('edit');
   }
   const submitSkill = async () => {
-    console.log (catRef, sklRef);
-    let body = {
-      category: catRef.current.value,
-      skill: sklRef.current.innerText
+    let unfreeze = freeze ();
+    try {
+      console.log (catRef, sklRef);
+      let body = {
+        category: catRef.current.value,
+        skill: sklRef.current.innerText
+      }
+      await api.post (body);
+      setMode ('reference');
+      unfreeze ();
+    } catch (e) {
+      unfreeze ();
     }
-    await api.post (body);
-    setMode ('reference');
   }
   return (
     <>

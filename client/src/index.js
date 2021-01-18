@@ -6,7 +6,7 @@ const swStatus = localStorage.getItem ('sw-status');
 const install = async () => {
   try {
     if (swStatus) return;
-    await navigator.serviceWorker.register ('/sw.js');
+    await navigator.serviceWorker.register (window.location.href + '/sw.js');
     localStorage.setItem ('sw-status', 'installed')
     alert ('Therapy Journal has installed!');
     window.location.reload ();

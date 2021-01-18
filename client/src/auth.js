@@ -14,14 +14,11 @@ let cognitoUser = null;
 let accessToken = null;
 let refreshToken = null;
 
-export const login = (Username, Password) => new Promise ((resolve, reject) => {
+export const login = (Username) => new Promise ((resolve, reject) => {
   try {
-    authDetails = new AmazonCognitoIdentity.AuthenticationDetails ({Username, Password});
+    authDetails = new AmazonCognitoIdentity.AuthenticationDetails ({Username, ClientMetadata: {phoneNumber: Username}});
     cognitoUser = new AmazonCognitoIdentity.CognitoUser ({Username, Pool});
-    cognitoUser.authenticateUser (authDetails, {
-      onSuccess: r => resolve (r),
-      onFailure: e => reject (e)
-    });
+    resolve ();
   } catch (e) {
     reject (e);
   }
@@ -29,7 +26,6 @@ export const login = (Username, Password) => new Promise ((resolve, reject) => {
 
 export const getCurrentUser = () => new Promise ((resolve, reject) => {
   try {
-    if (!Pool) throw 'Must configure user pool before calling login';
     cognitoUser = Pool.getCurrentUser ();
     resolve ();
   } catch (e) {
@@ -76,15 +72,29 @@ export const signOut = async () => new Promise (async (resolve, reject) => {
   }
 });
 
-export const register = async (phoneNumber, password) => new Promise (async (resolve, reject) => {
+export const register = async (phoneNumber) => new Promise (async (resolve, reject) => {
   const attributePhoneNumber = new AmazonCognitoIdentity.CognitoUserAttribute ({Name: 'phone_number', Value: phoneNumber});
   const customAttributeId = new AmazonCognitoIdentity.CognitoUserAttribute ({Name: 'custom:custom:id', Value: id ()})
   const attributeList = [attributePhoneNumber, customAttributeId];
-  Pool.signUp (phoneNumber, password, attributeList, null, (err, result) => {
+  Pool.signUp (phoneNumber, id (), attributeList, null, (err, result) => {
     if (err) return reject (err);
     cognitoUser = result.user;
-    retrieveAccessToken ().then (s => resolve ()).err (e => reject (e));
+    resolve ();
   })
+});
+
+export const customFlow = (phoneNumber, cb, onCodeSent) => new Promise (async (resolve, reject) => {
+  await login (phoneNumber);
+  cognitoUser.setAuthenticationFlowType ('CUSTOM_CHALLENGE');
+  console.log (cognitoUser, authDetails);
+  cognitoUser.initiateAuth (authDetails, {
+    onSuccess: r => resolve (r),
+    onFailure: e => reject (e),
+    customChallenge: function (challengeParameters) {
+      onCodeSent ();
+      cb (answer => cognitoUser.sendCustomChallengeAnswer (answer, this))
+    }
+  });
 });
 
 export const entries = {
@@ -127,4 +137,3 @@ export const skills = {
     });
   }
 }
-export const active = accessToken;
