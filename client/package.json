@@ -1,6 +1,5 @@
 {
   "name": "client",
-  "homepage": "https://lincoln-howard-jr.github.io/journal",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

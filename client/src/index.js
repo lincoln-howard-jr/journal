@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+
+console.warn = () => {}
+console.error = () => {}
 // import reportWebVitals from './reportWebVitals';
 const swStatus = localStorage.getItem ('sw-status');
 const install = async () => {

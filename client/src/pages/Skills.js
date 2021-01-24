@@ -1,62 +1,36 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {skills as api} from '../auth'
 import Pen from '../img/pen.svg'
 
-const findIndex = (indexedArr, key, value, meta={}) => {
-  let found = indexedArr.filter (el => el [key] === value)
-  if (found.length > 0) return found [0].list;
-  let index = {[key]: value, meta, list: []};
-  indexedArr.push (index);
-  return index.list;
-}
-
-function Skills ({display, freeze}) {
-  const [skills, setSkills] = useState ([]);
+function Skills ({display, skills, submitSkill}) {
   const [mode, setMode] = useState ('reference');
   const catRef = useRef ();
   const sklRef = useRef ();
-  const getSkills = async () => {
-    try {
-      let req = await api.get ();
-      let data = await req.json ();
-      let indexed = data.reduce ((acc, val) => {
-        findIndex (acc, 'category', val.category, {category: val.category}).push (val);
-        return acc;
-      }, []);
-      setSkills (indexed);
-    } catch (e) {
-      alert (e);
-    }
-  }
-  useEffect (() => {
-    getSkills ();
-  }, []);
   const openEditor = () => {
     setMode ('edit');
   }
-  const submitSkill = async () => {
-    let unfreeze = freeze ();
+  const onSubmitSkill = async () => {
     try {
-      console.log (catRef, sklRef);
-      let body = {
-        category: catRef.current.value,
-        skill: sklRef.current.innerText
-      }
-      await api.post (body);
-      setMode ('reference');
-      unfreeze ();
+      await submitSkill ({category: catRef.current.value, skill: sklRef.current.innerText})
     } catch (e) {
-      unfreeze ();
+
     }
+    setMode ('reference');
   }
   return (
     <>
+      <datalist id="skills-categories">
+        {
+          skills.map (category => (
+            <option>{category.meta.category}</option>
+          ))
+        }
+      </datalist>
       <main style={{display: mode === 'edit' ? display : 'none'}}>
         <h2>New Skill</h2>
-        <div>Category: <input ref={catRef} defaultValue="Tools For ..."/></div>
+        <div>Category: <input list="skills-categories" ref={catRef} defaultValue="Tools For"/></div>
         <div>Skill: <p style={{padding: 7.5}} ref={sklRef} contentEditable>...</p></div>
         <div>
-          <button onClick={submitSkill}>Add Skill</button>
+          <button onClick={onSubmitSkill}>Add Skill</button>
           <button onClick={()=>{setMode ('reference')}}>Cancel</button>
         </div>
       </main>
