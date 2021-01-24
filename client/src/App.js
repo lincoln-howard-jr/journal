@@ -8,9 +8,10 @@ import Write from './pages/Write'
 import Journal from './pages/Journal'
 import Skills from './pages/Skills'
 import Settings from './pages/Settings'
-import './App.css'
-import useSettings from './hooks/useSettings'
-
+import useSettings from './hooks/useSettings';
+import useSkills from './hooks/useSkills';
+import useJournal from './hooks/useJournal';
+import './App.css';
 
 const titles = {
   'write': 'Check In',
@@ -19,9 +20,25 @@ const titles = {
   'skills': 'Coping Skills'
 }
 
+// pending actions
+let pending = JSON.parse (localStorage.getItem ('pending-actions') || '[]');
+const handlePending = (actions={}) => {
+  localStorage.setItem ('pending-actions', []);
+  pending.forEach (({action, body}) => actions [action] (body));
+}
+
 function App({install, swStatus}) {
-  const {user, login, register, logout} = useAuth ();
+  // api
+  const {skills, getSkills, submitSkill} = useSkills ();
+  const {entries, getEntries, createEntry} = useJournal ();
   const settings = useSettings ();
+
+  const {user, login, register, logout} = useAuth (() => {
+    getSkills ();
+    getEntries ();
+    handlePending ({'submit-skill': submitSkill, 'create-entry': createEntry});
+  });
+  
   let initialPage = new URLSearchParams(window.location.search).get ('page') || 'write';
   const [page, setPage] = useState (initialPage);
   const [prompt, setPrompt] = useState (false);
@@ -95,9 +112,9 @@ function App({install, swStatus}) {
       <header>
         <h1>{titles [page]}</h1>
       </header>
-      <Write settings={settings} user={user} freeze={freeze} display={page === 'write' ? 'grid' : 'none'} />
-      <Journal user={user} freeze={freeze} display={page === 'journal' ? 'grid' : 'none'} />
-      <Skills user={user} freeze={freeze} display={page === 'skills' ? 'grid' : 'none'} />
+      <Write createEntry={createEntry} settings={settings} user={user} freeze={freeze} display={page === 'write' ? 'grid' : 'none'} />
+      <Journal entries={entries} user={user} freeze={freeze} display={page === 'journal' ? 'grid' : 'none'} />
+      <Skills submitSkill={submitSkill} skills={skills} user={user} display={page === 'skills' ? 'grid' : 'none'} />
       <Settings settings={settings} logout={logout} user={user} freeze={freeze} display={page === 'settings' ? 'grid' : 'none'} install={install} swStatus={swStatus} />
       <nav>
         <ul>

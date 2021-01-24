@@ -1,8 +1,6 @@
 import {useState, useEffect} from 'react';
 import {login as _login, register as _register, getCurrentUser, retrieveAccessToken, refreshSession, signOut, customFlow} from '../auth';
 
-// pull config from local storage if there
-
 export default function useAuth (onSessionActive) {
   // data
   const [user, setUser] = useState (null);
