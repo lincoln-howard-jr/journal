@@ -75,7 +75,7 @@ header {
   align-items: center;
   justify-content: center;
 }
-div#attributions {
+#attributions {
   display: none;
 }
 main {
@@ -161,10 +161,22 @@ section > ul > li {
   opacity: 0.4;
 }
 main.settings > div {
+  margin: 0;
   display: grid;
   align-items: center;
   justify-items: center;
   text-align: center;
+  overflow: hidden;
+  padding: 32px 0;
+}
+main.settings > div:not(:last-of-type) {
+  border-bottom: 1px solid #ccc;
+}
+main.settings > div > *:last-child, main.settings > div > *:first-child {
+  margin: 0;
+}
+main.settings > div > *:not(:first-child):not(:last-child) {
+  margin: 7px;
 }
 main.settings > div.action > * {
   text-decoration: underline;

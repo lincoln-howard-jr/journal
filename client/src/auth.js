@@ -137,3 +137,32 @@ export const skills = {
     });
   }
 }
+
+export const shares = {
+  get get () {
+    return () => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/shares', {
+      method: 'get',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    });
+  },
+  get getById () {
+    return id => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/entries/${id}`, {
+      method: 'get',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    });
+  },
+  get post () {
+    return body => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/shares', {
+      method: 'post',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify (body)
+    });
+  }
+}
