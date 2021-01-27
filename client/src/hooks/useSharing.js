@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {entries as api} from '../auth';
+import {shares as api} from '../auth';
 
 const months = [
   'January',
@@ -42,12 +42,21 @@ const findIndex = (indexedArr=[], key, value, meta={}) => {
   return index.list;
 }
 
-export default function useJournal () {
+export default function useSharing () {
 
-  const [entries, setEntries] = useState ([]);
-  const getEntries = async () => {
+  const [sharing, setSharing] = useState ([]);
+  const getShares = async () => {
     try {
       let req = await api.get ();
+      let arr = await req.json ();
+      setSharing (arr);
+    } catch (e) {
+      alert (e);
+    }
+  }
+  const getShareById = async id => new Promise (async (resolve, reject) => {
+    try {
+      let req = await api.getById (id);
       let arr = await req.json ();
       arr = arr.map (el => Object.assign (el, {start: new Date (el.start), end: new Date (el.end)}));
       arr.sort ((a, b) => b.start - a.start);
@@ -55,36 +64,23 @@ export default function useJournal () {
         findIndex (acc, 'date', dateShortHand (val.start), {date: printDate (val.start)}).push (val);
         return acc;
       }, []);
-      setEntries (dict);
+      resolve (dict);
     } catch (e) {
-      alert (e);
+      reject (e);
     }
-  }
-  const createEntry = async body => new Promise (async (resolve, reject) => {
+  })
+  const shareJournal = async (phone, name) => new Promise (async (resolve, reject) => {
     try {
-      let dsh = dateShortHand (body.start);
-      if (entries [0].date === dsh) {
-        console.log ('adding entry at existing index');
-        entries [0].list.splice (0, 0, body);
-      } else {
-        console.log ('adding entry at new index');
-        entries.splice (0, 0, {'date': dsh, date: printDate (body.start), list: [body]});
-      }
-      console.log (entries);
-      setEntries (entries);
-      await api.post (body);
+      let shareWith = (phone.length === 10) ? `+1${phone}` : phone;
+      await api.post ({shareWith, name});
+
+      alert (`Successfully shared your journal with ${phone}!`);
       resolve ();
     } catch (e) {
-      let pending = JSON.parse (localStorage.getItem ('pending-actions') || '[]');
-      pending.push ({
-        action: 'create-entry',
-        body
-      });
-      localStorage.setItem ('pending-actions', JSON.stringify (pending));
       reject (e);
     }
   })
 
-  return {entries, getEntries, createEntry};
+  return {sharing, getShareById, getShares, shareJournal};
 
 }

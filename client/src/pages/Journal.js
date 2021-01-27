@@ -44,10 +44,24 @@ const EntryContents = ({entries, open}) => entries.map (entry => {
 })
 
 
-function Journal({display, entries}) {
+function Journal({display, entries, isNotMain}) {
   const [open, setOpen] = useState ([]);
 
-  return (
+  return isNotMain ?
+  (
+    <>
+      {entries.map (index => (
+        <article key={`index-${index.date}`}>
+          <EntryHeader date={index.meta.date} isOpen={open.indexOf (index.date) !== -1} open={() => {setOpen (open => [...open, index.date])}} close={() => {
+            setOpen (open => open.filter (d => d !== index.date))
+          }} index={index} />
+          <EntryContents open={open.indexOf (index.date) !== -1} entries={index.list} />
+        </article>
+      ))}
+    </>
+  )
+  :
+  (
     <main style={{display}}>
       {entries.map (index => (
         <article key={`index-${index.date}`}>
@@ -58,7 +72,7 @@ function Journal({display, entries}) {
         </article>
       ))}
     </main>
-  );
+  )
 }
 
 export default Journal
