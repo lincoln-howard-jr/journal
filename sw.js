@@ -1,6 +1,13 @@
+const initialCache = [
+  '/journal/'
+]
 // on install
 self.addEventListener ('install', event => {
-  event.waitUntil (caches.open ('v1'));
+  event.waitUntil (
+    caches.open ('v1').then (cache => {
+      return cache.addAll (initialCache)
+    })
+  );
 });
 
 self.addEventListener('activate', event => {
