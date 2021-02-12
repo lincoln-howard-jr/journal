@@ -16,6 +16,8 @@ self.addEventListener('activate', event => {
 
 self.addEventListener ('fetch', event => {
   
+  console.log (event);
+
   if (event.request.method.toLowerCase () !== 'get') return;
   
   event.respondWith (
