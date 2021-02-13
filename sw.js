@@ -8,7 +8,6 @@ const initialCache = [
 let online = true;
 
 self.addEventListener ('message', event => {
-  console.log (event);
   online = event.data.online;
 });
 
@@ -22,12 +21,10 @@ self.addEventListener ('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  console.log (self.clients.claim ());
+  self.clients.claim ();
 });
 
 self.addEventListener ('fetch', event => {
-  
-  console.log (event, online);
 
   if (event.request.method.toLowerCase () !== 'get') return;
   
@@ -39,7 +36,6 @@ self.addEventListener ('fetch', event => {
         if (!online) throw '';
         event.waitUntil (cache.add (event.request));
       } catch (e) {
-        console.log (e);
       }
       return !!match ? match : fetch (event.request);
     }) ()
