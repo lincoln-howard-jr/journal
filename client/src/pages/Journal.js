@@ -1,29 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import {H2, H3} from './components/Headers'
+import Search from './components/Search';
+import Deferred from './components/Deferred';
+import {runIndexEntries, getTime} from '../lib/indexing';
+import {runScroll} from '../lib/scrolling';
 
-const getTime = (d=new Date ()) => {  
-  return `${(d.getHours () % 12 || 12)}:${`0${d.getMinutes ()}`.slice(-2)} ${d.getHours () > 11 ? 'pm' : 'am'}`;
-}
+const defaultShowCount = 10;
 
-const EntryHeader = ({date, isOpen, open, close}) => {
+const EntryHeader = ({date, isOpen, open, close, count}) => {
   return isOpen ? (
     <header className="entry-header">
-      <span onClick={close}>x</span>
-      <h2>{date}</h2>
+      <span className="fake-button" onClick={close}>close</span>
+      <H2>{date}</H2>
     </header>
   ) : (
     <header className="entry-header">
-      <span onClick={open}>more</span>
-      <h2>{date}</h2>
+      <span className="fake-button" onClick={open}>more</span>
+      <H2>{date}</H2>
+      <div className="pill">
+        <span>{count}</span>
+      </div>
     </header>
   )
 }
 
 const EntryContents = ({entries, open}) => entries.map (entry => {
   return open ? (
-    <section key={`entry-${entry.id}`}>
-      <h3>{getTime (entry.start)}</h3>
+    <section className="journal-entry" key={`entry-${entry.id}`}>
+      <H3 short={getTime (entry.start)}>
+        {getTime (entry.start)} - {getTime (entry.end)}
+      </H3>
       {
-        entry.entryType !== 'freeform' &&
+        (entry.entryType === 'questions' || !entry.entryType) &&
         entry.questions.map ((q, i) => (
           <section>
             <p>
@@ -35,9 +43,16 @@ const EntryContents = ({entries, open}) => entries.map (entry => {
       }
       {
         entry.entryType === 'freeform' &&
-        <section>
+        <section className="journal-entry">
           <p>{entry.freeform}</p>
         </section>
+      }
+      {
+        entry.entryType === 'audio' &&
+          <figure>
+            <figcaption><p>{entry.audio.filename}</p></figcaption>
+            <audio controls src={entry.audio.url} />
+          </figure>
       }
     </section>
   ) : (<div></div>)
@@ -46,31 +61,91 @@ const EntryContents = ({entries, open}) => entries.map (entry => {
 
 function Journal({display, entries, isNotMain}) {
   const [open, setOpen] = useState ([]);
-
-  return isNotMain ?
-  (
+  const [showCount, setShowCount] = useState (defaultShowCount);
+  const [isSearching, setIsSearching] = useState (false);
+  const [query, setQuery] = useState ('');
+  const [searchResults, setSearchResults] = useState ([]);
+  const updateSearch = q => {
+    setIsSearching (true);
+    setQuery (q);
+  }
+  const cancelSearch = () => {
+    setIsSearching (false);
+    setQuery ('');
+    setSearchResults ([]);
+  }
+  const updateCount = () => {
+    setShowCount (defaultShowCount + showCount);
+  };
+  useEffect (() => {
+    if (showCount !== defaultShowCount) runScroll ();
+  }, [showCount]);
+  useEffect (() => {
+    if (query.length) runQuery (query);
+  }, [query]);
+  const runQuery = q => {
+    // delay query until we know user isn't typing
+    setTimeout (() => {
+      // user was typing
+      if (q !== query) return;
+      let all = entries.reduce ((acc, val) => {
+        return [...acc, ...val.list];
+      }, []);
+      let freeformMatch = all.filter (entry => entry.entryType === 'freeform').filter (entry => entry.freeform.toLowerCase ().match (q.toLowerCase ()));
+      let qaMatch = all.filter (entry => entry.entryType !== 'freeform').map (qa => {
+        return Object.assign (qa, {combined: qa.answers.reduce ((acc, val) => {
+          return acc + ' ' + val.toLowerCase ();
+        }, '')});
+      }).filter (qa => qa.combined.match (q.toLowerCase ()));
+      let allMatch = [...qaMatch, ...freeformMatch];
+      setSearchResults (runIndexEntries (allMatch));
+    }, 500);
+  }
+  let body = (
     <>
-      {entries.map (index => (
-        <article key={`index-${index.date}`}>
-          <EntryHeader date={index.meta.date} isOpen={open.indexOf (index.date) !== -1} open={() => {setOpen (open => [...open, index.date])}} close={() => {
-            setOpen (open => open.filter (d => d !== index.date))
-          }} index={index} />
-          <EntryContents open={open.indexOf (index.date) !== -1} entries={index.list} />
-        </article>
-      ))}
+      {entries.map ((index, i) => i < showCount ? (
+        <Deferred delay={(i % 10 + 1) * 85} defferedClassName={''}>
+          <article key={`index-${index.date}`}>
+            <EntryHeader count={index.list.length} date={index.meta.date} isOpen={open.indexOf (index.date) !== -1} open={() => {setOpen (open => [...open, index.date])}} close={() => {
+              setOpen (open => open.filter (d => d !== index.date))
+            }} index={index} />
+            <EntryContents open={open.indexOf (index.date) !== -1} entries={index.list} />
+          </article>
+        </Deferred>
+        ) : i === showCount ? (<div className="grid"><span className="fake-button" onClick={updateCount}>More...</span></div>) : (<div className="none"/>))
+      }
+    </>
+  );
+  if (isSearching) body = (
+    <>
+      <div className="grid">
+        <span className="fake-button" onClick={cancelSearch}>Clear Search Results</span>
+      </div>
+      {
+        searchResults.map ((index, i) => (
+          <Deferred delay={i * 50} defferedClassName="">
+            <article key={`index-search-results-for-${query}-${index.date}`}>
+              <EntryHeader count={index.list.length} date={index.meta.date} isOpen={open.indexOf (index.date) !== -1} open={() => {setOpen (open => [...open, index.date])}} close={() => {
+                setOpen (open => open.filter (d => d !== index.date))
+              }} index={index} />
+              <EntryContents open={open.indexOf (index.date) !== -1} entries={index.list} />
+            </article>
+          </Deferred>
+        ))
+      }
+    </>
+  );
+  return display ==='none' ? (<div/>) : isNotMain ? (
+    <>
+      <Search currentValue={query} updateSearch={updateSearch} cancelSearch={cancelSearch} />
+      {body}
     </>
   )
   :
   (
-    <main style={{display}}>
-      {entries.map (index => (
-        <article key={`index-${index.date}`}>
-          <EntryHeader date={index.meta.date} isOpen={open.indexOf (index.date) !== -1} open={() => {setOpen (open => [...open, index.date])}} close={() => {
-            setOpen (open => open.filter (d => d !== index.date))
-          }} index={index} />
-          <EntryContents open={open.indexOf (index.date) !== -1} entries={index.list} />
-        </article>
-      ))}
+    <main className={display}>
+      <Search currentValue={query} updateSearch={updateSearch} cancelSearch={cancelSearch} />
+      {body}
     </main>
   )
 }

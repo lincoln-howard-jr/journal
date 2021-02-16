@@ -1,0 +1,47 @@
+/* 
+  journal styling
+*/
+@keyframes header-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-250px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+article {
+  animation: header-slide-in 0.6s;
+  min-height: 90px;
+  display: grid;
+  align-items: center;
+}
+.entry-header {
+  grid-template-columns: 1fr 4fr 1fr;
+}
+section:not(:last-of-type) {
+  margin-bottom: 24px;
+}
+section > ul {
+  font-weight: 200;
+  font-size: var(--body-text-size);
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+section > ul > li {
+  line-height: 21px;
+  letter-spacing: 0.5px;
+}
+.pill {
+  display: grid;
+  justify-items: right;
+}
+.pill > span {
+  text-align: center;
+  width: 3ch;
+  border: 1px solid var(--font-color);
+  background-color: var(--background-color);
+  border-radius: 6px;
+}

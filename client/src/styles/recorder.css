@@ -1,0 +1,12 @@
+.recorder-container span {
+  display: inline-block;
+  height: 9ch;
+  width: 9ch;
+  border-radius: 50%;
+  line-height: 9ch;
+  text-align: center;
+  border: 1px solid var(--font-color);
+}
+figcaption.audio-recording {
+  
+}

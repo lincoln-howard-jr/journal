@@ -1,0 +1,161 @@
+/*
+  import font
+*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+/*
+  Declare variables for font color and text sizes
+*/
+:root {
+  --font-color: #030303;
+  --background-color: #fcfcfc;
+  --nav-background-color: #ffffff;
+  --input-background-color: #fcfcfc;
+  --input-border-color: #999;
+  --input-text-color: #030303;
+  --error-color: red;
+  --h1-font-size: clamp(21px, 4.4vmin, 32px);
+  --h2-font-size: clamp(18px, 3.8vmin, 26px);
+  --h3-font-size: clamp(16px, 3vmin, 22px);
+  --body-text-size: clamp(14px, 2.6vmin, 16px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --font-color: lightblue;
+    --background-color: #030303;
+    --nav-background-color: rgba(10, 10, 53, 0.918);
+    --input-background-color: lightblue;
+    --input-text-color: #030303;
+    --input-border-color: #444;
+    --error-color: rgb(255, 53, 87);
+  }
+  img {
+    filter: drop-shadow(
+      0px 0px 4px #fafafa
+    );
+  }
+}
+
+/*
+  reset
+*/
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--background-color);
+}
+/* 
+  default main styling
+*/
+main {
+  width: min(84vw, 900px);
+  margin: 0 auto 98px auto;
+}
+main > div {
+  margin: var(--body-text-size) 0;
+}
+/*
+  general image styling
+*/
+img {
+  width: 100%;
+  user-select: none;
+}
+/* 
+  button styling
+*/
+button {
+  font-family: 'Montserrat', sans-serif;
+  opacity: 0.9;
+  border: 1px solid #666;
+  font-weight: 200;
+  padding: 5px 12px;
+  height: calc(var(--body-text-size) * 1.5 + 10);
+  border-radius: var(--body-text-size);
+  background-color: var(--button-background-color);
+  color: var(--button-text-color);
+  max-width: 30ch;
+  margin-top: var(--h1-font-size); margin-bottom: var(--h1-font-size);
+  user-select: none;
+}
+button:hover {
+  opacity: 1;
+}
+button:first-of-type:not(:last-of-type), button + button:not(:last-of-type) {
+  margin-right: 0;
+  border-right: 1px solid #333;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+button + button {
+  margin-left: 0;
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.fake-button {
+  margin-top: var(--h2-font-size);
+  margin-bottom: var(--h2-font-size); 
+  text-decoration: underline;
+  text-align: center;
+  cursor: pointer;
+}
+/* basic input styling */
+input {
+  background-color: var(--input-background-color);
+  color: var(--input-text-color);
+  border-color: var(--input-border-color);
+  border-width: 1px;
+  padding: 5px;
+  border-radius: 7px;
+}
+input::placeholder {
+  color: var(--input-border-color);
+}
+/*
+  helpers
+*/
+.grid {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: 1fr;
+  max-width: 100%;
+}
+.grid > * {
+  width: 100%;
+}
+.none {
+  display: none !important;
+}
+/* loading animation - screen freeze */
+#loading-animation {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  background-color: #666;
+  opacity: 0.4;
+}
+/* 
+  dont show attributions by default
+*/
+#attributions {
+  display: none;
+}
+/* 
+  registration/login page styling
+*/
+.phone-number-input {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+.text-center {
+  text-align: center;
+}

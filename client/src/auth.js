@@ -13,7 +13,19 @@ let Pool = new AmazonCognitoIdentity.CognitoUserPool ({UserPoolId: poolDetails.P
 let cognitoUser = null;
 let accessToken = null;
 let refreshToken = null;
-
+let headers = {
+  get get () {
+    return new Headers ({
+      'x-amz-access-token': accessToken
+    });
+  },
+  get post () {
+    return new Headers ({
+      'x-amz-access-token': accessToken,
+      'Content-Type': 'application/json'
+    });
+  }
+}
 export const login = (Username) => new Promise ((resolve, reject) => {
   try {
     authDetails = new AmazonCognitoIdentity.AuthenticationDetails ({Username, ClientMetadata: {phoneNumber: Username}});
@@ -40,7 +52,6 @@ export const retrieveAccessToken = () => new Promise ((resolve, reject) => {
       if (e) return reject (e);
       accessToken = session.getAccessToken ().getJwtToken ();
       refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken ({RefreshToken: session.getRefreshToken ().getToken ()});
-      console.log ('access token retrieved');
       resolve ();
     });
   } catch (e) {
@@ -101,18 +112,13 @@ export const entries = {
   get get () {
     return () => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/entries', {
       method: 'get',
-      headers: new Headers ({
-        'x-amz-access-token': accessToken
-      })
+      headers: headers.get
     });
   },
   get post () {
     return body => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/entries', {
       method: 'post',
-      headers: new Headers ({
-        'x-amz-access-token': accessToken,
-        'Content-Type': 'application/json'
-      }),
+      headers: headers.post,
       body: JSON.stringify (body)
     });
   }
@@ -121,18 +127,13 @@ export const skills = {
   get get () {
     return () => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/skills', {
       method: 'get',
-      headers: new Headers ({
-        'x-amz-access-token': accessToken
-      })
+      headers: headers.get
     });
   },
   get post () {
     return body => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/skills', {
       method: 'post',
-      headers: new Headers ({
-        'x-amz-access-token': accessToken,
-        'Content-Type': 'application/json'
-      }),
+      headers: headers.get,
       body: JSON.stringify (body)
     });
   }
@@ -142,17 +143,13 @@ export const shares = {
   get get () {
     return () => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/shares', {
       method: 'get',
-      headers: new Headers ({
-        'x-amz-access-token': accessToken
-      })
+      headers: headers.get
     });
   },
   get getById () {
     return id => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/entries/${id}`, {
       method: 'get',
-      headers: new Headers ({
-        'x-amz-access-token': accessToken
-      })
+      headers: headers.get
     });
   },
   get post () {
@@ -164,5 +161,44 @@ export const shares = {
       }),
       body: JSON.stringify (body)
     });
+  },
+  get toggleFreeze () {
+    return id => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/shares/${id}`, {
+      method: 'put',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    });
+  }
+}
+
+export const questions = {
+  get get () {
+    return () => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/questions', {
+      method: 'get',
+      headers: headers.get
+    });
+  },
+  get post () {
+    return body => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/questions', {
+      method: 'post',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify (body)
+    });
+  }
+}
+export const audios = {
+  get post () {
+    return body => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/audios', {
+      method: 'post',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify (body)
+    })
   }
 }

@@ -6,6 +6,15 @@ console.warn = () => {}
 console.error = () => {}
 // import reportWebVitals from './reportWebVitals';
 const swStatus = localStorage.getItem ('sw-status');
+let passthrough = !navigator.onLine && swStatus;
+if (swStatus) {
+  window.addEventListener ('online', e => {
+    navigator.serviceWorker.startMessages ({online: true});
+  });
+  window.addEventListener ('offline', e => {
+    navigator.serviceWorker.startMessages ({online: true});
+  });
+}
 const install = async () => {
   try {
     if (swStatus) return;
@@ -14,13 +23,23 @@ const install = async () => {
     alert ('Therapy Journal has installed!');
     window.location.reload ();
   } catch (e) {
-    alert (e);
   }
+}
+
+const uninstall = () => {
+  localStorage.removeItem ('sw-status')
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.unregister ()
+    }
+    window.location.reload ();
+  })
+
 }
 
 ReactDOM.render(
   <React.StrictMode>
-    <App install={install} swStatus={swStatus} />
+    <App install={install} uninstall={uninstall} passthrough={passthrough} swStatus={swStatus} />
   </React.StrictMode>,
   document.getElementById('root')
 );

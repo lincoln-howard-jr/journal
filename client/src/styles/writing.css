@@ -1,0 +1,47 @@
+/*
+  writing - question-answer styling
+*/
+.freeform {
+  padding: 4px 6px;
+}
+.questions {
+  margin: 2vw;
+}
+.questions > div {
+  margin-top: 7px;
+  padding: 3px 5px;
+  text-align: left;
+}
+.questions > div::before {
+  content: "";
+  outline: none;
+  position: absolute;
+  margin-left: -24px;
+  margin-top: -25px;
+  width: var(--body-text-size);
+  height: var(--body-text-size);
+  background-size: cover;
+  background-image: url('../img/pen-small.png');
+  filter: drop-shadow(
+    0px 0px 2px #ffffff
+  );
+}
+.questions:focus > div::before {
+  outline: none;
+}
+.questions > div:not(:last-child) {
+  margin-bottom: 24px;
+}
+/* Add Question Dialog styling */
+.current-question-list {
+  list-style-type: none;
+  margin: var(--h1-font-size);
+  padding: 0;
+
+}
+.current-question-list > li {
+  padding: 5px 12px;
+}
+.add-question-input {
+  padding: 5px 12px;
+}

@@ -22,7 +22,6 @@ export default function useSkills () {
       }, []);
       setSkills (indexed);
     } catch (e) {
-      alert (e);
     }
   }
   const submitSkill = (body) => new Promise (async (resolve, reject) => {

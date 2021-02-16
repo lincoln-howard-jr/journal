@@ -1,0 +1,24 @@
+form.search-bar {
+  background-color: var(--background-color);
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: 1fr calc(var(--body-text-size) * 2);
+  padding: 0 var(--body-text-size);
+  width: 67%;
+  height: calc(var(--body-text-size) * 2);
+  border: 1px solid var(--font-color);
+  border-radius: var(--body-text-size);
+}
+form.search-bar > input {
+  background-color: var(--background-color);
+  height: calc(var(--body-text-size) * 1.5);
+  width: 100%;
+  border: 0;
+  outline: 0;
+  left: calc(var(--body-text-size) / 2);
+}
+form.search-bar > img {
+  width: var(--body-text-size);
+  height: var(--body-text-size);
+}

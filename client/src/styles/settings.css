@@ -1,0 +1,70 @@
+
+main.settings div {
+  margin: 0;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+  overflow: hidden;
+  width: 100%;
+}
+main.settings > div {
+  padding: 32px 0;
+}
+main.settings > div:not(:last-of-type) {
+  border-bottom: 1px solid #ccc;
+}
+main.settings > div > *:last-child, main.settings > div > *:first-child {
+  margin: 0;
+}
+main.settings > div > *:not(:first-child):not(:last-child) {
+  margin: 7px;
+}
+main.settings > div.action > span {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.setting {
+  display: grid;
+  grid-template-columns: 1fr 64px;
+}
+.setting > *:first-child {
+  justify-content: left;
+}
+.setting > *:nth-child(2) {
+  justify-items: right;
+}
+.setting-group > h3 {
+  margin: var(--h1-font-size);
+  text-decoration: underline;
+}
+.setting-group > .setting {
+  margin: 18px;
+}
+.toggle {
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  border-radius: 12px;
+  border: 2px solid #666;
+  transition: 0.5s;
+}
+.toggle::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  background-color: #666;
+  position: relative;
+  top: 3px;
+  display: block;
+  right: -4px;
+  transition: 0.1s;
+}
+.toggle.on {
+  border-color: #787;
+}
+.toggle.on::after {
+  background-color: #787;
+  right: -26px;
+}
