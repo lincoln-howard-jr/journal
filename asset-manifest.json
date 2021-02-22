@@ -1,25 +1,28 @@
 {
   "files": {
-    "main.css": "/journal/static/css/main.cad3779c.chunk.css",
-    "main.js": "/journal/static/js/main.2f9a8591.chunk.js",
-    "main.js.map": "/journal/static/js/main.2f9a8591.chunk.js.map",
+    "main.css": "/journal/static/css/main.d57d4910.chunk.css",
+    "main.js": "/journal/static/js/main.ba9173cb.chunk.js",
+    "main.js.map": "/journal/static/js/main.ba9173cb.chunk.js.map",
     "runtime-main.js": "/journal/static/js/runtime-main.bf081229.js",
     "runtime-main.js.map": "/journal/static/js/runtime-main.bf081229.js.map",
-    "static/js/2.e43473f0.chunk.js": "/journal/static/js/2.e43473f0.chunk.js",
-    "static/js/2.e43473f0.chunk.js.map": "/journal/static/js/2.e43473f0.chunk.js.map",
+    "static/js/2.d540259b.chunk.js": "/journal/static/js/2.d540259b.chunk.js",
+    "static/js/2.d540259b.chunk.js.map": "/journal/static/js/2.d540259b.chunk.js.map",
     "index.html": "/journal/index.html",
-    "static/css/main.cad3779c.chunk.css.map": "/journal/static/css/main.cad3779c.chunk.css.map",
-    "static/js/2.e43473f0.chunk.js.LICENSE.txt": "/journal/static/js/2.e43473f0.chunk.js.LICENSE.txt",
+    "static/css/main.d57d4910.chunk.css.map": "/journal/static/css/main.d57d4910.chunk.css.map",
+    "static/js/2.d540259b.chunk.js.LICENSE.txt": "/journal/static/js/2.d540259b.chunk.js.LICENSE.txt",
     "static/media/book.65cd22a3.svg": "/journal/static/media/book.65cd22a3.svg",
+    "static/media/calendar.0073112f.svg": "/journal/static/media/calendar.0073112f.svg",
+    "static/media/filter.8be2c938.svg": "/journal/static/media/filter.8be2c938.svg",
     "static/media/plus.a86e5868.svg": "/journal/static/media/plus.a86e5868.svg",
     "static/media/search.28b0ad10.svg": "/journal/static/media/search.28b0ad10.svg",
     "static/media/settings.d2739024.svg": "/journal/static/media/settings.d2739024.svg",
-    "static/media/skill.23054f65.svg": "/journal/static/media/skill.23054f65.svg"
+    "static/media/skill.23054f65.svg": "/journal/static/media/skill.23054f65.svg",
+    "static/media/stopwatch.43421b05.svg": "/journal/static/media/stopwatch.43421b05.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.bf081229.js",
-    "static/js/2.e43473f0.chunk.js",
-    "static/css/main.cad3779c.chunk.css",
-    "static/js/main.2f9a8591.chunk.js"
+    "static/js/2.d540259b.chunk.js",
+    "static/css/main.d57d4910.chunk.css",
+    "static/js/main.ba9173cb.chunk.js"
   ]
 }
