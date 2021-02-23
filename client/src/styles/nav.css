@@ -9,8 +9,8 @@ nav {
   left: 0;
   bottom: 0;
   width: 100vw;
-  height: 64px;
-  padding: 18px 0;
+  height: 72px;
+  padding: 12px 0;
   border-top: 1px solid var(--font-color);
   background-color: var(--nav-background-color);
 }
