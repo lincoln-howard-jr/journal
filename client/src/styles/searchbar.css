@@ -1,4 +1,8 @@
-form.search-bar {
+div.grid.search-container {
+  grid-template-columns: 28px 1fr 28px;
+}
+div.grid.search-container > form.search-bar {
+  grid-column: 2;
   background-color: var(--background-color);
   display: grid;
   align-items: center;
@@ -7,10 +11,10 @@ form.search-bar {
   padding: 0 var(--body-text-size);
   width: 67%;
   height: calc(var(--body-text-size) * 2);
-  border: 1px solid var(--font-color);
+  border: 1px solid var(--input-border-color);
   border-radius: var(--body-text-size);
 }
-form.search-bar > input {
+div.grid.search-container > form.search-bar > input {
   background-color: var(--background-color);
   height: calc(var(--body-text-size) * 1.5);
   width: 100%;
@@ -18,7 +22,99 @@ form.search-bar > input {
   outline: 0;
   left: calc(var(--body-text-size) / 2);
 }
-form.search-bar > img {
+div.grid.search-container > form.search-bar > img {
   width: var(--body-text-size);
   height: var(--body-text-size);
+}
+div.grid.search-container > span.date-filter {
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+}
+
+/* for the dt filter */
+div.grid.search-filter {
+  grid-template-columns: 1fr 30ch 1fr;
+  gap: 12px;
+}
+div.grid.search-filter > div.date-start, div.grid.search-filter > div.date-end {
+  grid-column: 2;
+  grid-template-columns: 5ch 25ch;
+}
+div.grid.search-filter > div.date-start > div, div.grid.search-filter > div.date-end > div {
+  grid-template-columns: 6ch 2ch 6ch 2ch 9ch;
+}
+/* list that helps add filtes */
+ul.add-filter-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  gap: 12px;
+  grid-template-columns: 1fr repeat(2, 32px) 1fr;
+}
+ul.add-filter-list > :first-child {
+  grid-column: 2;
+}
+.filter {
+  gap: 14px;
+  grid-template-columns: 32px 1fr 3fr 32px;
+}
+.filter > span {
+  text-align: center;
+}
+.time-filter > div {
+  display: grid;
+  align-items: center;
+  text-align: center;
+  grid-template-columns: 1fr 6ch 2ch 6ch 4ch 1fr;
+}
+.date-filter > div {
+  display: grid;
+  align-items: center;
+  text-align: center;
+  grid-template-columns: 1fr 6ch 2ch 6ch 2ch 8ch 1fr;
+}
+.filter > div > :first-child {
+  grid-column: 2;
+}
+/* list that holds the filters */
+ol.filter-list {
+  margin: 0;
+  padding: 0;
+}
+@media (max-width: 1100px) {
+  .date-filter, .time-filter {
+    padding: 24px 0;
+    grid-template-columns: 36px 1fr;
+    grid-template-rows: 32px 32px;
+  }
+  .filter-list > li:not(:last-child) {
+    border-bottom: 1px dashed var(--font-color);
+  }
+  .date-filter > :first-child, .time-filter > :first-child {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .date-filter > :nth-child(2), .time-filter > :nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .date-filter > :nth-child(3), .time-filter > :nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .date-filter > :nth-child(4), .time-filter > :nth-child(4) {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: right;
+  }
+  .time-filter > div {
+    grid-template-columns: 1fr 4ch 2ch 4ch 4ch;
+  }
+  .date-filter > div {
+    display: grid;
+    align-items: center;
+    text-align: center;
+    grid-template-columns: 1fr 4ch 2ch 4ch 2ch 4ch;
+  }
 }

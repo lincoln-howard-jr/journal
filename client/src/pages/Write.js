@@ -19,7 +19,7 @@ function CustomQuestionSetting ({question, onToggle, getSetting}) {
   )
 }
 
-function Write ({questions, display, freeze, settings, createEntry}) {
+function Write ({session, questions, display, freeze, settings, createEntry}) {
   // hooks
   const {getSetting, addSetting, toggle} = settings;
   // necessary state for Write
@@ -141,7 +141,9 @@ function Write ({questions, display, freeze, settings, createEntry}) {
             getSetting ('default-questions') && defaultQuestions.map (question => (
               <>
                 <b>{question}</b>
-                <div onFocus={onFirstFocus (question)} contentEditable>...</div>
+                <div onFocus={onFirstFocus (question)} contentEditable onBlur={e => {
+                  session.set (question, e.target.innerText);
+                }}>{session.getSetting (question) || '...'}</div>
               </>
             ))
           }
@@ -152,7 +154,9 @@ function Write ({questions, display, freeze, settings, createEntry}) {
                   questions.questions.filter (q => getSetting (`show-custom-question-${q}`)).map (question => (
                     <>
                       <b>{question}</b>
-                      <div onFocus={onFirstFocus (question)} contentEditable>...</div>
+                      <div onFocus={onFirstFocus (question)} contentEditable onBlur={e => {
+                  session.set (question, e.target.innerText);
+                }}>{session.getSetting (question) || '...'}</div>
                     </>
                   ))
                 }
@@ -167,13 +171,15 @@ function Write ({questions, display, freeze, settings, createEntry}) {
       {
         getSetting ('freeform', '!audio-recording') &&
         <>
-          <div onFocus={onFirstFocus ('freeform')} className="freeform" contentEditable ref={ffRef}>Write your entry here!</div>
+          <div onFocus={onFirstFocus ('freeform')} className="freeform" contentEditable ref={ffRef} onBlur={e => {
+                  session.set ('freeform', e.target.innerText);
+                }}>{session.getSetting ('freeform') || 'Write your entry here!'}</div>
         </>
       }
       {
         getSetting ('freeform', '&audio-recording') &&
         <>
-          <AudioRecorder onChange={onAudioRecorderChange} />
+          <AudioRecorder freeze={freeze} onChange={onAudioRecorderChange} />
         </>
       }
       <button onClick={complete}>Complete</button>

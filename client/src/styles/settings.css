@@ -62,9 +62,9 @@ main.settings > div.action > span {
   transition: 0.1s;
 }
 .toggle.on {
-  border-color: #787;
+  border-color: var(--accent-color);
 }
 .toggle.on::after {
-  background-color: #787;
+  background-color: var(--accent-color);
   right: -26px;
 }

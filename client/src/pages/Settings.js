@@ -10,7 +10,9 @@ const attributions = {
   'list.svg': 'Icons made by <a href="https://www.flaticon.com/authors/phatplus" title="phatplus">phatplus</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
   'skill.svg': 'Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
   'settings.svg': 'Icons made by <a href="https://www.flaticon.com/authors/srip" title="srip">srip</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'search.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>'
+  'search.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>',
+  'filter.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/kirill-kazachek" title="Kirill Kazachek">Kirill Kazachek</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>',
+  'stopwatch.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>'
 }
 
 function ShareJourunal ({shareJournal, settings}) {
@@ -70,14 +72,11 @@ function SharedByMe ({freeze, sharedByMe, toggleSetting, getSetting, toggleFreez
 
 function SharedWithMe ({sharedWithMe, redirect}) {
   let shares = sharedWithMe.filter (share => !share.frozen);
+  if (shares.length === 0) return (<div className="none" />)
   return (
     <div className="action">
       <p style={{textDecoration: 'none'}}>Journals Shared With You</p>
       <hr style={{width: '25vw'}}/>
-      {
-        shares.length === 0 &&
-        <span style={{textDecoration: 'none'}}>Nobody has shared a journal with you...</span>
-      }
       {
         shares.map (share => (
           <span onClick={() => {redirect (`?page=sharing&id=${share.id}&name=${share.name}`)}}>{share.name}</span>
@@ -123,7 +122,10 @@ function Settings({freeze, settings, swStatus, install, uninstall, display, logo
     <main className="settings" style={{display}}>
       <SettingGroup longTitle={'Journal Settings'} shortTitle={'Journal'}>
         <Setting setting="freeform" title="Enable Freeform" getSetting={settings.getSetting} onToggle={settings.toggle} />
-        <Setting setting="audio-recording" title="Enable Audio Recording" getSetting={settings.getSetting} onToggle={settings.toggle} relationships={['+freeform']} />
+        {
+          settings.getSetting ('audio-recording-supported') &&
+          <Setting setting="audio-recording" title="Enable Audio Recording" getSetting={settings.getSetting} onToggle={settings.toggle} relationships={['+freeform']} />
+        }
         <Setting setting="default-questions" title="Show Default Questions" getSetting={settings.getSetting} onToggle={settings.toggle} relationships={['|custom-questions']} />
         <Setting setting="custom-questions" title="Show Custom Questions" getSetting={settings.getSetting} onToggle={settings.toggle} relationships={['|default-questions']} />
       </SettingGroup>

@@ -79,3 +79,7 @@ b {
   text-decoration: underline;
   margin: var(--h1-font-size);
 }
+/* accent color stuff */
+h1, h4, b {
+  color: var(--accent-color);
+}

@@ -22,6 +22,7 @@ import defaultSettings from './lib/defaultSettings';
 import handlePending from './lib/pendingActions'
 import './App.css';
 import { scrollToTop } from './lib/scrolling'
+import { hasBrowserSupport } from './lib/webaudio'
 
 function App({install, uninstall, swStatus, passthrough}) {
   // api
@@ -29,6 +30,7 @@ function App({install, uninstall, swStatus, passthrough}) {
   const {entries, getEntries, createEntry} = useJournal ();
   const sharing = useSharing ();
   const settings = useSettings (defaultSettings);
+  const session = useSettings ({}, sessionStorage);
   const questions = useQuestions ();
   // initialize after session is activated
   const onAuth = () => {
@@ -39,6 +41,12 @@ function App({install, uninstall, swStatus, passthrough}) {
         settings.set (`share-${share.id}`, !share.frozen);
       });
     });
+    if (!hasBrowserSupport) {
+      settings.set ('audio-recording-supported', false);
+      settings.set ('audio-recording', false);
+    } else {
+      settings.set ('audio-recording-supported', true);
+    }
     questions.getQuestions ();
     handlePending ({'submit-skill': submitSkill, 'create-entry': createEntry});
   }
@@ -173,10 +181,9 @@ function App({install, uninstall, swStatus, passthrough}) {
     <>
       <div id="loading-animation" style={{display: loadingAnimation}}></div>
       <header>
-        <h1>{titles (page).long (pageData)}</h1>
-        <h4>{titles (page).short (pageData)}</h4>
+        <H1 short={titles (page).short (pageData)}>{titles (page).long (pageData)}</H1>
       </header>
-      <Write questions={questions} createEntry={createEntry} settings={settings} user={user} freeze={freeze} display={page === 'write' ? 'grid' : 'none'} />
+      <Write session={session} questions={questions} createEntry={createEntry} settings={settings} user={user} freeze={freeze} display={page === 'write' ? 'grid' : 'none'} />
       <Journal redirect={redirect} entries={entries} user={user} freeze={freeze} display={page === 'journal' ? 'grid' : 'none'} />
       <Skills submitSkill={submitSkill} skills={skills} user={user} display={page === 'skills' ? 'grid' : 'none'} />
       <Settings freeze={freeze} redirect={redirect} settings={settings} {...sharing} logout={logout} user={user} freeze={freeze} display={page === 'settings' ? 'grid' : 'none'} install={install} swStatus={swStatus} uninstall={uninstall} />

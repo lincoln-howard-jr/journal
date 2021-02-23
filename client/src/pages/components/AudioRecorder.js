@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import {getTime, dateShortHand} from '../../lib/indexing';
 import * as WebAudio from '../../lib/webaudio';
 
-function AudioRecorder ({onChange}) {
+function AudioRecorder ({onChange, freeze}) {
   const [ready, setReady] = useState (false);
   const [recording, setRecording] = useState (false);
   const [timeElapsed, setTimeElapsed] = useState (0);
@@ -29,7 +29,7 @@ function AudioRecorder ({onChange}) {
     setRecording (false);
     setTimeElapsed (0);
     await WebAudio.stop ();
-    let blob = await WebAudio.extract (`audio-recording-${getTime ()}-${dateShortHand ()}.mp3`);
+    let blob = await WebAudio.extract (freeze, `audio-recording-${getTime ()}-${dateShortHand ()}.mp3`);
     setFile (blob);
   }
   const pause = async () => {
@@ -96,6 +96,7 @@ function AudioRecorder ({onChange}) {
                 Title:&nbsp;&nbsp;&nbsp;
                 <input className="audio-title-input" onChange={e => setTitle (e.target.value)} defaultValue={title} />
               </p>
+              <p className="fake-button"><a className="error" onClick={reset ()}>Start Over</a></p>
             </figcaption>
             <audio controls src={window.URL.createObjectURL (file)} />
           </figure>

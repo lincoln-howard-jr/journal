@@ -6,8 +6,8 @@ import {useState, useEffect} from 'react';
 //   &setting - must also be true
 //   +setting - if setting is true, show this
 
-export default function useSettings (defaultSettings={}) {
-  const storedSettings = JSON.parse (localStorage.getItem ('therapy-journal-settings') || '{}');
+export default function useSettings (defaultSettings={}, storage=window.localStorage) {
+  const storedSettings = JSON.parse (storage.getItem ('therapy-journal-settings') || '{}');
   const currentSettings = Object.assign (defaultSettings, storedSettings);
   const [settings, setSettings] = useState (currentSettings);
   const getSetting = (setting, ...relationships) => {
@@ -61,7 +61,7 @@ export default function useSettings (defaultSettings={}) {
     setSettings ({...settings, ...changes});
   }
   useEffect (() => {
-    localStorage.setItem ('therapy-journal-settings', JSON.stringify (settings));
+    storage.setItem ('therapy-journal-settings', JSON.stringify (settings));
   }, [settings]);
 
   return {getSetting, toggle, addSetting, set}
