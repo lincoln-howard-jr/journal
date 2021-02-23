@@ -36,7 +36,7 @@ body {
 */
 main {
   width: min(84vw, 900px);
-  margin: 0 auto 98px auto;
+  margin: 0 auto 100px auto;
 }
 main > div {
   margin: var(--body-text-size) 0;
