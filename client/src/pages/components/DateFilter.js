@@ -53,11 +53,11 @@ function DateFilter ({value, remove, setValue}) {
         }
       </span>
       <div>
-        <input type="number" min={1} max={12} defaultValue={mm} onChange={e=>setMonth (parseInt (e.target.value))} />
+        <input type="tel" min={1} max={12} defaultValue={mm} onChange={e=>setMonth (parseInt (e.target.value))} />
         <span>/</span>
-        <input type="number" min={1} max={maxDays} defaultValue={dd} onChange={e=>setDate (parseInt (e.target.value))} />
+        <input type="tel" min={1} max={maxDays} defaultValue={dd} onChange={e=>setDate (parseInt (e.target.value))} />
         <span>/</span>
-        <input type="number" min={2020} max={new Date ().getFullYear ()} defaultValue={yyyy} onChange={e=>setYear (parseInt (e.target.value))}/>
+        <input type="tel" min={2020} max={new Date ().getFullYear ()} defaultValue={yyyy} onChange={e=>setYear (parseInt (e.target.value))}/>
       </div>
       <span onClick={remove} className="fake-button">
         remove

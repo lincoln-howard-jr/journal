@@ -46,9 +46,9 @@ function TimeFilter ({value, remove, setValue}) {
         {value.mode === 'is-at' ? 'Exact' : value.mode === 'after' ? 'After' : 'Before'}
       </span>
       <div>
-        <input type="number" value={displayHours} onChange={setHours} />
+        <input type="tel" value={displayHours} onChange={setHours} />
         <span>:</span>
-        <input type="number" value={displayMinutes} onChange={e=>setMinutes (parseInt (e.target.value))} />
+        <input type="tel" value={displayMinutes} onChange={e=>setMinutes (parseInt (e.target.value))} />
         <span className="fake-button" onClick={ampm}>{hours < 12 ? 'am' : 'pm'}</span>
       </div>
       <span onClick={remove} className="fake-button">

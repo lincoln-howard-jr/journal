@@ -119,7 +119,7 @@ function Journal({display, entries, isNotMain}) {
   let body = (
     <>
       {entries.map ((index, i) => i < showCount ? (
-        <Deferred delay={(i % 10 + 1) * 85} defferedClassName={''}>
+        <Deferred delay={(i % 10) * 85} defferedClassName={''}>
           <article key={`index-${index.date}`}>
             <EntryHeader count={index.list.length} date={index.meta.date} isOpen={open.indexOf (index.date) !== -1} open={() => {setOpen (open => [...open, index.date])}} close={() => {
               setOpen (open => open.filter (d => d !== index.date))
