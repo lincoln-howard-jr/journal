@@ -1,17 +1,16 @@
 @media (prefers-color-scheme: dark) {
   :root {
-    --font-color: #5ed9ff;
+    --font-color: #ffffff;
     --background-color: #030303;
-    --nav-background-color: #8173ffd2;
+    --nav-background-color: #413a83f2;
     --input-background-color: #ffffff00;
     --input-text-color: #5ed9ff;
     --input-border-color: #438ea5;
     --error-color: rgb(255, 53, 87);
     --accent-color: #a298ff;
+    --default-font-weight: 300;
   }
   img {
-    filter: drop-shadow(
-      0px 0px 5px #ffffff
-    );
+    filter: invert(1);
   }
 }

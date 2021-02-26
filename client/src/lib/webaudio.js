@@ -79,6 +79,7 @@ export const extract = async (freeze, title='recording') => new Promise (async (
       mp3data.push (new Int8Array (encoder.flush ()));
       let file = new File (mp3data, title, {type: 'audio/mp3'});
       unfreeze ();
+      chunks = [];
       resolve (file);
     });
   } catch (e) {

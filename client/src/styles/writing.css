@@ -1,6 +1,9 @@
 /*
   writing - question-answer styling
 */
+*[contenteditable] {
+  color: var(--input-text-color);
+}
 .freeform {
   padding: 4px 6px;
 }

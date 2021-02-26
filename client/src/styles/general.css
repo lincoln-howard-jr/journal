@@ -13,12 +13,13 @@
   --input-border-color: #999;
   --input-text-color: #030303;
   --error-color: red;
-  --accent-color: #0b0538;
-  --accent-color-light: #0b053844;
+  --accent-color: #4b4486;
+  --accent-color-light: #4b448655;
   --h1-font-size: clamp(21px, 4.4vmin, 32px);
   --h2-font-size: clamp(18px, 3.8vmin, 26px);
   --h3-font-size: clamp(16px, 3vmin, 22px);
   --body-text-size: clamp(14px, 2.6vmin, 16px);
+  --default-font-weight: 200;
 }
 /*
   reset

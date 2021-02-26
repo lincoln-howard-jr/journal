@@ -141,21 +141,20 @@ function App({install, uninstall, swStatus, passthrough}) {
           <hr style={{width: '35%'}}/>
           <b>Why A Journal?</b>
           <p>
-            Throughout our experiences as individuals with mental illness, we have discovered the benefit of
-            journaling. These benefits are not limited to those with mental illness, providing anyone with a
+            Journaling provides anyone with a structure to
             deeper understanding of themselves and their emotional wellbeing. Oftentimes describing a situation
             or emotion in writing provides a sense of clarity not found in other ways. Also available to you is
-            a place to write down and sort coping skills you have learned. 
+            a place to write down and sort skills you have learned.
           </p>
           <b>How Does It Work?</b>
           <p>
             To start, register an account with your phone number. You will be texted a secret code. Enter that and...
-            well that's it, you now have your very own therapy journal!
+            well that's it, you now have your very own journal!
             To put it simply, you write details about your life in your journal. Again, but in more detail, you can
             structure your journal in different ways. Journal entries can be formatted as "question and answer" or as "freeform
-            writing" (this is easily switched with one click in the settings tab). All journal entries include the date
-            and time of writing automatically and can be found listed in chronological order. You also can curate a
-            list of coping skills for different situations and share your journal if need be.
+            writing" or "audio journaling" (this is easily switched with one click in the settings tab). All journal entries automatically include the
+            date and time of writing and can be found listed in chronological order. You also can curate a
+            list of skills for different situations and share your journal if need be.
           </p>
         </section>
         <section>
@@ -168,7 +167,7 @@ function App({install, uninstall, swStatus, passthrough}) {
           </p>
           <b>Sharing</b>
           <p>
-            By nature of being a Therapy Journal application, the contained subject matter will often be sensitive
+            By nature of being a journaling application, the contained subject matter will often be sensitive
             information. With this application, you can share your journal with anyone. However, it is recommended
             for, and with intention of, sharing with medical professionals only. In the case of abuse of this feature deemed
             detrimental to the health of another individual, we retain the right to terminate your account.

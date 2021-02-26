@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
 import StopwatchSVG from '../../img/stopwatch.svg';
+import CaretSVG from '../../img/caret-down.svg'
 
 function TimeFilter ({value, remove, setValue}) {
   const [mode, setMode] = useState (value.mode);
@@ -43,7 +44,10 @@ function TimeFilter ({value, remove, setValue}) {
         <img src={StopwatchSVG} />
       </span>
       <span className="fake-button" onClick={cycleMode}>
-        {value.mode === 'is-at' ? 'Exact' : value.mode === 'after' ? 'After' : 'Before'}
+        <span className="grid switch-mode">
+          <span>{value.mode === 'is-at' ? 'Exact' : value.mode === 'after' ? 'After' : 'Before'}</span>
+          <img style={{display: 'inline', transform: 'rotate(-90deg)'}} width={8} height={8} src={CaretSVG} />
+        </span>
       </span>
       <div>
         <input type="tel" value={displayHours} onChange={setHours} />

@@ -122,7 +122,7 @@ function Write ({session, questions, display, freeze, settings, createEntry}) {
       </ul>
       <h2>Add A Custom Question?</h2>
       <h4>Add Question</h4>
-      <b ref={addQuestionRef} className="add-question-input" contentEditable>...?</b>
+      <p ref={addQuestionRef} className="add-question-input" contentEditable>...?</p>
       <div>
         <button onClick={addQuestion}>Add Question</button>
         <button onClick={() => setNewQuestionDialog (false)}>Back To Writing</button>

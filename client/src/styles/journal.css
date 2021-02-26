@@ -24,7 +24,7 @@ section:not(:last-of-type) {
   margin-bottom: 24px;
 }
 section > ul {
-  font-weight: 200;
+  font-weight: var(--default-font-weight);
   font-size: var(--body-text-size);
   list-style-type: none;
   margin: 0;

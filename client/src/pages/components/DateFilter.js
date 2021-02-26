@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import CalendarSVG from '../../img/calendar.svg'
+import CaretSVG from '../../img/caret-down.svg'
 
 const days = [
   0,
@@ -47,10 +48,15 @@ function DateFilter ({value, remove, setValue}) {
         <img src={CalendarSVG} alt="Date Filter" />
       </span>
       <span className="fake-button" onClick={cycleMode}>
-        {
-          value.mode === 'single-day' ? 'Day Of' :
-          value.mode === 'after' ? 'After' : 'Before'
-        }
+        <span className="grid switch-mode">
+          <span>
+            {
+              value.mode === 'single-day' ? 'Day Of' :
+              value.mode === 'after' ? 'After' : 'Before'
+            }
+          </span>
+          <img style={{display: 'inline', transform: 'rotate(-90deg)'}} width={8} height={8} src={CaretSVG} />
+        </span>
       </span>
       <div>
         <input type="tel" min={1} max={12} defaultValue={mm} onChange={e=>setMonth (parseInt (e.target.value))} />
