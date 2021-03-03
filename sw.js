@@ -1,19 +1,14 @@
 const version = 'v0.1.1';
 const initialCache = [
-  '/journal/',
-  '/journal/?page=settings',
-  '/journal/?page=journal',
-  '/journal/?page=write',
-  '/journal/?page=skills',
+  '/journal/static/css/main.c2254fcd.chunk.css',
+  '/journal/static/js/main.77522714.chunk.js',
+  '/journal/static/js/main.77522714.chunk.js.map',
   '/journal/static/js/runtime-main.bf081229.js',
-  '/journal/static/js/2.7a8c1fa3.chunk.js',
-  '/journal/static/css/main.2e452ff5.chunk.css',
-  '/journal/static/js/main.7dcc7974.chunk.js',
-  '/journal/static/js/main.7dcc7974.chunk.js.map',
   '/journal/static/js/runtime-main.bf081229.js.map',
+  '/journal/static/js/2.7a8c1fa3.chunk.js',
   '/journal/static/js/2.7a8c1fa3.chunk.js.map',
   '/journal/index.html',
-  '/journal/static/css/main.2e452ff5.chunk.css.map',
+  '/journal/static/css/main.c2254fcd.chunk.css.map',
   '/journal/static/js/2.7a8c1fa3.chunk.js.LICENSE.txt',
   '/journal/static/media/book.65cd22a3.svg',
   '/journal/static/media/calendar.0073112f.svg',
@@ -26,7 +21,12 @@ const initialCache = [
   '/journal/static/media/settings.d2739024.svg',
   '/journal/static/media/skill.23054f65.svg',
   '/journal/static/media/stopwatch.43421b05.svg',
-  '/journal/static/media/trash.dd7f053f.svg'
+  '/journal/static/media/trash.dd7f053f.svg',
+  '/journal/',
+  '/journal/?page=settings',
+  '/journal/?page=journal',
+  '/journal/?page=write',
+  '/journal/?page=skills'
 ]
 
 let online = true;
