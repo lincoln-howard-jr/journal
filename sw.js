@@ -1,3 +1,4 @@
+const version = 'v0.1.1';
 const initialCache = [
   '/journal/',
   '/journal/?page=settings',
@@ -8,12 +9,8 @@ const initialCache = [
   '/journal/static/js/2.7a8c1fa3.chunk.js',
   '/journal/static/css/main.2e452ff5.chunk.css',
   '/journal/static/js/main.7dcc7974.chunk.js',
-  '/journal/static/css/main.2e452ff5.chunk.css',
-  '/journal/static/js/main.7dcc7974.chunk.js',
   '/journal/static/js/main.7dcc7974.chunk.js.map',
-  '/journal/static/js/runtime-main.bf081229.js',
   '/journal/static/js/runtime-main.bf081229.js.map',
-  '/journal/static/js/2.7a8c1fa3.chunk.js',
   '/journal/static/js/2.7a8c1fa3.chunk.js.map',
   '/journal/index.html',
   '/journal/static/css/main.2e452ff5.chunk.css.map',
@@ -31,6 +28,7 @@ const initialCache = [
   '/journal/static/media/stopwatch.43421b05.svg',
   '/journal/static/media/trash.dd7f053f.svg'
 ]
+
 let online = true;
 
 const isStaticAsset = url => {
@@ -44,7 +42,7 @@ self.addEventListener ('message', event => {
 // on install
 self.addEventListener ('install', event => {
   event.waitUntil (
-    caches.open ('v1').then (cache => {
+    caches.open (version).then (cache => {
       return cache.addAll (initialCache)
     })
   );
@@ -60,7 +58,7 @@ self.addEventListener ('fetch', event => {
   
   if (isStaticAsset (event.request.pathname)) return event.respondWith (
     (async () => {
-      let cache = await caches.open ('v1');
+      let cache = await caches.open (version);
       let match = await cache.match (event.request);
       return !!match ? match : fetch (event.request);
     }) ()
@@ -68,7 +66,7 @@ self.addEventListener ('fetch', event => {
 
   event.respondWith (
     (async () => {
-      let cache = await caches.open ('v1');
+      let cache = await caches.open (version);
       let match = await cache.match (event.request);
       try {
         if (!online) throw '';
