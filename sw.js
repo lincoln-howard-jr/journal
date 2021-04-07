@@ -1,5 +1,10 @@
 const version = 'v0.1.1';
 const initialCache = [
+  '/journal/',
+  '/journal/?page=skills',
+  '/journal/?page=settings',
+  '/journal/?page=write',
+  '/journal/?page=journal',
   '/journal/static/css/main.c2254fcd.chunk.css',
   '/journal/static/js/main.77522714.chunk.js',
   '/journal/static/js/main.77522714.chunk.js.map',
@@ -21,12 +26,7 @@ const initialCache = [
   '/journal/static/media/settings.d2739024.svg',
   '/journal/static/media/skill.23054f65.svg',
   '/journal/static/media/stopwatch.43421b05.svg',
-  '/journal/static/media/trash.dd7f053f.svg',
-  '/journal/',
-  '/journal/?page=settings',
-  '/journal/?page=journal',
-  '/journal/?page=write',
-  '/journal/?page=skills'
+  '/journal/static/media/trash.dd7f053f.svg'
 ]
 
 let online = true;
