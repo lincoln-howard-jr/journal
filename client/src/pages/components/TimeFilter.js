@@ -55,8 +55,8 @@ function TimeFilter ({value, remove, setValue}) {
         <input type="tel" value={displayMinutes} onChange={e=>setMinutes (parseInt (e.target.value))} />
         <span className="fake-button" onClick={ampm}>{hours < 12 ? 'am' : 'pm'}</span>
       </div>
-      <span onClick={remove} className="fake-button">
-        remove
+      <span>
+        <span className="fake-button" onClick={remove}>remove</span>
       </span>
     </li>
   )

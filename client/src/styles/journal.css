@@ -1,47 +1,66 @@
-/* 
-  journal styling
-*/
-@keyframes header-slide-in {
-  0% {
-    opacity: 0;
-    transform: translateX(-250px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+main.view-journal article {
+  transition: 0.3s;
+  margin: 32px auto;
+  padding: 15px 10px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 6px var(--accent-color);
+  border: 1px solid var(--accent-color);
 }
-article {
-  animation: header-slide-in 0.6s;
-  min-height: 90px;
-  display: grid;
-  align-items: center;
+main.view-journal article header {
+  cursor: pointer;
+  grid-template-columns: 2fr 3fr;
+  justify-items: left;
 }
-.entry-header {
-  grid-template-columns: 1fr 4fr 1fr;
-}
-section:not(:last-of-type) {
-  margin-bottom: 24px;
-}
-section > ul {
-  font-weight: var(--default-font-weight);
-  font-size: var(--body-text-size);
+main.view-journal article ol {
+  text-align: right;
+  width: 100%;
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
-section > ul > li {
-  line-height: 21px;
-  letter-spacing: 0.5px;
+main.view-journal article ol li {
+  display: inline-block;
+  margin: 8px 8px 0 8px;
 }
-.pill {
-  display: grid;
-  justify-items: right;
+main.view-journal article.open header {
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--accent-color);
 }
-.pill > span {
-  text-align: center;
-  width: 3ch;
-  border: 1px solid var(--font-color);
-  background-color: var(--background-color);
-  border-radius: 6px;
+main.view-journal article section {
+  transition: 0.7s;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+main.view-journal article section:nth-child(2) {
+  transition-delay: 0.2s;
+}
+main.view-journal article section:nth-child(3) {
+  transition-delay: 0.4s;
+}
+main.view-journal article section:nth-child(4) {
+  transition-delay: 0.6s;
+}
+main.view-journal article section:nth-child(5) {
+  transition-delay: 0.8s;
+}
+main.view-journal article section:nth-child(6) {
+  transition-delay: 1s;
+}
+main.view-journal article.open section {
+  opacity: 1;
+  max-height: none;
+  transition: 0;
+}
+@media (hover: hover) {
+  main.view-journal :is(article, h2, svg) {
+    transition: 0.3s;
+  }
+  main.view-journal article:not(.open):hover {
+    background-color: var(--accent-color);
+  }
+  main.view-journal article:not(.open):hover :is(h2, svg) {
+    filter: invert(1);
+  }
 }

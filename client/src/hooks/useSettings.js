@@ -10,6 +10,7 @@ export default function useSettings (defaultSettings={}, storage=window.localSto
   const storedSettings = JSON.parse (storage.getItem ('therapy-journal-settings') || '{}');
   const currentSettings = Object.assign (defaultSettings, storedSettings);
   const [settings, setSettings] = useState (currentSettings);
+  const [iter, setIter] = useState (0);
   const getSetting = (setting, ...relationships) => {
     if (!relationships.length) return settings [setting];
     return relationships.reduce ((acc, val) => {
@@ -21,9 +22,13 @@ export default function useSettings (defaultSettings={}, storage=window.localSto
       return acc;
     }, settings [setting]);
   }
+  const getAll = () => {
+    return Object.assign ({}, settings);
+  }
   const addSetting = (setting, initial) => {
     if (settings [setting]) return;
     setSettings ({...settings, [setting]: initial});
+    setIter (iter + 1);
   }
   const set = (setting, value, ...relationships) => {
     if (!relationships.length) return setSettings ({...settings, [setting]: value});
@@ -40,9 +45,17 @@ export default function useSettings (defaultSettings={}, storage=window.localSto
       };
       return acc;
     }, {[setting]: value});
-    setSettings ({...settings, ...changes});
+    setSettings (_sett => Object.assign (_sett, changes));
+    setIter (iter + 1);
   }
-  const toggle = (setting, ...relationships) => e => {
+  const setAll = (arr=[]) => {
+    let changes = arr.reduce ((acc, {key, value}) => {
+      return Object.assign (acc, {[key]: value})
+    }, {});
+    setSettings (_sett => Object.assign (_sett, changes));
+    setIter (iter + 1);
+  }
+  const toggle = (setting, relationships=[]) => e => {
     if (!relationships.length)  return setSettings ({...settings, [setting]: !settings[setting]})
     let to = !settings [setting];
     let changes = relationships.reduce ((acc, val) => {
@@ -59,10 +72,11 @@ export default function useSettings (defaultSettings={}, storage=window.localSto
       return acc;
     }, {[setting]: to});
     setSettings ({...settings, ...changes});
+    setIter (iter + 1);
   }
   useEffect (() => {
     storage.setItem ('therapy-journal-settings', JSON.stringify (settings));
   }, [settings]);
 
-  return {getSetting, toggle, addSetting, set}
+  return {getSetting, getAll, toggle, addSetting, set, setAll}
 }

@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {skills as api} from '../auth';
+import {skills as api} from '../lib/auth';
 
 const findIndex = (indexedArr, key, value, meta={}) => {
   let found = indexedArr.filter (el => el [key] === value)
@@ -12,9 +12,10 @@ const findIndex = (indexedArr, key, value, meta={}) => {
 export default function useSkills () {
 
   const [skills, setSkills] = useState ([]);
-  const getSkills = async () => {
+  const [staged, setStaged] = useState ([]);
+  const getSkills = async userId => {
     try {
-      let req = await api.get ();
+      let req = await api.get (userId);
       let data = await req.json ();
       let indexed = data.reduce ((acc, val) => {
         findIndex (acc, 'category', val.category, {category: val.category}).push (val);
@@ -43,7 +44,25 @@ export default function useSkills () {
       reject (e);
     }
   })
-
-  return {skills, getSkills, submitSkill}
+  const stageForRemoval = id => {
+    setStaged ([...staged, id]);
+  }
+  const unstage = id => {
+    setStaged (staged.filter (_id => _id !== id));
+  }
+  const isStaged = id => {
+    return staged.includes (id);
+  }
+  const removeSkill = id => new Promise (async (resolve, reject) => {
+    try {
+      if (!isStaged (id)) return;
+      await api.del (id);
+      await getSkills ();
+      resolve ();
+    } catch (e) {
+      reject (e);
+    }
+  });
+  return {skills, getSkills, submitSkill, stageForRemoval, unstage, isStaged, removeSkill}
 
 }

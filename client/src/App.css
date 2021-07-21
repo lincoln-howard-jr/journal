@@ -1,9 +1,15 @@
 @import url('./styles/general.css');
+@import url('./styles/modal.css');
 @import url('./styles/typography.css');
+@import url('./styles/viz.css');
+@import url('./styles/WordCount.css');
 @import url('./styles/nav.css');
 @import url('./styles/settings.css');
 @import url('./styles/writing.css');
 @import url('./styles/journal.css');
+@import url('./styles/skills.css');
 @import url('./styles/searchbar.css');
 @import url('./styles/recorder.css');
+@import url('./styles/metrix.css');
+@import url('./styles/components.css');
 @import url('./styles/darkmode.css');

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import {questions as api} from '../auth';
+import {questions as api} from '../lib/auth';
 
-export default function useQuestions () {
+export default function useWriting () {
 
   const [questions, setQuestions] = useState ([]);
   
@@ -9,7 +9,7 @@ export default function useQuestions () {
     try {
       let req = await api.get ();
       let qs = await req.json ();
-      setQuestions (qs.map (q => q.body));
+      setQuestions (qs.map (q => ({prompt: q.body, id: `custom-question-${q.id}`, unit: 'string', frequency: 'as needed'})));
       resolve (qs);
     } catch (e) {
       reject (e);
@@ -28,5 +28,5 @@ export default function useQuestions () {
   });
 
   return {questions, getQuestions, createQuestion};
-
+ 
 }

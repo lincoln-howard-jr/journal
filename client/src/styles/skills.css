@@ -1,0 +1,30 @@
+.skill-category {
+  width: min(84vw, 600px);
+}
+
+.skill-category li {
+  display: grid;
+  padding: 14px 8px;
+  justify-content: left;
+  justify-items: left;
+}
+
+.skill-category li:not(:first-child) {
+  border-top: 1px dashed var(--font-color);
+}
+
+.skill-category li.stable {
+  grid-template-columns: 1fr 14px;
+}
+
+.skill-category li.to-remove {
+  background-color: var(--error-bg);
+  grid-template-columns: 1fr 36px;
+}
+.skill-category li.to-remove > span > img {
+  width: 14px;
+  display: inline;
+}
+.skill-category li.to-remove > span > img:first-child {
+  margin-right: 8px;
+}

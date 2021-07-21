@@ -1,16 +1,26 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --font-color: #ffffff;
-    --background-color: #030303;
+    --background-color: #0d0d1a;
     --nav-background-color: #413a83f2;
     --input-background-color: #ffffff00;
     --input-text-color: #5ed9ff;
     --input-border-color: #438ea5;
     --error-color: rgb(255, 53, 87);
+    --error-bg: #ff000011;
     --accent-color: #a298ff;
+    --accent-color-light: #000;
+    --accent-color-lighter: #000;
     --default-font-weight: 300;
+    --button-background-color: #322B6D;
+    --button-border-color: #a298ff;
+    --article-bg-color-primary: #000000;
+    --article-bg-color-secondary: #000000;
   }
   img {
     filter: invert(1);
+  }
+  article {
+    box-shadow: 0 0 12px #000;
   }
 }

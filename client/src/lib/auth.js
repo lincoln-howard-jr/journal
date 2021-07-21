@@ -110,7 +110,7 @@ export const customFlow = (phoneNumber, cb, onCodeSent) => new Promise (async (r
 
 export const entries = {
   get get () {
-    return () => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/entries', {
+    return userId => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/entries' + (userId ? '?userId=' + userId : ''), {
       method: 'get',
       headers: headers.get
     });
@@ -121,11 +121,17 @@ export const entries = {
       headers: headers.post,
       body: JSON.stringify (body)
     });
+  }, 
+  get hide () {
+    return id => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/entries/${id}`, {
+      method: 'delete',
+      headers: headers.get
+    })
   }
 }
 export const skills = {
   get get () {
-    return () => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/skills', {
+    return userId => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/skills${userId ? '?userId=' + userId : ''}`, {
       method: 'get',
       headers: headers.get
     });
@@ -136,6 +142,12 @@ export const skills = {
       headers: headers.get,
       body: JSON.stringify (body)
     });
+  },
+  get del () {
+    return id => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/skills/${id}`, {
+      method: 'delete',
+      headers: headers.get
+    })
   }
 }
 
@@ -200,5 +212,76 @@ export const audios = {
       }),
       body: JSON.stringify (body)
     })
+  }
+}
+
+export const notifications = {
+  get get () {
+    return () => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/notifications', {
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    })
+  },
+  get post () {
+    return body => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/notifications', {
+      method: 'post',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify (body)
+    })
+  },
+  get del () {
+    return id => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/notifications/${id}`, {
+      method: 'DELETE',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    })
+  }
+}
+
+export const metrix = {
+  get get () {
+    return userId => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/metrix${userId ? '?userId=' + userId : ''}`, {
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    })
+  },
+  get post () {
+    return body => fetch ('https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/metrix', {
+      method: 'post',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify (body)
+    })
+  },
+}
+
+export const measurements = {
+  get get () {
+    return userId => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/measurements/${userId ? '?userId=' + userId : ''}`, {
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    })
+  },
+  get post () {
+    return (metric, body) => {
+      console.log (metric, body);
+      fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/metrix/${metric}`, {
+        method: 'post',
+        headers: new Headers ({
+          'x-amz-access-token': accessToken,
+          'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify (body)
+      })
+    }
   }
 }

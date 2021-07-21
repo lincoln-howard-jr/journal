@@ -1,8 +1,8 @@
 export default function H1 (props) {
   return (
     <>
-      <h3>{props.children}</h3>
-      <h6>{!!props.short ? props.short : props.children}</h6>
+      <h3 className="long">{props.children}</h3>
+      <h3 className="short">{!!props.short ? props.short : props.children}</h3>
     </>
   )
 }

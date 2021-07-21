@@ -7,26 +7,33 @@
 */
 :root {
   --font-color: #030303;
+  --inverse-font-color: #f3f3f3;
   --background-color: #fcfcfc;
   --nav-background-color: #ffffff;
   --input-background-color: #fcfcfc;
   --input-border-color: #999;
   --input-text-color: #030303;
   --error-color: red;
+  --error-bg: #ff000011;
   --accent-color: #4b4486;
-  --accent-color-light: #4b448655;
-  --h1-font-size: clamp(21px, 4.4vmin, 32px);
-  --h2-font-size: clamp(18px, 3.8vmin, 26px);
-  --h3-font-size: clamp(16px, 3vmin, 22px);
-  --body-text-size: clamp(14px, 2.6vmin, 16px);
+  --accent-color-light: #aba4d6a0;
+  --accent-color-lighter: #aba4d640;
+  --h1-font-size: clamp(20px, 4.4vmin, 32px);
+  --h2-font-size: clamp(16px, 3.8vmin, 26px);
+  --h3-font-size: clamp(14px, 3vmin, 22px);
+  --body-text-size: clamp(12px, 2.6vmin, 16px);
   --default-font-weight: 200;
+  --button-background-color: #ffffff;
+  --button-border-color: #322B6D;
+  --article-bg-color-primary: #aba4d660;
+  --article-bg-color-secondary: #aba4d630;
 }
 /*
   reset
 */
 body {
   margin: 0;
-  padding: 0;
+  padding: 12px 0 0 0;
   min-height: 100vh;
   width: 100vw;
   overflow-x: hidden;
@@ -56,26 +63,35 @@ img {
 /* 
   button styling
 */
-button {
-  font-family: 'Montserrat', sans-serif;
-  opacity: 0.9;
-  border: 1px solid #666;
-  font-weight: 200;
-  padding: 5px 12px;
-  height: calc(var(--body-text-size) * 1.5 + 10);
-  border-radius: var(--body-text-size);
+button, .button-styling {
   background-color: var(--button-background-color);
-  color: var(--button-text-color);
-  max-width: 30ch;
-  margin-top: var(--h1-font-size); margin-bottom: var(--h1-font-size);
+  font-family: 'Montserrat', sans-serif;
+  font-size: var(--body-text-size);
   user-select: none;
+  opacity: 0.7;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px;
+  max-width: 30ch;
+  height: calc(var(--body-text-size) * 1.5 + 10);
+  margin-top: var(--h1-font-size); margin-bottom: var(--h1-font-size);
+  border: 1px solid var(--button-border-color);
+  border-radius: 5px;
+  color: var(--button-text-color);
+  font-weight: 200;
+  transition: 0.3s;
+  box-shadow: 1px 2px 4px var(--accent-color-light);
 }
-button:hover {
-  opacity: 1;
+@media (hover: hover) {
+  button:hover, .button-styling:hover {
+    opacity: 1;
+    color: var(--button-background-color);
+    background-color: var(--button-border-color);
+  }
 }
 button:first-of-type:not(:last-of-type), button + button:not(:last-of-type) {
   margin-right: 0;
-  border-right: 1px solid #333;
+  border-right: 1px solid var(--button-border-color);
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }

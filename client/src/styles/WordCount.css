@@ -1,0 +1,39 @@
+figure.keywords {}
+figure.keywords > figcaption {}
+figure.keywords > section.keyword-container {}
+figure.keywords > section.keyword-container > form.keyword-search {}
+figure.keywords > section.keyword-container > form.keyword-search > input.keyword {}
+figure.keywords > section.keyword-container > form.keyword-search > button {}
+figure.keywords > section.keyword-container > form.keyword-search > button > img {}
+figure.keywords > svg.keyword-chart {}
+figure.keywords > svg.keyword-chart > g.keyword-chart-axis {}
+figure.keywords > svg.keyword-chart > g.keyword-chart-axis > line {
+  stroke: var(--accent-color);
+}
+figure.keywords > svg.keyword-chart > g.keyword-chart-axis > text {
+  stroke: var(--accent-color);
+}
+g.keyword-trendline-1 > line {
+  stroke: var(--color-1);
+}
+g.keyword-trendline-2 > line {
+  stroke: var(--color-2);
+}
+g.keyword-trendline-3 > line {
+  stroke: var(--color-3);
+}
+g.keyword-trendline-4 > line {
+  stroke: var(--color-4);
+}
+g.keyword-chart-labels > text:nth-child(1) {
+  stroke: var(--color-1);
+}
+g.keyword-chart-labels > text:nth-child(2) {
+  stroke: var(--color-2);
+}
+g.keyword-chart-labels > text:nth-child(3) {
+  stroke: var(--color-3);
+}
+g.keyword-chart-labels > text:nth-child(4) {
+  stroke: var(--color-4);
+}

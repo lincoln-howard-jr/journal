@@ -2,10 +2,12 @@ import DateFilter from './DateFilter';
 import TimeFilter from './TimeFilter';
 import CalendarSVG from '../../img/calendar.svg';
 import StopwatchSVG from '../../img/stopwatch.svg';
+import TypeFilter from './TypeFilter';
 
 const filterTypes = {
   'date': DateFilter,
-  'time': TimeFilter
+  'time': TimeFilter,
+  'type': TypeFilter
 }
 
 

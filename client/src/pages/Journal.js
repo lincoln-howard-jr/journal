@@ -1,23 +1,53 @@
 import { useEffect, useState } from 'react'
-import {H2, H3} from './components/Headers'
-import Search from './components/Search';
+import {H1, H2, H3} from './components/Headers'
 import Deferred from './components/Deferred';
-import Filters from './components/Filters';
-import {runIndexEntries, getTime} from '../lib/indexing';
+import {getTime, printDate} from '../lib/indexing';
 import {runScroll} from '../lib/scrolling';
-import constructFilterList from '../lib/filters';
+import MinusSVG from '../img/minus.svg'
+import TrashSVG from '../img/trash.svg'
+import CancelSVG from '../img/cancel.svg'
+import { useApp } from '../AppProvider';
+import Query from './components/Query';
+import AnalogClock from './components/viz/AnalogClock';
 
 const defaultShowCount = 10;
 
-const EntryHeader = ({date, isOpen, open, close, count}) => {
+function RemoveEntryModal ({entry, resolve, reject, hideEntry}) {
+  const handleYes = async () => {
+    try {
+      await hideEntry (entry.id);
+      resolve ();
+    } catch (e) {
+      reject ('Couldn\'t  successfully hide entry!')
+    }
+  }
+  const handleNo = () => reject ('Cancelled');
+  return (
+    <div className="grid remove-entry-modal">
+      <p>Are you sure you want to hide your journal entry from {printDate (entry.start)} at {getTime (entry.start)}</p>
+      <div>
+        <button onClick={handleYes}>Yes, hide it!</button>
+        <button onClick={handleNo}>No, don't!</button>
+      </div>
+    </div>
+  )
+}
+
+function EntryHeader ({entries, date, isOpen, open, close, count}) {
   return isOpen ? (
-    <header className="entry-header">
-      <span className="fake-button" onClick={close}>close</span>
+    <header className="entry-header" onClick={close}>
+      <span className="fake-button"></span>
       <H2>{date}</H2>
     </header>
   ) : (
-    <header className="entry-header">
-      <span className="fake-button" onClick={open}>more</span>
+    <header className="entry-header" onClick={open}>
+      <span>
+        {
+          entries.map (entry => (
+            <AnalogClock date={entry.start} />
+          ))
+        }
+      </span>
       <H2>{date}</H2>
       <div className="pill">
         <span>{count}</span>
@@ -26,149 +56,138 @@ const EntryHeader = ({date, isOpen, open, close, count}) => {
   )
 }
 
-const EntryContents = ({entries, open}) => entries.map (entry => {
-  return open ? (
-    <section className="journal-entry" key={`entry-${entry.id}`}>
-      <H3 short={getTime (entry.start)}>
-        {getTime (entry.start)} - {getTime (entry.end)}
-      </H3>
-      {
-        (entry.entryType === 'questions' || !entry.entryType) &&
-        entry.questions.map ((q, i) => (
-          <section>
-            <p>
-              <b>{q} </b>
-              {entry.answers [i]}
-            </p>
+const EntryContents = ({entries, open}) => {
+  const {journal: {hideEntry}, setModal, closeModal, viewMode: {isViewOnly}} = useApp ();
+  return (
+    <>
+      {entries.map (entry => {
+        const _openModal = async entry => new Promise (async (resolve, reject) => {
+          setModal (<RemoveEntryModal entry={entry} resolve={resolve} reject={reject} hideEntry={hideEntry} />);
+        })
+        const openModal = entry => async () => {
+          try {
+            await _openModal (entry)
+            closeModal ();
+          } catch (e) {
+            closeModal ();
+          }
+        }
+        return open ? (
+          <section className="journal-entry" key={`entry-${entry.id}`}>
+            <header>
+              <span></span>
+              <H3 short={getTime (entry.start)}>
+                {getTime (entry.start)} - {getTime (entry.end)}
+              </H3>
+              {
+                !isViewOnly &&
+                <span>
+                  <img src={TrashSVG} onClick={openModal (entry)} />
+                </span>
+              }
+            </header>
+            {
+              (entry.entryType === 'questions' || !entry.entryType) &&
+              entry.questions.map ((q, i) => (
+                <section key={`${entry.id}-question-${i}`}>
+                  <p>
+                    <b>{q} </b>
+                    {entry.answers [i]}
+                  </p>
+                </section>
+              ))
+            }
+            {
+              entry.entryType === 'freeform' &&
+              <section className="journal-entry">
+                <p>{entry.freeform}</p>
+              </section>
+            }
+            {
+              entry.entryType === 'audio' &&
+                <figure>
+                  <figcaption><p>{entry.audio.title}</p></figcaption>
+                  <audio controls src={entry.audio.url} />
+                </figure>
+            }
           </section>
-        ))
-      }
-      {
-        entry.entryType === 'freeform' &&
-        <section className="journal-entry">
-          <p>{entry.freeform}</p>
-        </section>
-      }
-      {
-        entry.entryType === 'audio' &&
-          <figure>
-            <figcaption><p>{entry.audio.filename}</p></figcaption>
-            <audio controls src={entry.audio.url} />
-          </figure>
-      }
-    </section>
-  ) : (<div></div>)
-})
-
-function Journal({display, entries, isNotMain}) {
+        ) : null;
+      })}
+    </>
+  )
+}
+function Journal() {
+  const {router: {page}, journal: {entries, clearSearch, hideEntry}, freeze} = useApp ();
   const [open, setOpen] = useState ([]);
   const [showCount, setShowCount] = useState (defaultShowCount);
-  const [isSearching, setIsSearching] = useState (false);
-  const [query, setQuery] = useState ('');
-  const [searchResults, setSearchResults] = useState ([]);
-  const [searchOnClear, setOnClear] = useState (()=>{});
-  const [filterDialog, setFilterDialog] = useState (false);
-  const [filterIteration, setFilterIteration] = useState (0);
-  const iterate = a => setFilterIteration (filterIteration + 1);
-  const [filters, _setFilter] = useState ([]);
-  const setFilters = newFilters => {
-    if (!isSearching) setIsSearching (true);
-    _setFilter (newFilters);
-    iterate ();
-  }
-  const updateSearch = q => {
-    setIsSearching (true);
-    setQuery (q);
-  }
-  const cancelSearch = () => {
-    setIsSearching (false);
-    if (searchOnClear) searchOnClear ();
-    setSearchResults ([]);
-  }
   const updateCount = () => {
+    runScroll ();
     setShowCount (defaultShowCount + showCount);
-  };
-  useEffect (() => {
-    if (showCount !== defaultShowCount) runScroll ();
-  }, [showCount]);
-  useEffect (() => {
-    if (query.length || filterIteration > 0) runQuery (query);
-  }, [query, filterIteration]);
-  const runQuery = (q) => {
-    // delay query until we know user isn't typing
-    setTimeout (() => {
-      // user was typing
-      if (q !== query) return;
-      let all = entries.reduce ((acc, val) => {
-        return [...acc, ...val.list];
-      }, []);
-      all = constructFilterList (Object.values (filters)).reduce ((acc, val) => {
-        return acc.filter (val);
-      }, all);
-      let freeformMatch = all.filter (entry => entry.entryType === 'freeform').filter (entry => entry.freeform.toLowerCase ().match (query.toLowerCase ()));
-      let qaMatch = all.filter (entry => entry.entryType === 'questions').map (qa => {
-        return Object.assign (qa, {combined: qa.answers.reduce ((acc, val) => {
-          return acc + ' ' + val.toLowerCase ();
-        }, '')});
-      }).filter (qa => qa.combined.match (query.toLowerCase ()));
-      let allMatch = [...qaMatch, ...freeformMatch];
-      setSearchResults (runIndexEntries (allMatch));
-    }, 500);
   }
-  // what to render in the body
+  const [removing, setRemoving] = useState ([]);
+  const startRemoving = id => {
+    if (removing.includes (id)) return remove (id);
+    setRemoving (removing => [...removing, id]);
+  }
+  const cancelRemove = id => {
+    setRemoving (removing => removing.filter (el => el !== id));
+  }
+  const shouldRemove = id => removing.includes (id);
+  const remove = async id => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
+    try {
+      if (!removing.includes (id)) return reject (new Error (`have not staged skill[${id}] for removal, cannot remove`));
+      await hideEntry (id);
+      setRemoving (removing => removing.filter (el => el !== id));
+      unfreeze ();
+      resolve ();
+    } catch (e) {
+      unfreeze ();
+      reject (e);
+    }
+  })
+  let removal = {startRemoving, cancelRemove, shouldRemove, remove}
+
+  // clear search on unmount
+  useEffect (() => {
+    if (page !== 'journal') clearSearch ()
+  }, [page])
+
+  // body element
   let body = (
     <>
-      {entries.map ((index, i) => i < showCount ? (
-        <Deferred delay={(i % 10) * 85} defferedClassName={''}>
-          <article key={`index-${index.date}`}>
-            <EntryHeader count={index.list.length} date={index.meta.date} isOpen={open.indexOf (index.date) !== -1} open={() => {setOpen (open => [...open, index.date])}} close={() => {
-              setOpen (open => open.filter (d => d !== index.date))
-            }} index={index} />
-            <EntryContents open={open.indexOf (index.date) !== -1} entries={index.list} />
-          </article>
-        </Deferred>
-        ) : i === showCount ? (<div className="grid"><span className="fake-button" onClick={updateCount}>More...</span></div>) : (<div className="none"/>))
-      }
-    </>
-  );
-  // render if searching
-  if (isSearching && searchResults.length > 0) body = (
-    <>
-      <div className="grid">
-        <span className="fake-button" onClick={cancelSearch}>Clear Search Results</span>
-      </div>
       {
-        searchResults.map ((index, i) => (
-          <Deferred delay={i * 50} defferedClassName="">
-            <article key={`index-search-results-for-${query}-${index.date}`}>
-              <EntryHeader count={index.list.length} date={index.meta.date} isOpen={open.indexOf (index.date) !== -1} open={() => {setOpen (open => [...open, index.date])}} close={() => {
-                setOpen (open => open.filter (d => d !== index.date))
-              }} index={index} />
-              <EntryContents open={open.indexOf (index.date) !== -1} entries={index.list} />
-            </article>
+        entries.filter ((d, i) => i < showCount).map ((index, i) => (
+          <Deferred key={`deffered-index-search-results-${index.date}`} delay={i * 50} defferedClassName="">
+            <div className={'article-wrapper' + (open.includes (index.date) ? ' open' : '')}>
+              <article key={`index-search-results-${index.date}`}>
+                <EntryHeader entries={index.list} count={index.list.length} date={index.meta.date} isOpen={open.indexOf (index.date) !== -1} open={() => {setOpen (open => [...open, index.date])}} close={() => {
+                  setOpen (open => open.filter (d => d !== index.date))
+                }} index={index} />
+                <EntryContents open={open.indexOf (index.date) !== -1} entries={index.list} {...removal} />
+              </article>
+            </div>
           </Deferred>
         ))
       }
+      {
+        showCount < entries.length &&
+        <div className="grid">
+          <span onClick={updateCount} className="fake-button">Show More</span>
+        </div>
+      }
     </>
   );
-  if (isSearching && searchResults.length === 0) body = (
+  if (entries.length === 0) body = (
     <div className="grid">
-      <span className="fake-button" onClick={cancelSearch}>Clear Search Results</span>
+      <span className="fake-button" onClick={clearSearch}>Clear Search Results</span>
       <H3>Hmmmm, nothing there!</H3>
     </div>
   );
-  return display ==='none' ? (<div/>) : isNotMain ? (
-    <>
-      <Search onClear={setOnClear} updateSearch={updateSearch} openFilter={()=>setFilterDialog (!filterDialog)} />
-      <Filters iterate={iterate} open={filterDialog} setFilters={setFilters} filters={filters} />
-      {body}
-    </>
-  )
-  :
-  (
-    <main className={display}>
-      <Search onClear={setOnClear} updateSearch={updateSearch} openFilter={()=>setFilterDialog (!filterDialog)} />
-      <Filters iterate={iterate} open={filterDialog} setFilters={setFilters} filters={filters} />
+  return (page !== 'journal') ? null : (
+    <main>
+      <H1>Journal</H1>
+      <Query />
       {body}
     </main>
   )

@@ -1,0 +1,50 @@
+.current-metrix-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--h2-font-size);
+}
+.current-metrix-list > .metrix-metric {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 7fr 2fr var(--h2-font-size);
+}
+.metrix-measurements {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.metrix-measurements > li {
+  display: grid;
+  grid-template-columns: var(--body-text-size) 1fr var(--body-text-size);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: var(--h2-font-size) 0;
+}
+.metrix-measurements > li:not(:last-of-type) {
+  padding-bottom: var(--h2-font-size);
+  border-bottom: 1px solid #ccc;
+}
+.metrix-measurements > li > ul {
+  display: none;
+}
+.metrix-measurements > li.open > ul {
+  display: grid;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  grid-column: 1 / 4;
+}
+.metrix-measurements > li > ul > li {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+}
+.metrix-measurements img {
+  cursor: pointer;
+}
+.metrix-measurements > li.open img {
+  transform: rotate(180deg);
+}

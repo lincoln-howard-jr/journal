@@ -1,22 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useRef, useState } from "react";
 import sanitizePhoneNumber from '../lib/sanitizePhoneNumber'
-import {H2, H3} from "./components/Headers";
+import {H1, H2, H3} from "./components/Headers";
+import attributions from '../lib/attributions'
+import {useApp} from '../AppProvider';
+import Notifications from "./components/TextNotifications";
+import CaretSVG from '../img/caret-down.svg';
+import CustomQuestion from "./components/CustomQuestions";
+import Metrix from './components/Metrix'
 
-const attributions = {
-  'calendar.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>',
-  'pen.svg': 'Icons made by <a href="https://www.flaticon.com/authors/icongeek26" title="Icongeek26">Icongeek26</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'book.svg': 'Icons made by <a href="https://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski">Zlatko Najdenovski</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'plus.svg': 'Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'list.svg': 'Icons made by <a href="https://www.flaticon.com/authors/phatplus" title="phatplus">phatplus</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'skill.svg': 'Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'settings.svg': 'Icons made by <a href="https://www.flaticon.com/authors/srip" title="srip">srip</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>',
-  'search.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>',
-  'filter.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/kirill-kazachek" title="Kirill Kazachek">Kirill Kazachek</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>',
-  'stopwatch.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>',
-  'caret-down.svg': '<div>Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>'
-}
-
-function ShareJourunal ({shareJournal, settings}) {
+function ShareJournal () {
+  const {sharing: {shareJournal}, settings} = useApp ();
   const numRef = useRef ();
   const nameRef = useRef ();
   const swnRef = useRef ();
@@ -32,7 +25,7 @@ function ShareJourunal ({shareJournal, settings}) {
   }
   return (
     <div className="action">
-      <p style={{textDecoration: 'none'}}>Share Your Journal With</p>
+      <b style={{textDecoration: 'none'}}>Share Your Journal With</b>
       <input ref={swnRef} placeholder="James Allen" />
       <input type="tel" ref={numRef} placeholder="123-456-7890" />
       <p style={{textDecoration: 'none'}}>Your Name</p>
@@ -43,12 +36,13 @@ function ShareJourunal ({shareJournal, settings}) {
   )
 }
 
-function SharedByMe ({freeze, sharedByMe, toggleSetting, getSetting, toggleFreeze}) {
-  const onToggle = (share) => () => async () => {
-    let unfreeze = freeze ();
+function SharedByMe () {
+  const {freeze, sharing: {sharedByMe, toggleFreeze}} = useApp ();
+
+  const onToggle = (share) => async () => {
+    let unfreeze = freeze ('');
     try {
       await toggleFreeze (share.id);
-      toggleSetting (`share-${share.id}`) ();
       unfreeze ();
     } catch (e) {
       unfreeze ();
@@ -56,7 +50,7 @@ function SharedByMe ({freeze, sharedByMe, toggleSetting, getSetting, toggleFreez
   }
   return (
     <div>
-      <p style={{textDecoration: 'none'}}>Who You Share Your Journal With</p>
+      <b style={{textDecoration: 'none'}}>Who You Share Your Journal With</b>
       <hr style={{width: '25vw'}}/>
       {
         sharedByMe.length === 0 &&
@@ -64,34 +58,41 @@ function SharedByMe ({freeze, sharedByMe, toggleSetting, getSetting, toggleFreez
       }
       {
         sharedByMe.map (share => (
-          <Setting getSetting={getSetting} title={share.shareWithName || share.shareWith} setting={`share-${share.id}`} onToggle={onToggle (share)} />
+          <>
+            <Setting onToggle={onToggle (share)} title={share.shareWithName || share.shareWith} setting={`share-${share.id}`} />
+            <br/>
+          </>
         ))
       }
     </div>
   );
 }
 
-function SharedWithMe ({sharedWithMe, redirect}) {
+function SharedWithMe () {
+  const {sharing: {sharedWithMe}, viewSharedJournal} = useApp ();
   let shares = sharedWithMe.filter (share => !share.frozen);
   if (shares.length === 0) return (<div className="none" />)
   return (
     <div className="action">
-      <p style={{textDecoration: 'none'}}>Journals Shared With You</p>
+      <b style={{textDecoration: 'none'}}>Journals Shared With You</b>
       <hr style={{width: '25vw'}}/>
       {
         shares.map (share => (
-          <span onClick={() => {redirect (`?page=sharing&id=${share.id}&name=${share.name}`)}}>{share.name}</span>
+          <span onClick={() => viewSharedJournal (share.userId)}>{share.name}</span>
         ))
       }
     </div>
   )
 }
 
-function SettingGroup ({longTitle, shortTitle, children}) {
+export function SettingGroup ({longTitle, shortTitle, children}) {
+  const [open, setOpen] = useState (false);
   return (
-    <div className="setting-group">
-      <header>
+    <div className={'setting-group' + (open ? ' open' : '')}>
+      <header onClick={() => setOpen (!open)}>
+        <span />
         <H3 short={shortTitle}>{longTitle}</H3>
+        <span><img src={CaretSVG} /></span>
       </header>
       {children}
       <div></div>
@@ -99,7 +100,8 @@ function SettingGroup ({longTitle, shortTitle, children}) {
   )
 }
 
-function Setting ({setting, title, onToggle, getSetting, relationships=[]}) {
+export function Setting ({setting, title, relationships=[], onToggle}) {
+  const {settings: {getSetting, toggle}} = useApp ();
   let show = relationships.reduce ((acc, val) => {
     if (!acc) return acc;
     let relation = val.charAt (0);
@@ -112,52 +114,80 @@ function Setting ({setting, title, onToggle, getSetting, relationships=[]}) {
   )
   return (
     <div className="setting">
-      <div>{title}</div>
-      <div><span onClick={onToggle.apply (null, [setting, ...relationships])} className={getSetting (setting) ? 'toggle on' : 'toggle'} /></div>
+      <div><b>{title}</b></div>
+      <div><span onClick={onToggle ? onToggle : toggle (setting, relationships)} className={getSetting (setting) ? 'toggle on' : 'toggle'} /></div>
     </div>
   )
 }
 
-function Settings({freeze, settings, swStatus, install, uninstall, display, logout, shareJournal, sharedWithMe, sharedByMe, toggleFreeze, redirect}) {
-  return (
-    <main className="settings" style={{display}}>
+function Settings () {
+  const {router: {page, redirect}, settings: {getSetting, iter}, auth: {user, logout}} = useApp ();
+  const [attributionId, setAttributionId] = useState ('attributions');
+  if (!user) return null;
+  return page === 'settings' ? (
+    <main className="settings">
+      <H1>Settings</H1>
       <SettingGroup longTitle={'Journal Settings'} shortTitle={'Journal'}>
-        <Setting setting="freeform" title="Enable Freeform" getSetting={settings.getSetting} onToggle={settings.toggle} />
+        <p>Make journal entries the way you want to make them. These settings are specific to your device, so you can have different preferences on your phone, tablet, laptop or whatever else you use!</p>
+        <Setting setting="freeform" title="Enable Freeform" />
         {
-          settings.getSetting ('audio-recording-supported') &&
-          <Setting setting="audio-recording" title="Enable Audio Recording" getSetting={settings.getSetting} onToggle={settings.toggle} relationships={['+freeform']} />
+          getSetting ('audio-recording-supported') &&
+          <Setting setting="audio-recording" title="Enable Audio Recording" relationships={['+freeform']} />
         }
-        <Setting setting="default-questions" title="Show Default Questions" getSetting={settings.getSetting} onToggle={settings.toggle} relationships={['|custom-questions']} />
-        <Setting setting="custom-questions" title="Show Custom Questions" getSetting={settings.getSetting} onToggle={settings.toggle} relationships={['|default-questions']} />
+        <Setting setting="default-questions" title="Show Default Questions" relationships={['custom-questions']} />
+        <Setting setting="custom-questions" title="Show Custom Questions" relationships={['default-questions']} />
+        <Setting setting="use-metrix" title="Show Metrix" />
       </SettingGroup>
-      <ShareJourunal settings={settings} shareJournal={shareJournal} />
-      <SharedWithMe settings={settings} sharedWithMe={sharedWithMe} redirect={redirect} />
-      <SharedByMe freeze={freeze} getSetting={settings.getSetting} toggleSetting={settings.toggle} setSetting={settings.set} sharedByMe={sharedByMe} toggleFreeze={toggleFreeze} />
-      {
-        !swStatus && 
+      <SettingGroup shortTitle="Prompts" longTitle="Manage Prompts">
+        <CustomQuestion />
+      </SettingGroup>
+      <SettingGroup longTitle="Manage Your Notifications" shortTitle="Notifications">
+        <Notifications />
+      </SettingGroup>
+      <SettingGroup shortTitle="Sharing" longTitle="Manage Journal Sharing">
+        <SharedWithMe/>
+        <br style={{margin: 12}} />
+        <SharedByMe/>
+        <ShareJournal/>
+      </SettingGroup>
+      <SettingGroup shortTitle="Misc" longTitle="Miscellaneous">
         <div className="action">
-          <span onClick={install}>Install!</span>
+          { 
+            window.navigator.canShare &&
+            <span onClick={() => {
+              window.navigator.share ({
+                title: 'My Journal',
+                url: 'https://lincoln-howard-jr.github.io/journal/'
+              })
+            }}>Share This Application</span>
+          }
         </div>
-      }
-      {
-        !!swStatus &&
         <div className="action">
-          <span onClick={uninstall}>Uninstall</span>
+          <span onClick={logout}>Log Out</span>
         </div>
-      }
-      <div className="action">
-        <span onClick={logout}>Log Out</span>
-      </div>
-      <section id="attributions">
-        <H2>Attributions</H2>
-        <ul>
-          {Object.keys (attributions).map (k => (
-            <li key={`attribiution-${k}`} dangerouslySetInnerHTML={{__html: attributions [k]}}></li>
-          ))}
-        </ul>
-      </section>
+        {
+          attributionId === 'attributions' &&
+          <div className="action">
+            <span onClick={() => setAttributionId ('')}>Show Attributions</span>
+          </div>
+        }
+        <div className="attributions" id={attributionId}>
+          <div className="fake-button">
+            <span onClick={() => setAttributionId ('attributions')}>Hide Attributions</span>
+          </div>
+          <ul>
+            {Object.keys (attributions).map (k => (
+              <li key={`attribiution-${k}`}>
+                <b>{k}</b>
+                <br />
+                <span dangerouslySetInnerHTML={{__html: attributions [k]}}/>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </SettingGroup>
     </main>
-  )
+  ) : null;
 }
 
 export default Settings

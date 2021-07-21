@@ -3,6 +3,10 @@
 */
 *[contenteditable] {
   color: var(--input-text-color);
+  outline: none;
+}
+*[contenteditable]:focus {
+  border-bottom: 1px dashed var(--accent-color);
 }
 .freeform {
   padding: 4px 6px;
@@ -15,8 +19,9 @@
   padding: 3px 5px;
   text-align: left;
 }
-.questions > div::before {
+.questions > div[contentEditable]::before {
   content: "";
+  box-shadow: none;
   outline: none;
   position: absolute;
   margin-left: -24px;
@@ -31,20 +36,71 @@
 }
 .questions:focus > div::before {
   outline: none;
+  box-shadow: none;
 }
 .questions > div:not(:last-child) {
   margin-bottom: 24px;
 }
 /* Add Question Dialog styling */
-.current-question-list {
+.prompt-list {
   list-style-type: none;
+  width: 100%;
   margin: var(--h1-font-size);
   padding: 0;
 
 }
-.current-question-list > li {
+.prompt-list > li {
   padding: 5px 12px;
 }
 .add-question-input {
   padding: 5px 12px;
+  max-width: 80%;
+}
+.add-a-section {
+  user-select: none;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  margin: var(--h1-font-size) 0;
+  font-size: var(--h2-font-size);
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color-light);
+  border-radius: 7px;
+  opacity: 0.4;
+  transition: 0.3s;
+  box-shadow: 1px 2px 4px var(--accent-color-light);
+  cursor: pointer;
+}
+.add-a-section:hover {
+  color: var(--button-background-color);
+  background-color: var(--button-border-color);
+  opacity: 0.7;
+}
+.add-a-section.selecting {
+  display: none;
+}
+.add-a-section + section {
+  display: none;
+}
+.add-a-section.selecting + section {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr var(--body-text-size);
+  gap: var(--h1-font-size);
+}
+.add-a-section.selecting + section > select {
+  width: max(80%, 250px);
+}
+.prompt-prompt {
+  display: grid;
+  grid-template-columns: 1fr var(--body-text-size);
+}
+.prompt-divider {
+  border: none;
+  border: 0;
+  margin: min(5vh, 35px) auto;
+  width: min(50%, 250px);
+}
+.prompt-divider:last-of-type {
+  display: none;
 }

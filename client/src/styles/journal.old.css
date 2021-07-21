@@ -1,0 +1,95 @@
+/* 
+  journal styling
+*/
+@keyframes header-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-250px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes content-slide-down {
+  0% {
+    transform: scaleY(0.4);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+div.article-wrapper.open {
+  transform-origin: top;
+  animation: content-slide-down 0.4s;
+}
+div.article-wrapper article {
+  animation: header-slide-in 0.6s;
+  display: grid;
+  align-items: center;
+  margin: calc(var(--h2-font-size) + 15px) auto;
+  border-radius: 15px;
+}
+div.article-wrapper article > .entry-header {
+  cursor: pointer;
+}
+div.article-wrapper:nth-child(2n) article {
+  background-color: var(--article-bg-color-primary);
+  box-shadow: -4px -4px 8px var(--article-bg-color-primary),
+               4px  4px 8px var(--article-bg-color-primary);
+}
+div.article-wrapper:nth-child(2n + 1) article {
+  background-color: var(--article-bg-color-secondary);
+  box-shadow: -4px -4px 8px var(--article-bg-color-secondary),
+               4px  4px 8px var(--article-bg-color-secondary);
+}
+.entry-header {
+  grid-template-columns: 1fr 4fr 1fr;
+  min-height: 90px;
+}
+section:not(:last-of-type) {
+  margin-bottom: 24px;
+}
+section.journal-entry {
+  padding: 0 14px;
+}
+section.journal-entry > header {
+  display: grid;
+  grid-template-columns: 14px 1fr 14px;
+}
+section.journal-entry.to-remove {
+  background-color: var(--error-bg);
+}
+section.journal-entry.to-remove > header {
+  grid-template-columns: 32px 1fr 32px;
+}
+section.journal-entry.to-remove > header > span {
+  display: grid;
+  grid-template-columns: 14px 6px 14px;
+}
+section > ul {
+  font-weight: var(--default-font-weight);
+  font-size: var(--body-text-size);
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+section > ul > li {
+  line-height: 21px;
+  letter-spacing: 0.5px;
+}
+.pill {
+  display: grid;
+  justify-items: right;
+}
+.pill > span {
+  text-align: center;
+  width: 3ch;
+  border: 1px solid var(--font-color);
+  background-color: var(--background-color);
+  border-radius: 6px;
+}
+section.journal-entry figure {
+  text-align: center;
+}

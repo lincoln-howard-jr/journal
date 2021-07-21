@@ -2,7 +2,7 @@ import lame from 'lamejs';
 
 let audioCtx = null;
 let AudioContext = (window.AudioContext || window.webkitAudioContext);
-const encoder = new lame.Mp3Encoder (1, 44100, 128000);
+let encoder;
 
 
 let stream = null;
@@ -24,7 +24,6 @@ export const createMediaRecorder = () => {
   if (!stream) throw new Error ('no stream available to record');
   mediaRecorder = new window.MediaRecorder (stream);
   mediaRecorder.ondataavailable = evt => {
-    console.log (chunks);
     chunks.push (evt.data);
   }
 }
@@ -75,11 +74,11 @@ export const extract = async (freeze, title='recording') => new Promise (async (
   let unfreeze = freeze ();
   try {
     audioCtx.decodeAudioData (await chunks [0].arrayBuffer (), decoded => {
+      encoder = new lame.Mp3Encoder (decoded.numberOfChannels, decoded.sampleRate, 256000);
       mp3data.push (encoder.encodeBuffer (decoded.getChannelData (0).map (data => data * 10000)));
-      mp3data.push (new Int8Array (encoder.flush ()));
+      mp3data.push (new Int16Array (encoder.flush ()));
       let file = new File (mp3data, title, {type: 'audio/mp3'});
       unfreeze ();
-      chunks = [];
       resolve (file);
     });
   } catch (e) {

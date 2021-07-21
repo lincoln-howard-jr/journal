@@ -7,9 +7,8 @@ export const scrollToTop = (offset=0) => setTimeout (() => {
 }, offset);
 
 export const runScroll = (top=2 * window.innerHeight / 3, offset=100) => setTimeout (() => {
-  window.scrollBy ({
-    left: 0,
-    top: top,
+  window.scrollTo ({
+    top: document.body.scrollHeight,
     behavior: 'smooth'
-  })
+  });
 }, offset);

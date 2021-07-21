@@ -1,19 +1,22 @@
 import {useState} from 'react';
-import {shares as api} from '../auth';
+import {shares as api} from '../lib/auth';
 import {runIndexEntries} from '../lib/indexing';
 
-export default function useSharing () {
+export default function useSharing (settings) {
 
   const [sharedWithMe, setSharedWithMe] = useState ([]);
   const [sharedByMe, setSharedByMe] = useState ([]);
-  const getShares = async cb => {
+  const [sharedJournal, setSharedJournal] = useState ([]);
+  const getShares = async () => {
     try {
       let req = await api.get ();
-      let dict = await req.json ();
-      setSharedByMe (dict.sharedByMe);
-      setSharedWithMe (dict.sharedWithMe);
-      cb (dict);
+      let {sharedWithMe, sharedByMe} = await req.json ();
+      setSharedByMe (sharedByMe);
+      setSharedWithMe (sharedWithMe);
+      let sett = sharedByMe.map (sbm => {return {key: `share-${sbm.id}`, value: !sbm.frozen}});
+      settings.setAll (sett);
     } catch (e) {
+      console.log (e);
     }
   }
   const getShareById = async id => new Promise (async (resolve, reject) => {
@@ -21,7 +24,8 @@ export default function useSharing () {
       let req = await api.getById (id);
       let arr = await req.json ();
       let dict = runIndexEntries (arr);
-      resolve (dict);
+      setSharedJournal (dict);
+      resolve ();
     } catch (e) {
       reject (e);
     }
@@ -29,9 +33,8 @@ export default function useSharing () {
 
   const toggleFreeze = async id => new Promise (async (resolve, reject) => {
     try {
-      let req = await api.toggleFreeze (id);
-      let updated = await req.json ();
-      setSharedByMe (sbm => sbm.map (share => share.id === id ? updated : share))
+      await api.toggleFreeze (id);
+      await getShares ();
       resolve ();
     } catch (e) {
       reject (e);
@@ -41,16 +44,14 @@ export default function useSharing () {
   const shareJournal = async (phone, name, shareWithName) => new Promise (async (resolve, reject) => {
     try {
       let shareWith = (phone.length === 10) ? `+1${phone}` : phone;
-      let req = await api.post ({shareWith, name, shareWithName});
-      let share = await req.json ();
-      alert (`Successfully shared your journal with ${phone}!`);
-      console.log (share);
-      resolve (share);
+      await api.post ({shareWith, name, shareWithName});
+      await getShares ();
+      resolve ();
     } catch (e) {
       reject (e);
     }
   })
 
-  return {sharedByMe, sharedWithMe, getShareById, getShares, shareJournal, toggleFreeze};
+  return {sharedByMe, sharedWithMe, sharedJournal, getShareById, getShares, shareJournal, toggleFreeze};
 
 }

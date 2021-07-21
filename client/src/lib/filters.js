@@ -32,14 +32,18 @@ const constructTimeFilter = value => entry => {
   }
 }
 
+const constructEntryTypeFilter  = value => entry => {
+  return entry.entryType === value.entryType;
+}
+
 const filterTypes = {
-  'date': constructDateFilter,
-  'time': constructTimeFilter
+  type: constructEntryTypeFilter,
+  date: constructDateFilter,
+  time: constructTimeFilter
 }
 
 const constructFilterList = filters => {
   let _f = filters.map (filter => filterTypes [filter.type] (filter.value))
-  console.log (_f);
   return _f;
 }
 

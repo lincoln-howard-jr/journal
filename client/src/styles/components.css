@@ -1,0 +1,32 @@
+/* slider */
+.component-slider-svg {
+  max-width: 400px;
+}
+.component-slider-svg text {
+  font-size: clamp(var(--body-text-size), calc((525px - 100vw)), var(--h1-font-size));
+}
+.component-slider-svg .slider-base :is(circle, text, line) {
+  stroke: var(--accent-color);
+  fill: var(--accent-color);
+}
+.component-slider-svg .slider-value :is(circle, text, line)  {
+  stroke: var(--accent-color);
+  fill: var(--accent-color);
+}
+/* analog clock */
+.analog-clock {
+  display: inline-block;
+  width: min(6vw, 52px);
+  margin: auto;
+}
+.analog-clock :is(circle, line) {
+  stroke: var(--font-color);
+}
+.analog-clock .clock-ticks line {
+  stroke: var(--font-color);
+  opacity: 0.4;
+}
+.analog-clock .clock-ticks line:nth-child(3n + 1) {
+  stroke: var(--font-color);
+  opacity: 1;
+}

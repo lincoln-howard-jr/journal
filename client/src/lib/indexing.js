@@ -24,7 +24,7 @@ export const days = [
 
 export const dateShortHand = (_d=new Date ()) => {
   let d = new Date (_d);
-  return `${d.getMonth ()}-${d.getDate ()}-${d.getFullYear ()}`.toString ();
+  return `${d.getFullYear ()}-${d.getMonth () + 1}-${d.getDate ()}`.toString ();
 }
 export const printDate = (_d=new Date ()) => {
   let d = new Date (_d);
@@ -32,6 +32,14 @@ export const printDate = (_d=new Date ()) => {
 }
 export const getTime = (d=new Date ()) => {  
   return `${(d.getHours () % 12 || 12)}:${`0${d.getMinutes ()}`.slice(-2)} ${d.getHours () > 11 ? 'pm' : 'am'}`;
+}
+export const dateFromShortHand = d => {
+  if (d instanceof Date) return d;
+  let [year, month, date] = d.split ('-');
+  year = parseInt (year);
+  month = parseInt (month) - 1;
+  date = parseInt (date);
+  return new Date (year, month, date);
 }
 
 export const findIndex = (indexedArr=[], key, value, meta={}) => {
@@ -42,7 +50,6 @@ export const findIndex = (indexedArr=[], key, value, meta={}) => {
   return index.list;
 }
 
-
 export const runIndexEntries = (entries) => {
   let arr = entries.map (el => Object.assign (el, {start: new Date (el.start), end: new Date (el.end)}));
   arr.sort ((a, b) => b.start - a.start);
@@ -50,4 +57,10 @@ export const runIndexEntries = (entries) => {
     findIndex (acc, 'date', dateShortHand (val.start), {date: printDate (val.start)}).push (val);
     return acc;
   }, []);
+}
+
+export const wordCount = entry => {
+  if (entry.entryType === 'questions') return entry.answers.join (' ').split (' ').length;
+  if (entry.entryType === 'freeform') return entry.freeform.split (' ').length;
+  return 0;
 }

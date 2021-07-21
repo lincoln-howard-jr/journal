@@ -5,4 +5,6 @@ const sanitizePhoneNumber = number => {
   return '+1' + reduced;
 }
 
+export const stripPhoneNumber = number => number.replaceAll (/[^0-9]/g, '');
+
 export default sanitizePhoneNumber

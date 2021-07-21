@@ -132,3 +132,6 @@ ol.filter-list {
     grid-column: 1;
   }
 }
+.add-filter-disabled {
+  opacity: 0.3;
+}

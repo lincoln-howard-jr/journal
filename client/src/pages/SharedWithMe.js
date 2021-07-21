@@ -1,28 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useApp } from "../AppProvider";
 import Journal from "./Journal";
+import {H2} from './components/Headers';
 
-function SharedWithMe ({shareId, name, display, getShareById}) {
-  const [journal, setJournal] = useState ([]);
-  const [error, setErr] = useState (false);
+function SharedWithMe () {
+  const {auth: {user}, router: {page, params}, sharing: {getShareById, sharedJournal}} = useApp ();
   useEffect (() => {
-    if (!shareId) return;
+    if (!user || !params.get ('shareId')) return;
     (async () => {
       try {
-        setJournal (await getShareById (shareId));
+        await getShareById (params.get ('shareId'));
       } catch (e) {
-        setErr ('We encountered an experience loading this journal. It may not longer be shared with you...');
+        alert ('We encountered an experience loading this journal. It may not longer be shared with you...');
       }
     }) ();
-  }, [shareId]);
+  }, [params, page, user]);
+  if (page !== 'sharing' || !user) return null;
   return (
     <>
-      <main style={{display}}>
-        <h5>Shared By {name}</h5>
-        <Journal isNotMain display={display} entries={journal} />
-        {
-          error &&
-          <p className="error">{error}</p>
-        }
+      <main>
+        <H2>Shared By {params.get ('name')}</H2>
+        <Journal isNotMain _entries={sharedJournal} />
       </main>
     </>
   )

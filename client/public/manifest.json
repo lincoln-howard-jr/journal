@@ -1,6 +1,6 @@
 {
   "short_name": "Journal",
-  "name": "My Therapy Journal",
+  "name": "My Journal",
   "icons": [
     {
       "src": "icons/manifest-icon-192.png",
@@ -18,7 +18,7 @@
   "scope": "/journal/",
   "start_url": "/journal/",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#4b4486",
   "background_color": "#ffffff",
   "shortcuts": [
     {

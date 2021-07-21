@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export default function ({children, defferedClassName, delay}) {
+export default function ({key, children, defferedClassName, delay}) {
   const [deferring, setDeferring] = useState (true);
   useEffect (() => {
     setTimeout (() => {

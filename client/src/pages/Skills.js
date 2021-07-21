@@ -1,5 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { H2 } from './components/Headers';
+import { H1, H2 } from './components/Headers';
+import MinusSVG from '../img/minus.svg'
+import TrashSVG from '../img/trash.svg'
+import CancelSVG from '../img/cancel.svg'
+import { useApp } from '../AppProvider';
+import { useRef } from 'react';
 
 function SkillSuggestions () {
   return (
@@ -20,23 +24,63 @@ function SkillSuggestions () {
   )
 }
 
-function Skills ({display, skills, submitSkill}) {
-  const [mode, setMode] = useState ('reference');
-  const catRef = useRef ();
-  const sklRef = useRef ();
-  const openEditor = () => {
-    setMode ('edit');
-  }
-  const onSubmitSkill = async () => {
-    try {
-      await submitSkill ({category: catRef.current.value, skill: sklRef.current.innerText})
-    } catch (e) {
+function Skills () {
+  const {auth: {user}, router: {page}, settings: {getSetting, toggle, iter}, skills: {skills, isStaged, submitSkill, stageForRemoval, unstage, removeSkill}, freeze} = useApp ();
 
+  const sklRef = useRef ();
+  const catRef = useRef ();
+  const addSkill = async e => {
+    let unfreeze = freeze ();
+    try {
+      let category = catRef.current.value;
+      let skill = sklRef.current.innerText;
+      await submitSkill ({category, skill});
+      catRef.current.value = 'Tools For';
+      sklRef.current.innerText = '...';
+      unfreeze ();
+    } catch (e) {
+      unfreeze ();
     }
-    setMode ('reference');
   }
+  if (!user) return null;
+  if (page !== 'skills') return null;
+  if (!getSetting ('skill-add-mode')) return (
+    <main className="skill-category">
+      <H1 short="Skills">Reference Your Skills</H1>
+      <div className="text-center">
+        <a className="fake-button text-center" onClick={toggle ('skill-add-mode')}>Add A Skill</a>
+      </div>
+      {
+        skills.map (category => (
+          <section key={`skill-category-${category.meta.category}`} className="skill-category">
+            <H2>{category.meta.category}</H2>
+            <ul>
+              {
+                category.list.map (skill => (
+                  <li key={`skill-skill-${skill.id}`} className={isStaged (skill.id) ? 'to-remove' : 'stable'}>
+                    <span>{skill.skill}</span>
+                    <span>
+                      {
+                        isStaged (skill.id) ? 
+                        <>
+                          <img onClick={e => removeSkill (skill.id)} src={TrashSVG} />
+                          <img onClick={e => unstage (skill.id)} src={CancelSVG} />
+                        </>
+                        :
+                          <img onClick={e => stageForRemoval (skill.id)} src={MinusSVG} />
+                        }
+                      </span>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        ))
+      }
+    </main>
+  )
   return (
-    <>
+    <main>
       <datalist id="skills-categories">
         {
           skills.map (category => (
@@ -44,60 +88,16 @@ function Skills ({display, skills, submitSkill}) {
           ))
         }
       </datalist>
-      <main className={mode === 'edit' ? display : 'none'}>
-        <h2>New Skill</h2>
-        <div>Category: <input list="skills-categories" ref={catRef} defaultValue="Tools For"/></div>
-        <div>Skill: <p style={{padding: 7.5}} ref={sklRef} contentEditable>...</p></div>
-        <div>
-          <button onClick={onSubmitSkill}>Add Skill</button>
-          <button onClick={()=>{setMode ('reference')}}>Cancel</button>
-        </div>
-        <hr style={{margin: '10vh 0'}} />
-        <SkillSuggestions />
-      </main>
-      <main className={mode === 'reference' ? display : 'none'}>
-        {
-          !skills.length && (
-            <>
-              <p>
-                You haven't added any coping skills yet, but that's ok! Click on 'Add New Skill' to start
-                adding coping skills!
-              </p>
-              <p>Having trouble thinking of some? We made a list of some sample skills!</p>
-              <SkillSuggestions />
-            </>
-          )
-        }
-        {
-          skills.map (category => (
-            <section>
-              <H2>{category.meta.category}</H2>
-              <ul>
-                {
-                  category.list.map (skill => (
-                    <li>{skill.skill}</li>
-                  ))
-                }
-              </ul>
-            </section>
-          ))
-        }
-        <span style={{marginTop: '2.5vh'}} onClick={openEditor} className="fake-button">Add New Skill</span>
-        {
-          !skills.length && (
-            <>
-              <p>
-                You haven't added any coping skills yet, but that's ok! Click on 'Add New Skill' to start
-                adding coping skills!
-              </p>
-              <p>Having trouble thinking of some? We made a list of some sample skills!</p>
-              <SkillSuggestions />
-            </>
-          )
-        }
-      </main>
-    </>
+      <H1>Add A Skill</H1>
+      <div>Category: <input list="skills-categories" ref={catRef} defaultValue="Tools For"/></div>
+      <div>Skill: <p style={{padding: 7.5}} ref={sklRef} contentEditable>...</p></div>
+      <div>
+        <button onClick={addSkill}>Add Skill</button>
+        <button onClick={toggle ('skill-add-mode')}>Cancel</button>
+      </div>
+      <hr style={{margin: '10vh 0'}} />
+      <SkillSuggestions />
+    </main>
   )
 }
-
 export default Skills

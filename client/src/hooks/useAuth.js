@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
-import {login as _login, register as _register, getCurrentUser, retrieveAccessToken, refreshSession, signOut, customFlow} from '../auth';
+import {login as _login, register as _register, getCurrentUser, retrieveAccessToken, refreshSession, signOut, customFlow} from '../lib/auth';
+import {keepAlive, cancelKeepAlive} from '../lib/keepAlive';
 
 export default function useAuth (onSessionActive) {
   // data
@@ -11,12 +12,11 @@ export default function useAuth (onSessionActive) {
     return new Promise (async (resolve, reject) => {
       try {
         await customFlow (Username, cb, onCodeSent);
-        console.log ('custom flow complete');
         await retrieveAccessToken ();
+        keepAlive ();
         setUser (true);
         resolve ();
       } catch (e) {
-        console.log ('custom flow complete - on err');
         reject (e);
       }
     })
@@ -37,6 +37,7 @@ export default function useAuth (onSessionActive) {
   const logout = async () => new Promise (async (resolve, reject) => {
     try {
       await signOut ();
+      cancelKeepAlive ();
       window.location.reload ();
       resolve ();
     } catch (e) {
@@ -47,7 +48,6 @@ export default function useAuth (onSessionActive) {
   // init
   const init = async () => {
     try {
-      console.log ('init auth')
       await getCurrentUser ();
       await retrieveSession ();
       await refreshSession ();

@@ -1,0 +1,22 @@
+#modal-backdrop {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #aaaaaaaa;
+  z-index: 10;
+}
+#modal-content {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  width: max(75vw, 300px);
+  height: max(75vmin, 200px);
+  padding: max(3vw, 25px);
+  background-color: var(--background-color);
+  border: 1px solid var(--font-color);
+}

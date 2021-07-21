@@ -1,0 +1,197 @@
+svg {
+  --color-1: #4b4486;
+  --color-2: #CA054D;
+  --color-3: #80b190;
+  --color-4: #daa873;
+}
+svg text {
+  font-size: 27px;
+  user-select: none;
+  fill: var(--font-color);
+}
+svg:nth-child(3n) text {
+  font-size: 18px;
+}
+@keyframes slideUp {
+  0% {
+    transform: translateY(-5%) scaleY(0.05);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/* dashboard html styling */
+div.dashboard {
+  width: min(94%, 1000px);
+  row-gap: 25px;
+  margin: 25px auto;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr;
+}
+div.dashboard > :nth-child(3n) {
+  grid-column: 1 / 3;
+}
+div.dashboard > figure {
+  width: min(100%, 750px);
+}
+div.dashboard img {
+  width: min(100%, 32px);
+}
+/* svg styling */
+.time-of-day rect {
+  transform-origin: bottom;
+  animation: slideUp 1.5s;
+  fill: var(--accent-color);
+}
+.time-of-day line {
+  stroke: var(--accent-color);
+}
+div.dashboard > figure {
+  margin: 0;
+}
+div.dashboard > figure > figcaption {
+  font-size: var(--h3-font-size);
+  text-align: center;
+}
+g.circle-graph-group > path + text {
+  opacity: 0;
+}
+g.circle-graph-group > path:hover + text {
+  opacity: 1;
+}
+.type-of-entry > .legend {
+  fill: #ffffff;
+}
+.type-of-entry path {
+  transition: 0.4s;
+}
+.type-of-entry path:hover {
+  transform: scale(1.07);
+}
+text.trendline-1 {
+  stroke: var(--color-1);
+}
+text.trendline-2 {
+  stroke: var(--color-2);
+}
+text.trendline-3 {
+  stroke: var(--color-3);
+}
+text.trendline-4 {
+  stroke: var(--color-4);
+}
+line.trendline-1 {
+  stroke: var(--color-1);
+}
+line.trendline-2 {
+  stroke: var(--color-2);
+}
+line.trendline-3 {
+  stroke: var(--color-3);
+}
+line.trendline-4 {
+  stroke: var(--color-4);
+}
+/* specific to keywords styling */
+.keyword-container {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  height: 0;
+  overflow: visible;
+}
+.keyword-search {
+  transform: translateY(1vw);
+  display: grid;
+  grid-template-columns: calc(0.8 * var(--body-text-size)) 1fr calc(0.8 * var(--body-text-size));
+  height: calc(1.8 * var(--body-text-size));
+  padding: 0;
+  border: 1px solid var(--input-border-color);
+  border-radius: var(--body-text-size);
+  background-color: var(--input-background-color);
+  width: min(100%, 22ch);
+  padding: 0 2.5%;
+}
+.keyword-search * {
+  margin: 0;
+  padding: 0;
+}
+.keyword-search span {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  margin: none;
+  padding: none;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  width: calc(0.8 * var(--body-text-size));
+}
+.keyword-search button img {
+  width: calc(0.75 * var(--body-text-size));
+}
+.keyword-search input {
+  grid-column: 2;
+  border: none;
+  width: 80%;
+}
+.bar-chart-bar > rect:first-child {
+  fill: var(--color-3);
+}
+.bar-chart-bar > rect:nth-child(2) {
+  fill: var(--color-2);
+}
+.bar-chart-bar > rect:nth-child(3) {
+  fill: var(--color-1);
+}
+.bar-chart-text > text:first-child {
+  stroke: var(--color-1);
+}
+.bar-chart-text > text:nth-child(2) {
+  stroke: var(--color-2);
+}
+.bar-chart-text > text:nth-child(3) {
+  stroke: var(--color-3);
+}
+/* reset the dashboard layout when on smaller devices */
+@media (max-width: 1100px) {
+  div.dashboard {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    gap: 25px;
+  }
+  div.dashboard > figure {
+    grid-column: 1;
+  }
+  svg text {
+    font-size: 18px;
+  }
+}
+/* Single Metrix Graph */
+.single-metrix .single-metrix-axis line {
+  stroke: var(--accent-color);
+  stroke-width: 1px;
+}
+/* Pie Chart */
+.pie-chart :is(.the-pie, .legend) :nth-child(4n + 1) {
+  stroke: var(--color-1);
+}
+.pie-chart :is(.the-pie, .legend) :nth-child(4n + 2) {
+  stroke: var(--color-2);
+}
+.pie-chart :is(.the-pie, .legend) :nth-child(4n + 3) {
+  stroke: var(--color-3);
+}
+.pie-chart :is(.the-pie, .legend) :nth-child(4n) {
+  stroke: var(--color-4);
+}

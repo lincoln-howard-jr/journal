@@ -1,5 +1,6 @@
 export default {
   'custom-questions': true,
   'default-questions': true,
-  freeform: false
+  freeform: false,
+  'skill-add-mode': false
 }

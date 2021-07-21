@@ -28,6 +28,7 @@ function DateFilter ({value, remove, setValue}) {
   const [yyyy, setYear] = useState (d.getFullYear ());
   const [maxDays, setMaxDays] = useState (maxDaysIn (mm, yyyy));
   const cycleMode = () => {
+    if (value.modeFinal) return;
     setMode (
       mode === 'single-day' ? 'after' :
       mode === 'after' ? 'before' : 'single-day'
@@ -37,17 +38,17 @@ function DateFilter ({value, remove, setValue}) {
     if (mm === NaN || dd === NaN || yyyy === NaN) return;
     let max = maxDaysIn (mm, yyyy);
     setMaxDays (max);
-    setValue ({
+    setValue (Object.assign (value, {
       mode,
       date: new Date (yyyy, mm - 1, dd, 0, 0, 0)
-    });
+    }));
   }, [dd, mm, yyyy, mode]);
   return (
     <li className="grid filter date-filter">
       <span>
         <img src={CalendarSVG} alt="Date Filter" />
       </span>
-      <span className="fake-button" onClick={cycleMode}>
+      <span className={value.modeFinal ? '' : "fake-button"} onClick={cycleMode}>
         <span className="grid switch-mode">
           <span>
             {
@@ -55,7 +56,10 @@ function DateFilter ({value, remove, setValue}) {
               value.mode === 'after' ? 'After' : 'Before'
             }
           </span>
-          <img style={{display: 'inline', transform: 'rotate(-90deg)'}} width={8} height={8} src={CaretSVG} />
+          {
+            !value.modeFinal &&
+            <img style={{display: 'inline', transform: 'rotate(-90deg)'}} width={8} height={8} src={CaretSVG} />
+          }
         </span>
       </span>
       <div>
@@ -65,8 +69,8 @@ function DateFilter ({value, remove, setValue}) {
         <span>/</span>
         <input type="tel" min={2020} max={new Date ().getFullYear ()} defaultValue={yyyy} onChange={e=>setYear (parseInt (e.target.value))}/>
       </div>
-      <span onClick={remove} className="fake-button">
-        remove
+      <span>
+        <span className="fake-button" onClick={remove}>remove</span>
       </span>
     </li>
   )

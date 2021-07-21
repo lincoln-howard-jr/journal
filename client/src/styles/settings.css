@@ -1,4 +1,9 @@
-
+select {
+  user-select: none;
+  background-color: var(--background-color);
+  color: var(--font-color);
+  font-size: var(--body-text-size);
+}
 main.settings div {
   margin: 0;
   display: grid;
@@ -20,9 +25,12 @@ main.settings > div > *:last-child, main.settings > div > *:first-child {
 main.settings > div > *:not(:first-child):not(:last-child) {
   margin: 7px;
 }
-main.settings > div.action > span {
+main.settings div.action > span {
   text-decoration: underline;
   cursor: pointer;
+}
+main.settings div.action > span:not(:last-child) {
+  margin-bottom: 12px;
 }
 .setting {
   display: grid;
@@ -33,6 +41,14 @@ main.settings > div.action > span {
 }
 .setting > *:nth-child(2) {
   justify-items: right;
+}
+.setting-group > header {
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: var(--body-text-size) 1fr var(--body-text-size);
+}
+.setting-group.open > header > span > img {
+  transform: rotate(-180deg);
 }
 .setting-group > h3 {
   margin: var(--h1-font-size);
@@ -67,4 +83,70 @@ main.settings > div.action > span {
 .toggle.on::after {
   background-color: var(--accent-color);
   right: -26px;
+}
+/* attributions */
+.attributions ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.attributions li {
+  padding: 15px;
+  transition: 0.3s;
+}
+.attributions li:not(:last-child) {
+  border-bottom: 1px dashed var(--accent-color);
+}
+.attributions li:hover {
+  background-color: var(--accent-color-light);
+}
+/* notifications */
+.notification-creator {
+  display: block !important;
+}
+.notification-creator select {
+  display: inline-block;
+  font-size: var(--body-text-size);
+}
+.notification-creator select + select {
+  margin-left: 10px;
+}
+.notification-list {
+  display: block !important;
+}
+.notification-list > span {
+  margin: var(--body-text-size);
+  display: inline-grid;
+  align-items: center;
+  justify-content: center;
+  grid-gap: 8px;
+  grid-template-columns: 1fr 16px;
+}
+.notification-list > span > span {
+  transition: 0.3s;
+}
+.notification-list > span:hover > span {
+  color: var(--button-background-color)
+}
+.notification-list > span > img {
+  transition: 0.3s;
+  filter: invert(0);
+}
+.notification-list > span:hover > img {
+  filter: invert(1);
+}
+@media (prefers-color-scheme: dark) {
+  .notification-list > span > img {
+    transition: 0.3s;
+    filter: invert(1);
+  }
+  .notification-list > span:hover > img {
+    filter: invert(0);
+  }
+}
+.setting-group:not(.open) > *:nth-child(n+2) {
+  height: 0;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
 }

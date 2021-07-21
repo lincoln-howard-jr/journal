@@ -5,19 +5,19 @@ const titles = {
   },
   journal: {
     long: () => 'Review Your Journal Entries',
-    short: () => 'Therapy Journal'
+    short: () => 'Journal'
   },
   settings: {
-    long: () => 'Customize Your Therapy Journal',
+    long: () => 'Customize Your Journal',
     short: () => 'Customize'
   },
   skills: {
-    long: () => 'Coping Skills Reference Sheet',
-    short: () => 'Coping Skills'
+    long: () => 'Skills Reference Sheet',
+    short: () => 'Skills'
   },
   sharing: {
-    long: name => `Therapy Journal From ${name}`,
-    short: name => `Therapy Journal`
+    long: name => `Journal From ${name}`,
+    short: name => `Journal`
   }
 }
 export default (page) => {
