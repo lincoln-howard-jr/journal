@@ -5,8 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        env:
-          CI: false
         working-directory: ./client
     steps:
       - uses: actions/checkout@v2
@@ -17,5 +15,7 @@ jobs:
         run: npm install
       - name: Build React Appliction
         run: npm run build
+        env:
+          CI: false
       - name: Deploy To Github Pages
         run: gh-pages -d build
