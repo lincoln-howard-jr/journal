@@ -8,7 +8,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: cd journal/client
+      - run: pwd
+      - run: ls
+      - run: cd client
       - run: pwd
       - run: ls
       - run: npm install
