@@ -3,17 +3,19 @@ on: [push]
 jobs:
   do-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        env:
+          CI: false
+        working-directory: ./client
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
       - name: Install Dependencies
-        working-directory: ./client
         run: npm install
       - name: Build React Appliction
-        working-directory: ./client
         run: npm run build
       - name: Deploy To Github Pages
-        working-directory: ./client
         run: gh-pages -d build

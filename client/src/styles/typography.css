@@ -10,6 +10,7 @@
   font-family: 'Montserrat', sans-serif;
   color: var(--font-color);
   font-weight: var(--default-font-weight);
+  font-size: var(--body-text-size);
 }
 /* 
   general header and heading style
