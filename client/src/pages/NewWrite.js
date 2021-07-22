@@ -57,9 +57,8 @@ export default function Write () {
         questions,
         answers: Object.values (qa)
       }
-      console.log (body);
-      // await createEntry (body);
-      // await createMeasurements ();
+      await createEntry (body);
+      await createMeasurements ();
       setStart (new Date ());
       unfreeze ();
     } catch (e) {
