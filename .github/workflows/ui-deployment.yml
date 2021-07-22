@@ -9,11 +9,11 @@ jobs:
         with:
           node-version: '14'
       - name: Install Dependencies
-        working-direcroty: ./client
+        working-directory: ./client
         run: npm install
       - name: Build React Appliction
-        working-direcroty: ./client
+        working-directory: ./client
         run: npm run build
       - name: Deploy To Github Pages
-        working-direcroty: ./client
+        working-directory: ./client
         run: gh-pages -d build
