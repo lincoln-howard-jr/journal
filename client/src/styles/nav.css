@@ -31,8 +31,10 @@ nav > ul > li {
   grid-template-rows: 28px 12px;
   justify-items: center;
   align-items: baseline;
-  font-size: 10px;
   line-height: 12px;
+}
+nav > ul > li > label {
+  font-size: 10px;
 }
 nav > ul > li > img {
   height: 28px;

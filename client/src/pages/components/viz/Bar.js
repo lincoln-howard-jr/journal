@@ -1,4 +1,5 @@
 import {useState, useEffect, memo} from 'react';
+import {padding} from './dimensions';
 // component to represent a bar in a bar graph
 function _Bar ({key, time, i, width, height, hourlyMax, onClick}) {
   // tooltip state mgmt
@@ -15,14 +16,14 @@ function _Bar ({key, time, i, width, height, hourlyMax, onClick}) {
     setBreakdown ([audioCount / total, freeformCount / total, questionsCount / total]);
   }, [time]);
   //positioning calculations
-  let margin = width / 20;
-  let contentWidth = 18 * width / 20;
+  let margin = padding;
+  let contentWidth = width - 2 * padding;
   let offset = 0.1 * contentWidth / 24;
   const dimensions = {
-    x: margin + offset + i * contentWidth / 24,
+    x: padding + offset + i * contentWidth / 24,
     width: (contentWidth / 24) - (offset / 2)
   }
-  const y0 = (height - 20) - 0.66 * height * time.length / hourlyMax;
+  const y0 = (height - padding) - 0.66 * height * time.length / hourlyMax;
   const height_total = 0.66 * height * time.length / hourlyMax;
   // render
   return (
@@ -32,7 +33,7 @@ function _Bar ({key, time, i, width, height, hourlyMax, onClick}) {
       <rect {...dimensions} y={y0 + (1 - breakdown [2]) * height_total} height={breakdown [2] * height_total} />
       {
         showTooltip &&
-        <text x={margin + i * contentWidth / 24} y={height}>{(i % 12) || 12}{i > 11 ? 'PM' : 'AM'}</text>
+        <text textAnchor="center" x={margin + (i - 0.5) * contentWidth / 24} y={height}>{(i % 12) || 12}{i > 11 ? 'PM' : 'AM'}</text>
       }
     </g>
   )

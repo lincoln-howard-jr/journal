@@ -3,7 +3,7 @@ import { useApp } from '../../../AppProvider';
 import PieChart from './PieChart';
 import WordCount from './WordCount';
 import Bar from './Bar';
-import {width, height} from './dimensions';
+import {width, height, padding} from './dimensions';
 
 // calculate days between 2 dates
 const oneDay = 1000 * 60 * 60 * 24
@@ -80,7 +80,7 @@ export default function Metrics () {
         <figcaption>Entries By Time Of Day</figcaption>
         <svg key='time-of-day-svg' viewBox={`0 0 ${width} ${height}`}>
           {/** axis */}
-          <line x1={width / 20} y1={height - 20} x2={width - width / 20} y2={height - 20} />
+          <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} />
           {/* hour based bars */}
           {
             indexed.map ((time, i) => <Bar key={`bar-chart-bar-${i}`} time={time} i={i} height={height} width={width} hourlyMax={hourlyMax} onClick={onBarClick (i)} />)
