@@ -24,6 +24,8 @@ jobs:
         run: git fetch
       - name: Checkout Pages Repo
         run: git checkout gh-pages
+      - name: Remove Unused Directories
+        run: rm -rf client
       - name: Pop Stash
         run: git stash pop
       - name: Move Things
