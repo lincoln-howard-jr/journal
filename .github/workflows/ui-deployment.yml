@@ -25,7 +25,7 @@ jobs:
       - name: Checkout Pages Repo
         run: git checkout gh-pages
       - name: Clean The Directory
-        run: rm -r !(.git)
+        run: rm *
       - name: Pop Stash
         run: git stash show -p | git apply
       - name: Move Things
