@@ -22,6 +22,7 @@ jobs:
           git stash push -u \
           git checkout gh-pages \
           git stash pop \
+          cp -rf build ./ \
           git commit -am "auto action deployemnt" \
           git push
         
