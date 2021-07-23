@@ -16,14 +16,19 @@ jobs:
         working-directory: ./client
         env:
           CI: false
-      - name: Deploy To Pages
-        run: |
-          mv client/build ./build &&
-          git stash push -u &&
-          git fetch &&
-          git checkout gh-pages &&
-          git stash pop &&
-          cp -rf build ./ &&
-          git commit -am "auto action deployemnt" &&
-          git push
-        
+      - name: Move Things
+        run: mv client/build ./build
+      - name: Stash Changes
+        run: git stash push -u
+      - name: Fetch Remotes
+        run: git fetch
+      - name: Checkout Pages Repo
+        run: git checkout gh-pages
+      - name: Pop Stash
+        run: git stash pop
+      - name: Move Things
+        run: cp -rf build ./
+      - name: Commit Changes
+        run: git commit -am "auto generated commit"
+      - name: Push Changes
+        run: git push origin gh-pages
