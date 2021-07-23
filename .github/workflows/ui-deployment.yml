@@ -3,9 +3,6 @@ on: [push]
 jobs:
   do-deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./client
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -13,9 +10,18 @@ jobs:
           node-version: '14'
       - name: Install Dependencies
         run: npm install && npm install -g gh-pages
+        working-directory: ./client
       - name: Build React Appliction
         run: npm run build
+        working-directory: ./client
         env:
           CI: false
-      - name: Deploy To Github Pages
-        run: gh-pages -d build
+      - name: Deploy To Pages
+        run: |
+          mv client/build ./build
+          git stash push -u
+          git checkout gh-pages
+          git stash pop
+          git commit -am "auto action deployemnt"
+          git push
+        
