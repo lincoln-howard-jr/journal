@@ -19,7 +19,7 @@ jobs:
       - name: Move Things
         run: mv client/build ./build
       - name: Stash Changes
-        run: git stash push -u
+        run: git stash push -u ./build
       - name: Fetch Remotes
         run: git fetch
       - name: Checkout Pages Repo
