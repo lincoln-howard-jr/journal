@@ -1,36 +1,19 @@
-name: deploy-to-pages
+name: Build and Deploy
 on: [push]
 jobs:
-  do-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+
+      - name: Install and Build 🔧
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          node-version: '14'
-      - name: Install Dependencies
-        run: npm install && npm install -g gh-pages
-        working-directory: ./client
-      - name: Build React Appliction
-        run: npm run build
-        working-directory: ./client
-        env:
-          CI: false
-      - name: Move Things
-        run: mv client/build ./build
-      - name: Stash Changes
-        run: git stash push -u ./build
-      - name: Fetch Remotes
-        run: git fetch
-      - name: Checkout Pages Repo
-        run: git checkout gh-pages
-      - name: Clean The Directory
-        run: rm *
-      - name: Pop Stash
-        run: git stash show -p | git apply
-      - name: Move Things
-        run: cp -rf build ./
-      - name: Commit Changes
-        run: git commit -am "auto generated commit"
-      - name: Push Changes
-        run: git push origin gh-pages
+          branch: gh-pages
+          folder: build
