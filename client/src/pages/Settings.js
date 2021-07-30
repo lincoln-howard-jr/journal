@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import sanitizePhoneNumber from '../lib/sanitizePhoneNumber'
 import {H1, H2, H3} from "./components/Headers";
 import attributions from '../lib/attributions'
@@ -6,7 +6,6 @@ import {useApp} from '../AppProvider';
 import Notifications from "./components/TextNotifications";
 import CaretSVG from '../img/caret-down.svg';
 import CustomQuestion from "./components/CustomQuestions";
-import Metrix from './components/Metrix'
 
 function ShareJournal () {
   const {sharing: {shareJournal}, settings} = useApp ();
@@ -26,9 +25,13 @@ function ShareJournal () {
   return (
     <div className="action">
       <b style={{textDecoration: 'none'}}>Share Your Journal With</b>
+      <br/>
       <input ref={swnRef} placeholder="James Allen" />
+      <br/>
       <input type="tel" ref={numRef} placeholder="123-456-7890" />
-      <p style={{textDecoration: 'none'}}>Your Name</p>
+      <br/>
+      <b style={{textDecoration: 'none'}}>Your Name</b>
+      <br/>
       <input ref={nameRef} />
       <br />
       <span onClick={onClick}>Submit</span>
@@ -58,10 +61,10 @@ function SharedByMe () {
       }
       {
         sharedByMe.map (share => (
-          <>
+          <React.Fragment key={`share-${share.id}`}>
             <Setting onToggle={onToggle (share)} title={share.shareWithName || share.shareWith} setting={`share-${share.id}`} />
             <br/>
-          </>
+          </React.Fragment>
         ))
       }
     </div>
@@ -78,7 +81,10 @@ function SharedWithMe () {
       <hr style={{width: '25vw'}}/>
       {
         shares.map (share => (
-          <span onClick={() => viewSharedJournal (share.userId)}>{share.name}</span>
+          <React.Fragment key={`share-${share.id}`}>
+            <span onClick={() => viewSharedJournal (share.userId)}>{share.name}</span>
+            <br />
+          </React.Fragment>
         ))
       }
     </div>
@@ -145,8 +151,10 @@ function Settings () {
         <Notifications />
       </SettingGroup>
       <SettingGroup shortTitle="Sharing" longTitle="Manage Journal Sharing">
+        <p>
+          View journals shared with you and who you've shared your journal with.
+        </p>
         <SharedWithMe/>
-        <br style={{margin: 12}} />
         <SharedByMe/>
         <ShareJournal/>
       </SettingGroup>

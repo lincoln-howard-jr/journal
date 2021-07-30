@@ -90,9 +90,6 @@ export default function WordCount () {
             <text x={padding / 2} y={height - padding} textAnchor="middle">0</text>
             <text x={padding / 2} y={marginTop + padding} textAnchor="middle">{range_n}</text>
             <text x={padding * 2.5} y={height - padding / 4} textAnchor="middle">{dateShortHand (domain_0)}</text>
-            <text x={padding * 2.5 + (width - 2 * padding) / 4} y={height - padding / 4} textAnchor="middle">{dateShortHand (xinverse (0.25))}</text>
-            <text x={padding * 2.5 + 2 * (width - 2 * padding) / 4} y={height - padding / 4} textAnchor="middle">{dateShortHand (xinverse (0.5))}</text>
-            <text x={padding * 2.5 + 3 * (width - 2 * padding) / 4} y={height - padding / 4} textAnchor="middle">{dateShortHand (xinverse (0.75))}</text>
             <text x={width - padding * 2.5} y={height - padding / 4} textAnchor="middle">{dateShortHand (domain_n)}</text>
             {/* labels */}
             <g className="keyword-chart-labels">

@@ -1,4 +1,4 @@
-import { useState, useReducer, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useApp } from "../AppProvider";
 import {MetrixType} from './components/Metrix'
 import {H1, H2, H3} from './components/Headers'
@@ -49,16 +49,19 @@ export default function Write () {
     try {
       const all = allPrompts ();
       const qa = session.getAll ();
-      let questions = Object.keys (qa).map (id => all.find (p => p.id === id)).filter (a => a);
+      let questions = Object.keys (qa).filter (id => (qa [id] !== null && qa [id] !== undefined)).map (id => all.find (p => p.id === id)).filter (a => a);
+      let answers = questions.map (question => qa [question.id]);
+      questions = questions.map (question => question.prompt)
       const body = {
         entryType: 'questions',
         start,
         end: new Date (),
         questions,
-        answers: Object.values (qa)
+        answers
       }
       await createEntry (body);
       await createMeasurements ();
+      session.clearSettings ()
       setStart (new Date ());
       unfreeze ();
     } catch (e) {
@@ -83,7 +86,7 @@ export default function Write () {
   // remove prompt
   const removePrompt = (prompt) => {
     measure (prompt, undefined);
-    session.set (prompt.id, undefined);
+    session.removeSetting (prompt.id);
   }
 
   useEffect (() => {
@@ -106,14 +109,14 @@ export default function Write () {
               defaultValue: prompt.unit === 'string' ? (session.getSetting (prompt.prompt) || '...') : getMeasureValue (prompt)
             }
             return (
-              <>
+              <React.Fragment key={`prompt-${prompt.unit}-${prompt.id}`}>
                 <span className="prompt-prompt">
                   <b>{prompt.prompt}</b>
                   <span onClick={() => removePrompt (prompt)}><img src={TrashSVG} /></span>
                 </span>
                 <Metric autofocus={autoFocusPrompt === prompt.id} onChange={value => onChange (prompt, value)} {...dv} {...prompt} />
                 <hr className="prompt-divider" />
-              </>
+              </React.Fragment>
             )
           })
         }
@@ -128,7 +131,7 @@ export default function Write () {
                   <option value={null} defaultChecked></option>
                   {
                     allPrompts ().filter (m => !isCaptured (m)).filter (m => !getActivePromts ().find (_m => m.id === _m.id)).map (metric => (
-                      <option value={metric.id}>{metric.prompt}</option>
+                      <option key={`option-${prompt.unit}-${prompt.id}`} value={metric.id}>{metric.prompt}</option>
                     ))
                   }
                 </select>

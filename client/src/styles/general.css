@@ -18,10 +18,10 @@
   --accent-color: #4b4486;
   --accent-color-light: #aba4d6a0;
   --accent-color-lighter: #aba4d640;
-  --h1-font-size: clamp(20px, 4.4vmin, 32px);
-  --h2-font-size: clamp(16px, 3.8vmin, 26px);
-  --h3-font-size: clamp(14px, 3vmin, 22px);
-  --body-text-size: clamp(12px, 2.6vmin, 16px);
+  --h1-font-size: clamp(24px, 4.4vmin, 32px);
+  --h2-font-size: clamp(21px, 3.8vmin, 26px);
+  --h3-font-size: clamp(18px, 3vmin, 22px);
+  --body-text-size: clamp(14px, 2.6vmin, 16px);
   --default-font-weight: 200;
   --button-background-color: #ffffff;
   --button-border-color: #322B6D;
@@ -49,6 +49,12 @@ main {
 }
 main > div {
   margin: var(--body-text-size) 0;
+}
+/* list style */
+ul, ol {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 /*
   general image styling

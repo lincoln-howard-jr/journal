@@ -144,7 +144,6 @@ export default function Notifications ({defaultMessage=_defaultMessage}) {
       <>
         <b>Customize Message:</b>
         <p ref={messageRef} contentEditable>{message}</p>
-        <button onClick={() => {setMessage (messageRef.current.innerText); setStep (step - 1)}}>Back</button>
         {
           !editId &&
           <>
@@ -154,7 +153,10 @@ export default function Notifications ({defaultMessage=_defaultMessage}) {
         }
         {
           !!editId &&
-          <button>Update Notification</button>
+          <>
+            <button onClick={() => setStep (step - 1)}>Back</button>
+            <button>Update Notification</button>
+          </>
         }
       </>
     )

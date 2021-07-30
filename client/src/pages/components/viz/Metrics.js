@@ -4,6 +4,7 @@ import PieChart from './PieChart';
 import WordCount from './WordCount';
 import Bar from './Bar';
 import {width, height, padding} from './dimensions';
+import SingleMetrix from './SingleMetrix';
 
 // calculate days between 2 dates
 const oneDay = 1000 * 60 * 60 * 24

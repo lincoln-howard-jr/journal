@@ -1,12 +1,3 @@
-figure.keywords {}
-figure.keywords > figcaption {}
-figure.keywords > section.keyword-container {}
-figure.keywords > section.keyword-container > form.keyword-search {}
-figure.keywords > section.keyword-container > form.keyword-search > input.keyword {}
-figure.keywords > section.keyword-container > form.keyword-search > button {}
-figure.keywords > section.keyword-container > form.keyword-search > button > img {}
-figure.keywords > svg.keyword-chart {}
-figure.keywords > svg.keyword-chart > g.keyword-chart-axis {}
 figure.keywords > svg.keyword-chart > g.keyword-chart-axis > line {
   stroke: var(--accent-color);
 }

@@ -30,6 +30,14 @@ export default function useSettings (defaultSettings={}, storage=window.localSto
     setSettings ({...settings, [setting]: initial});
     setIter (iter + 1);
   }
+  const removeSetting = setting => {
+    delete settings [setting];
+    setIter (iter + 1);
+  }
+  const clearSettings = () => {
+    setSettings ({});
+    setIter (iter + 1);
+  }
   const set = (setting, value, ...relationships) => {
     if (!relationships.length) return setSettings ({...settings, [setting]: value});
     let changes = relationships.reduce ((acc, val) => {
@@ -78,5 +86,5 @@ export default function useSettings (defaultSettings={}, storage=window.localSto
     storage.setItem ('therapy-journal-settings', JSON.stringify (settings));
   }, [settings]);
 
-  return {getSetting, getAll, toggle, addSetting, set, setAll}
+  return {getSetting, removeSetting, getAll, toggle, addSetting, set, setAll, clearSettings}
 }

@@ -31,13 +31,19 @@ export function NumberMetric ({onChange, defaultValue, range, step}) {
 
 export function StringMetric ({onChange, autofocus, defaultValue='...'}) {
   const ref = useRef ();
+  const [isFirstFocus, setIsFirstFocus] = useState (defaultValue === '...');
+  const onFirstFocus = () => {
+    if (!isFirstFocus) return;
+    ref.current.innerText = '';
+    setIsFirstFocus (false);
+  }
   useEffect (() => {
     if (ref.current && autofocus) {
       ref.current.focus ();
     }
   }, [ref]);
   return (
-    <div ref={ref} contentEditable onBlur={e => onChange (e.target.innerText)}>{defaultValue}</div>
+    <div ref={ref} onFocus={onFirstFocus} contentEditable onBlur={e => onChange (e.target.innerText)}>{defaultValue}</div>
   )
 }
 

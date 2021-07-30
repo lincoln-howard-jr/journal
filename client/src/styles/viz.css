@@ -10,7 +10,7 @@ svg text {
   fill: var(--font-color);
 }
 svg:nth-child(3n) text {
-  font-size: 18px;
+  font-size: 16px;
 }
 @keyframes slideUp {
   0% {
@@ -31,7 +31,7 @@ svg:nth-child(3n) text {
 /* dashboard html styling */
 div.dashboard {
   width: min(94%, 1000px);
-  row-gap: 25px;
+  row-gap: 50px;
   margin: 25px auto;
   display: grid;
   align-items: center;
@@ -145,18 +145,21 @@ line.trendline-4 {
   div.dashboard {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    gap: 25px;
-  }
-  div.dashboard > figure {
-    grid-column: 1;
   }
   svg text {
-    font-size: 18px;
+    font-size: 28px;
   }
 }
 /* Single Metrix Graph */
+.single-metrix marker {
+  fill: var(--accent-color);
+}
 .single-metrix .single-metrix-axis line {
   stroke: var(--accent-color);
+  stroke-width: 1px;
+}
+.single-metrix .single-metrix-data line {
+  stroke: var(--accent-color-light);
   stroke-width: 1px;
 }
 /* Pie Chart */
