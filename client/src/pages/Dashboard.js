@@ -8,7 +8,7 @@ function Analytics () {
 
   if (page !== 'dashboard') return null;
   return (
-    <main>
+    <main className="dashboard">
       <H1>Dashboard</H1>
       <Metrics />
     </main>

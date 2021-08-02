@@ -5,6 +5,7 @@ import WordCount from './WordCount';
 import Bar from './Bar';
 import {width, height, padding} from './dimensions';
 import SingleMetrix from './SingleMetrix';
+import { EntriesThisWeek, QuestionsThisWeek, SkillCount, TotalEntryCount } from './Stats';
 
 // calculate days between 2 dates
 const oneDay = 1000 * 60 * 60 * 24
@@ -49,16 +50,14 @@ export default function Metrics () {
         type: 'time',
         value: {
           mode: 'after',
-          minutes: 0,
-          hours: time
+          time: `${time % 12 || 12}:00 ${time < 12 ? 'am' : 'pm'}`
         }
       },
       {
         type: 'time',
         value: {
           mode: 'before',
-          minutes: 0,
-          hours: time + 1
+          time: `${(time + 1) % 12 || 12}:00 ${(time + 1) < 12 ? 'am' : 'pm'}`
         }
       }
     ]);
@@ -108,14 +107,18 @@ export default function Metrics () {
   // return the dashboard
   return (
     <>
-      <div className="dashboard">
-        {
-          metrics.map (metric => (
-            <>
-              {metric}
-            </>
-          ))
-        }
+      <div className="row four-items">
+        <QuestionsThisWeek />
+        <EntriesThisWeek />
+        <TotalEntryCount />
+        <SkillCount />
+      </div>
+      <div className="row two-items">
+        {metrics [0]}
+        {metrics [1]}
+      </div>
+      <div className="row one-item">
+        {metrics [2]}
       </div>
     </>
   );

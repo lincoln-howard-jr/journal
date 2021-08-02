@@ -30,3 +30,32 @@
   stroke: var(--font-color);
   opacity: 1;
 }
+/* number counter */
+.number-counter {
+  margin: auto;
+  width: min(100%, 100px);
+}
+.number-counter rect {
+  transform-origin: center;
+  transition: 0.3s;
+  fill-opacity: 0;
+  fill: var(--color-1);
+  stroke: var(--color-1);
+  stroke-width: 0.5;
+}
+.number-counter text {
+  transform-origin: center;
+  font-size: 37px;
+  transition: 0.3s;
+  stroke: var(--color-1);
+  fill: var(--color-1);
+}
+.number-counter:hover rect {
+  transform: rotate(9deg);
+  fill-opacity: 1;
+}
+.number-counter:hover text {
+  transform: scale(1.1);
+  stroke: var(--background-color);
+  fill: var(--background-color);
+}

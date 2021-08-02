@@ -63,8 +63,10 @@ export default function useAuth (onSessionActive) {
       await _register (phoneNumber);
       await login (phoneNumber, cb, onCodeSent);
       setUser (true);
+      resolve ();
     } catch (e) {
       setErr (e);
+      reject (e);
     }
   });
 

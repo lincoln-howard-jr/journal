@@ -8,14 +8,10 @@ const fmtRawPhoneNumber = number => {
   if (stripped.length > 10) stripped = stripped.substr (0, 10);
   console.log (stripped);
   if (stripped.length === 0) return stripped;
-  if (stripped.length < 3) return `(${stripped}`;
-  if (stripped.length < 6) return `(${stripped.substr (0, 3)}) ${stripped.substr (3)}`;
+  if (stripped.length < 4) return `(${stripped}`;
+  if (stripped.length < 7) return `(${stripped.substr (0, 3)}) ${stripped.substr (3)}`;
   return `(${stripped.substr (0, 3)}) ${stripped.substr (3, 3)}-${stripped.substr (6)}`;
 }
-
-const isNumber = keycode => keycode < 58 && keycode > 47;
-const isBackspace = keycode => keycode === 8;
-const isEnter = keycode => keycode === 13;
 
 export default function Auth () {
   // important global state
@@ -26,10 +22,6 @@ export default function Auth () {
   const [answer, setAnswer] = useState (v => () => console.log (v));
   const codeRef = useRef ();
   const setPhoneNumber = (number) => _setPhoneNumber (fmtRawPhoneNumber (number));
-  const handleKeypress = e => {
-    e.preventDefault ();
-    if (isEnter (e.keycode)) return onLogInClick ();
-  }
   const promptForCode = _answer => {
     setPrompt (true);
     setAnswer (() => () => {_answer (codeRef.current.value)});
@@ -44,6 +36,7 @@ export default function Auth () {
     try {
       let phoneNumber = sanitizePhoneNumber (rawPhoneNumber);
       await register (phoneNumber, promptForCode, onCodeSent);
+      setAuthError (null);
     } catch (e) {
       setAuthError (e);
     }
@@ -52,6 +45,7 @@ export default function Auth () {
     try {
       let phoneNumber = sanitizePhoneNumber (rawPhoneNumber);
       await login (phoneNumber, promptForCode, onCodeSent);
+      setAuthError (null);
     } catch (e) {
       setAuthError (e);
     }
@@ -88,7 +82,7 @@ export default function Auth () {
         </div>
         <section>
           <h3>About Us</h3>
-          <hr style={{width: '35%'}}/>
+          <hr/>
           <b>Why A Journal?</b>
           <p>
             Journaling provides anyone with a structure to
@@ -109,7 +103,7 @@ export default function Auth () {
         </section>
         <section>
           <h3>Terms of Service</h3>
-          <hr style={{width: '35%'}}/>
+          <hr/>
           <b>Privacy</b>
           <p>
             None of your information (journal entries, coping skills, phone number, etc) will be publicly available

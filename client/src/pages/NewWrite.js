@@ -7,8 +7,10 @@ import CancelSVG from '../img/cancel.svg'
 import TrashSVG from '../img/trash.svg'
 import defualtPrompts from "../lib/defaultQuestions";
 import defaultQuestions from "../lib/defaultQuestions";
+import TimePicker from "./components/TimePicker";
 
 export default function Write () {
+
   // state stuff
   const {
     auth: {user},
@@ -140,8 +142,10 @@ export default function Write () {
             </section>
           </>
         }
+        <div>
+          <button onClick={submit}>Submit</button>
+        </div>
       </div>
-      <button onClick={submit}>Submit</button>
     </main>
   )
 }

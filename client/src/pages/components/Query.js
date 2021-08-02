@@ -48,8 +48,7 @@ export default function Query () {
         type: 'time',
         value: {
           mode: 'is-at',
-          minutes: new Date ().getMinutes (),
-          hours: new Date ().getHours ()
+          time: `${new Date ().getHours () % 12 || 12}:${('00' + new Date ().getMinutes ()).slice (-2)} ${new Date ().getHours < 12 ? 'am' : 'pm'}`
         }
       }]
       setFilters (newFilters);
@@ -59,8 +58,7 @@ export default function Query () {
         type: 'time',
         value: {
           mode: 'before',
-          minutes: new Date ().getMinutes (),
-          hours: new Date ().getHours ()
+          time: timeFilters [0].value.time
         }
       }]
       setFilters (newFilters);

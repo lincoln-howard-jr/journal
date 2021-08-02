@@ -78,7 +78,7 @@ export default function WordCount () {
         <figcaption>Keyword Search</figcaption>
         <section className="keyword-container">
           <form onSubmit={addKeyword} className="keyword-search">
-            <input name="keyword" placeholder="keyword" />
+            <input name="keyword" placeholder="keyword" autoComplete="off" />
             <span><img src={SearchIcon} /></span>
           </form>
         </section>

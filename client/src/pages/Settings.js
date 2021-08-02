@@ -133,67 +133,69 @@ function Settings () {
   return page === 'settings' ? (
     <main className="settings">
       <H1>Settings</H1>
-      <SettingGroup longTitle={'Journal Settings'} shortTitle={'Journal'}>
-        <p>Make journal entries the way you want to make them. These settings are specific to your device, so you can have different preferences on your phone, tablet, laptop or whatever else you use!</p>
-        <Setting setting="freeform" title="Enable Freeform" />
-        {
-          getSetting ('audio-recording-supported') &&
-          <Setting setting="audio-recording" title="Enable Audio Recording" relationships={['+freeform']} />
-        }
-        <Setting setting="default-questions" title="Show Default Questions" relationships={['custom-questions']} />
-        <Setting setting="custom-questions" title="Show Custom Questions" relationships={['default-questions']} />
-        <Setting setting="use-metrix" title="Show Metrix" />
-      </SettingGroup>
-      <SettingGroup shortTitle="Prompts" longTitle="Manage Prompts">
-        <CustomQuestion />
-      </SettingGroup>
-      <SettingGroup longTitle="Manage Your Notifications" shortTitle="Notifications">
-        <Notifications />
-      </SettingGroup>
-      <SettingGroup shortTitle="Sharing" longTitle="Manage Journal Sharing">
-        <p>
-          View journals shared with you and who you've shared your journal with.
-        </p>
-        <SharedWithMe/>
-        <SharedByMe/>
-        <ShareJournal/>
-      </SettingGroup>
-      <SettingGroup shortTitle="Misc" longTitle="Miscellaneous">
-        <div className="action">
-          { 
-            window.navigator.canShare &&
-            <span onClick={() => {
-              window.navigator.share ({
-                title: 'My Journal',
-                url: 'https://lincoln-howard-jr.github.io/journal/'
-              })
-            }}>Share This Application</span>
+      <div className="settings-container">
+        <SettingGroup longTitle={'Journal Settings'} shortTitle={'Journal'}>
+          <p>Make journal entries the way you want to make them. These settings are specific to your device, so you can have different preferences on your phone, tablet, laptop or whatever else you use!</p>
+          <Setting setting="freeform" title="Enable Freeform" />
+          {
+            getSetting ('audio-recording-supported') &&
+            <Setting setting="audio-recording" title="Enable Audio Recording" relationships={['+freeform']} />
           }
-        </div>
-        <div className="action">
-          <span onClick={logout}>Log Out</span>
-        </div>
-        {
-          attributionId === 'attributions' &&
+          <Setting setting="default-questions" title="Show Default Questions" relationships={['custom-questions']} />
+          <Setting setting="custom-questions" title="Show Custom Questions" relationships={['default-questions']} />
+          <Setting setting="use-metrix" title="Show Metrix" />
+        </SettingGroup>
+        <SettingGroup shortTitle="Prompts" longTitle="Manage Prompts">
+          <CustomQuestion />
+        </SettingGroup>
+        <SettingGroup longTitle="Manage Your Notifications" shortTitle="Notifications">
+          <Notifications />
+        </SettingGroup>
+        <SettingGroup shortTitle="Sharing" longTitle="Manage Journal Sharing">
+          <p>
+            View journals shared with you and who you've shared your journal with.
+          </p>
+          <SharedWithMe/>
+          <SharedByMe/>
+          <ShareJournal/>
+        </SettingGroup>
+        <SettingGroup shortTitle="Misc" longTitle="Miscellaneous">
           <div className="action">
-            <span onClick={() => setAttributionId ('')}>Show Attributions</span>
+            { 
+              window.navigator.canShare &&
+              <span onClick={() => {
+                window.navigator.share ({
+                  title: 'My Journal',
+                  url: 'https://lincoln-howard-jr.github.io/journal/'
+                })
+              }}>Share This Application</span>
+            }
           </div>
-        }
-        <div className="attributions" id={attributionId}>
-          <div className="fake-button">
-            <span onClick={() => setAttributionId ('attributions')}>Hide Attributions</span>
+          <div className="action">
+            <span onClick={logout}>Log Out</span>
           </div>
-          <ul>
-            {Object.keys (attributions).map (k => (
-              <li key={`attribiution-${k}`}>
-                <b>{k}</b>
-                <br />
-                <span dangerouslySetInnerHTML={{__html: attributions [k]}}/>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </SettingGroup>
+          {
+            attributionId === 'attributions' &&
+            <div className="action">
+              <span onClick={() => setAttributionId ('')}>Show Attributions</span>
+            </div>
+          }
+          <div className="attributions" id={attributionId}>
+            <div className="fake-button">
+              <span onClick={() => setAttributionId ('attributions')}>Hide Attributions</span>
+            </div>
+            <ul>
+              {Object.keys (attributions).map (k => (
+                <li key={`attribiution-${k}`}>
+                  <b>{k}</b>
+                  <br />
+                  <span dangerouslySetInnerHTML={{__html: attributions [k]}}/>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </SettingGroup>
+      </div>
     </main>
   ) : null;
 }

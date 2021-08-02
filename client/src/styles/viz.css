@@ -29,22 +29,33 @@ svg:nth-child(3n) text {
   }
 }
 /* dashboard html styling */
-div.dashboard {
-  width: min(94%, 1000px);
-  row-gap: 50px;
-  margin: 25px auto;
+main.dashboard div.row {
   display: grid;
   align-items: center;
-  justify-items: center;
+}
+main.dashboard div.row.one-item {
+  grid-template-columns: 1fr;
+}
+main.dashboard div.row.two-items {
   grid-template-columns: 1fr 1fr;
 }
-div.dashboard > :nth-child(3n) {
-  grid-column: 1 / 3;
+main.dashboard div.row.three-items {
+  grid-template-columns: 1fr 1fr 1fr;
 }
-div.dashboard > figure {
+main.dashboard div.row.four-items {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+main.dashboard figure {
+  margin: 0 auto;
   width: min(100%, 750px);
+  text-align: center;
 }
-div.dashboard img {
+main.dashboard figure figcaption {
+  text-align: center;
+  color: var(--accent-color);
+  font-size: var(--h3-font-size);
+}
+main.dashboard img {
   width: min(100%, 32px);
 }
 /* svg styling */
@@ -114,7 +125,11 @@ line.trendline-4 {
   margin: 0;
   padding: 0;
 }
-.keyword-search button img {
+.keyword-search span {
+  display: grid;
+  align-items: center;
+}
+.keyword-search span img {
   width: calc(0.75 * var(--body-text-size));
 }
 .keyword-search input {
@@ -142,9 +157,17 @@ line.trendline-4 {
 }
 /* reset the dashboard layout when on smaller devices */
 @media (max-width: 1100px) {
-  div.dashboard {
+  main.dashboard div.row.one-item {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
+  }
+  main.dashboard div.row.two-items {
+    grid-template-columns: 1fr;
+  }
+  main.dashboard div.row.three-items {
+    grid-template-columns: 1fr;
+  }
+  main.dashboard div.row.four-items {
+    grid-template-columns: 1fr 1fr;
   }
   svg text {
     font-size: 28px;

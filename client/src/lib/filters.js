@@ -7,7 +7,7 @@ const ceil = date => {
 const isInRange = (is, after, before) => {
   return is <= before && is >= after;
 }
-const toMinutes = ({hours, minutes}) => {
+const toMinutes = (hours, minutes) => {
   return hours * 60 + minutes;
 }
 
@@ -23,12 +23,17 @@ const constructDateFilter = value => entry => {
 }
 
 const constructTimeFilter = value => entry => {
+  const [time, ampm] = value.time.split (' ');
+  console.log (time.split (':'))
+  const [_hours, minutes] = time.split (':').map (num => parseInt (num));
+  const hours = _hours % 12 + (ampm === 'pm' ? 12 : 0);
+  console.log (value, hours, minutes);
   if (value.mode === 'is-at') {
-    return isInRange (toMinutes (value), toMinutes ({hours: entry.start.getHours (), minutes: entry.start.getHours ()}), toMinutes ({hours: entry.end.getHours (), minutes: entry.end.getHours ()}));
+    return isInRange (toMinutes (hours, minutes), toMinutes (entry.start.getHours (), entry.start.getHours ()), toMinutes (entry.end.getHours (), entry.end.getHours ()));
   } else if (value.mode === 'before') {
-    return toMinutes ({hours: entry.start.getHours (), minutes: entry.start.getMinutes ()}) <= toMinutes (value);
+    return toMinutes (entry.start.getHours (), entry.start.getMinutes ()) <= toMinutes (hours, minutes);
   } else if (value.mode === 'after') {
-    return toMinutes ({hours: entry.start.getHours (), minutes: entry.start.getMinutes ()}) >= toMinutes (value);
+    return toMinutes (entry.start.getHours (), entry.start.getMinutes ()) >= toMinutes (hours, minutes);
   }
 }
 

@@ -43,6 +43,8 @@ body {
   default main styling
 */
 main {
+  display: grid;
+  row-gap: var(--body-text-size);
   width: min(84vw, 900px);
   margin: 0 auto;
   padding-bottom: 80px;
@@ -80,7 +82,7 @@ button, .button-styling {
   padding: 5px;
   max-width: 30ch;
   height: calc(var(--body-text-size) * 1.5 + 10);
-  margin-top: var(--h1-font-size); margin-bottom: var(--h1-font-size);
+  margin-block: var(--body-text-size);
   border: 1px solid var(--button-border-color);
   border-radius: 5px;
   color: var(--button-text-color);
@@ -172,4 +174,12 @@ input::placeholder {
 }
 .text-center {
   text-align: center;
+}
+/* util */
+br {
+  margin: 0 0 var(--body-text-size) 0;
+}
+hr {
+  margin: calc(var(--body-text-size) / 2) auto;
+  width: 25vw;
 }
