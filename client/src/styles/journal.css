@@ -1,6 +1,6 @@
 main.view-journal article {
+  width: min(900px, 84vw);
   transition: 0.3s;
-  width: 100%;
   margin: var(--body-text-size) auto;
   padding: 15px 10px;
   border-radius: 5px;
@@ -11,6 +11,16 @@ main.view-journal article header {
   cursor: pointer;
   grid-template-columns: 2fr 3fr;
   justify-items: left;
+}
+main.view-journal article section header {
+  cursor: unset;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: var(--body-text-size) 1fr var(--body-text-size);
+}
+main.view-journal article section header span {
+  cursor: pointer;
 }
 main.view-journal article ol {
   text-align: right;
@@ -23,7 +33,7 @@ main.view-journal article ol li {
   display: inline-block;
   margin: 8px 8px 0 8px;
 }
-main.view-journal article.open header {
+main.view-journal article.open > header {
   padding-bottom: 12px;
   margin-bottom: 12px;
   border-bottom: 1px solid var(--accent-color);
