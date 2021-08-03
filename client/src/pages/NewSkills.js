@@ -8,7 +8,7 @@ export default function Skills () {
   if (!user) return null;
   if (page !== 'skills') return null;
   return (
-    <>
+    <main>
       <H1>Skills</H1>
       {
         skills.map (category => (
@@ -26,6 +26,6 @@ export default function Skills () {
           </section>
         ))
       }
-    </>
+    </main>
   )
 }
