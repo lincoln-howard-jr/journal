@@ -28,3 +28,66 @@
 .skill-category li.to-remove > span > img:first-child {
   margin-right: 8px;
 }
+/* new skills */
+section.skill-category-container, section.skill-category-container * {
+  transition: 0.5s;
+}
+section.skill-category-container {
+  width: min(84%, 900px);
+  margin: calc(1.5 * var(--h1-font-size)) auto;
+  padding-bottom: var(--h1-font-size);
+  display: grid;
+  gap: var(--body-text-size);
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--accent-color);
+  border-radius: 5px;
+  box-shadow: 3px 3px 6px var(--accent-color);
+}
+section.skill-category-container header {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  grid-row: 1 / 4;
+  border-right: 1px solid var(--accent-color);
+  border-bottom: 1px solid var(--accent-color);
+  border-radius: 4px;
+  background-color: var(--accent-color);
+}
+section.skill-category-container h2 {
+  color: var(--background-color);
+  font-weight: 400;
+}
+section.skill-category-container div {
+  user-select: none;
+  display: grid;
+  align-items: middle;
+  justify-content: center;
+  margin-top: calc(3 * var(--body-text-size) / 4);
+}
+section.skill-category-container:nth-child(2n) header {
+  grid-column: 2;
+}
+@media (hover: hover) {
+  section.skill-category-container:hover, section.skill-category-container.open {
+    background-color: var(--accent-color);
+    box-shadow: 0 0 2px var(--background-color);
+  }
+  section.skill-category-container:nth-child(2n + 1):hover header, section.skill-category-container.open:nth-child(2n + 1) header {
+    transform: translate(-15px, -15px);
+    box-shadow: 1px 1px 5px var(--accent-color),
+                2px 2px 6px var(--background-color);
+    background-color: var(--background-color);
+  }
+  section.skill-category-container:nth-child(2n):hover header, section.skill-category-container.open:nth-child(2n) header {
+    transform: translate(15px, -15px);
+    box-shadow: -1px 1px 5px var(--accent-color),
+                -2px 2px 6px var(--background-color);
+    background-color: var(--background-color);
+  }
+  section.skill-category-container:hover h2, section.skill-category-container.open h2 {
+    color: var(--accent-color);
+  }
+  section.skill-category-container:hover div, section.skill-category-container.open div {
+    color: var(--background-color);
+  }
+}
