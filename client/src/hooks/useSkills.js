@@ -27,20 +27,10 @@ export default function useSkills () {
   }
   const submitSkill = (body) => new Promise (async (resolve, reject) => {
     try {
-      setSkills (skls => {
-        let idx = findIndex (skls, 'category', body.category, {category: body.category});
-        idx.push (body);
-        return skls;
-      })
       await api.post (body);
+      await getSkills ();
       resolve ();
     } catch (e) {
-      let pending = JSON.parse (localStorage.getItem ('pending-actions') || '[]');
-      pending.push ({
-        action: 'submit-skill',
-        body
-      });
-      localStorage.setItem ('pending-actions', JSON.stringify (pending));
       reject (e);
     }
   })

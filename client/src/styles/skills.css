@@ -29,8 +29,7 @@ section.skill-category-container, section.skill-category-container * {
   transition: 0.5s;
 }
 section.skill-category-container {
-  width: min(84%, 900px);
-  margin: calc(1.5 * var(--h1-font-size)) auto;
+  margin: calc(1.5 * var(--h1-font-size)) 0;
   padding-bottom: var(--h1-font-size);
   display: grid;
   gap: var(--body-text-size);
@@ -52,6 +51,9 @@ section.skill-category-container header {
 section.skill-category-container h2 {
   color: var(--background-color);
   font-weight: 400;
+}
+section.skill-category-container div:nth-child(2n + 5):last-child {
+  grid-column: 1 / 3;
 }
 section.skill-category-container div {
   user-select: none;
@@ -86,4 +88,49 @@ section.skill-category-container:hover h2, section.skill-category-container.open
 }
 section.skill-category-container:hover div, section.skill-category-container.open div {
   color: var(--background-color);
+}
+/* creating a skill */
+.new-skill-form {
+  display: grid;
+  gap: var(--body-text-size);
+  align-items: center;
+  transition: 0.3s ease-in-out;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 2fr 1fr;
+  border-left: 6px solid var(--accent-color);
+  padding: 0 max(15%, 25px);
+  margin: 25px 0;
+}
+.new-skill-form:focus-within {
+  padding-left: calc(max(15%, 25px) / 2);
+  margin-left: calc(max(15%, 25px) / 2);
+}
+.new-skill-form h3 {
+  text-align: center;
+  grid-column: 1 / 3;
+}
+.new-skill-form > div {
+  display: grid;
+  grid-template-rows: calc(1.5 * var(--body-text-size)) 1fr;
+}
+.new-skill-form label {
+  color: var(--accent-color);
+  font-weight: 500;
+}
+.new-skill-form input {
+  border: none;
+  height: calc(2 * var(--body-text-size));
+}
+.new-skill-form button {
+  margin: auto;
+  grid-column: 1 / 3;
+}
+@media (max-width: 1100px) {
+  .new-skill-form {
+    grid-template-rows: unset;
+    grid-template-columns: 1fr;
+  }
+  .new-skill-form :is(h3, button) {
+    grid-column: 1;
+  }
 }
