@@ -52,12 +52,18 @@ export function TotalEntryCount () {
   const [count, setCount] = useState ('...');
   useEffect (() => {
     if (!entryList.length) return;
-    setCount (entryList.length);
+    let start = entries [entries.length - 1].list [0].start;
+    start = new Date (start.getFullYear (), start.getMonth (), start.getDate ());
+    let now = new Date ();
+    now = new Date (now.getFullYear (), now.getMonth (), now.getDate ());
+    let daysBetween = (now - start) / (24 * 60 * 60 * 1000);
+    let c = entryList.length / daysBetween;
+    setCount (c.toFixed (1));
   }, [entries])
 
   return (
     <figure>
-      <figcaption>Entries<br/>(All Time)</figcaption>
+      <figcaption>Entries<br/>(Per Day)</figcaption>
       <NumberCounter number={count} />
     </figure>
   )

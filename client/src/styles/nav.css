@@ -20,7 +20,7 @@ nav > ul {
   padding: 0;
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(5, 48px);
+  grid-template-columns: repeat(4, 48px);
   align-items: center;
   justify-items: center;
 }
@@ -57,4 +57,15 @@ nav > ul > li.active > label {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(5, 48px) 1fr;
   }
+}
+/* settings gears icon */
+#settings-menu-icon {
+  position: absolute;
+  right: calc(var(--h1-font-size) / 2);
+  top: calc(var(--h1-font-size) / 2);
+  width: var(--h1-font-size);
+  height: var(--h1-font-size);
+}
+main > h1:first-child, main > h1:first-child + h1.short {
+  margin-top: calc(var(--h1-font-size) / 2);
 }

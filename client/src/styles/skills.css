@@ -117,6 +117,9 @@ section.skill-category-container:hover div, section.skill-category-container.ope
   color: var(--accent-color);
   font-weight: 500;
 }
+.new-skill-form p {
+  margin: 0;
+}
 .new-skill-form input {
   border: none;
   height: calc(2 * var(--body-text-size));
