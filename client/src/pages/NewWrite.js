@@ -108,7 +108,7 @@ export default function Write () {
           getActivePromts ().map (prompt => {
             const Metric = MetrixType [prompt.unit];
             const dv = {
-              defaultValue: prompt.unit === 'string' ? (session.getSetting (prompt.prompt) || '...') : getMeasureValue (prompt)
+              defaultValue: prompt.unit === 'string' ? (session.getSetting (prompt.id) || '...') : getMeasureValue (prompt)
             }
             return (
               <React.Fragment key={`prompt-${prompt.unit}-${prompt.id}`}>

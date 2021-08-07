@@ -8,7 +8,7 @@ import RulerSVG from '../../img/ruler.svg';
 import { useApp } from "../../AppProvider"
 
 export default function Nav () {
-  const {router: {page, redirect}, viewMode: {isViewOnly}, viewMyJournal} = useApp ();
+  const {auth: {user}, router: {page, redirect}, viewMode: {isViewOnly}, viewMyJournal} = useApp ();
   return (
     <>
       <nav>
@@ -44,7 +44,7 @@ export default function Nav () {
         </ul>
       </nav>
       {
-        page !== 'settings' &&
+        page !== 'settings' && user &&
         <div onClick={() => redirect ('/?page=settings')} id="settings-menu-icon">
           <img src={NavSettings} alt="" />
         </div>

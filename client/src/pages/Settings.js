@@ -139,10 +139,10 @@ function Settings () {
           <Setting setting="freeform" title="Enable Freeform" />
           {
             getSetting ('audio-recording-supported') &&
-            <Setting setting="audio-recording" title="Enable Audio Recording" relationships={['+freeform']} />
+            <Setting setting="audio-recording" title="Enable Audio Recording" />
           }
-          <Setting setting="default-questions" title="Show Default Questions" relationships={['custom-questions']} />
-          <Setting setting="custom-questions" title="Show Custom Questions" relationships={['default-questions']} />
+          <Setting setting="default-questions" title="Show Default Questions" />
+          <Setting setting="custom-questions" title="Show Custom Questions" />
           <Setting setting="use-metrix" title="Show Metrix" />
         </SettingGroup>
         <SettingGroup shortTitle="Prompts" longTitle="Manage Prompts">

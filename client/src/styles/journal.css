@@ -3,7 +3,7 @@ main.view-journal article {
   transition: 0.3s;
   margin: var(--body-text-size) auto;
   padding: 15px 10px;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: 3px 3px 6px var(--accent-color);
   border: 1px solid var(--accent-color);
 }
