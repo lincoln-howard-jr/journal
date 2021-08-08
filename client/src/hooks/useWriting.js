@@ -27,6 +27,17 @@ export default function useWriting () {
     }
   });
 
-  return {questions, getQuestions, createQuestion};
+  const deleteQuestion = async q => new Promise (async (resolve, reject) => {
+    try {
+      let req = await api.del (q);
+      if (!req.ok) throw new Error ('Could not delete question');
+      await getQuestions ();
+      resolve ();
+    } catch (e) {
+      reject (e);
+    }
+  })
+
+  return {questions, getQuestions, createQuestion, deleteQuestion};
  
 }

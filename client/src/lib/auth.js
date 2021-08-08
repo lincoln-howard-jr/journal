@@ -200,6 +200,14 @@ export const questions = {
       }),
       body: JSON.stringify (body)
     });
+  },
+  get del () {
+    return id => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/questions/${id}`, {
+      method: 'DELETE',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    })
   }
 }
 export const audios = {
@@ -261,6 +269,14 @@ export const metrix = {
       body: JSON.stringify (body)
     })
   },
+  get del () {
+    return id => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/metrix/${id}`, {
+      method: 'DELETE',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    })
+  }
 }
 
 export const measurements = {

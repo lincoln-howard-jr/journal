@@ -113,7 +113,7 @@ export default function Write () {
             return (
               <React.Fragment key={`prompt-${prompt.unit}-${prompt.id}`}>
                 <span className="prompt-prompt">
-                  <b>{prompt.prompt}</b>
+                  <b>{prompt.prompt}{prompt.unitLabel ? ` (${prompt.unitLabel})` : ''}</b>
                   <span onClick={() => removePrompt (prompt)}><img src={TrashSVG} /></span>
                 </span>
                 <Metric autofocus={autoFocusPrompt === prompt.id} onChange={value => onChange (prompt, value)} {...dv} {...prompt} />

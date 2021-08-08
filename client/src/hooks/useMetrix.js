@@ -39,6 +39,16 @@ export default function useMetrix () {
     }
   })
 
+  const deleteMetrix = async id => new Promise (async (resolve, reject) => {
+    try {
+      await metrixApi.del (id);
+      await getMetrix ();
+      resolve ();
+    } catch (e) {
+      reject (e);
+    }
+  })
+
   // get metrix
   const getMeasurements = async userId => {
     try {
@@ -81,11 +91,11 @@ export default function useMetrix () {
 
   useEffect (() => {
     if (!metrix.length || !measurements.length) return;
-    let today = measurements.filter (mes => metrix.find (met => met.id === mes.metric).frequency !== 'as needed').filter (m => isToday (m.measuredAt));
+    let today = measurements.filter (mes => metrix.find (met => met.id === mes.metric)?.frequency !== 'as needed').filter (m => isToday (m.measuredAt));
     let cap = metrix.filter (metric => !!today.find (m => m.metric === metric.id)).map (metric => metric.id);
     setCaptured (cap);
   }, [metrix, measurements]);
 
-  return {metrix, measurements, captured, getMetrix, createMetrix, getMeasureValue, getMeasurements, measure, createMeasurements, isCaptured}
+  return {metrix, measurements, captured, getMetrix, createMetrix, deleteMetrix, getMeasureValue, getMeasurements, measure, createMeasurements, isCaptured}
 
 }

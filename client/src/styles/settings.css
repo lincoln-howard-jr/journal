@@ -153,3 +153,12 @@ main.settings div.action > span:not(:last-child) {
   margin: 0 !important;
   padding: 0 !important;
 }
+/* custom prompts */
+.manage-default-question {
+  margin-bottom: var(--body-text-size);
+}
+.manage-custom-question, .manage-custom-metrix {
+  display: grid;
+  margin-bottom: var(--body-text-size);
+  grid-template-columns: var(--body-text-size) 1fr var(--body-text-size);
+}

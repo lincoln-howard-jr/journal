@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useApp } from "../../AppProvider";
 import defaultQuestions from "../../lib/defaultQuestions";
+import { trash } from "../../img/images";
 
 const metricTypeDict = {
   boolean: 'Yes/No',
@@ -27,35 +28,23 @@ const INI = ({value, setValue}) => {
   )
 }
 
-function MetricSetting ({metric}) {
-  const {settings: {getSetting, toggle}} = useApp ();
+const CES = ({value, setValue}) => {
   return (
-    <li className="setting">
-      <div>{metric.prompt}</div>
-      <div><span className={getSetting (`show-metrix-metric-${metric.id}`) ? 'toggle on' : 'toggle'} onClick={toggle (`show-metrix-metric-${metric.id}`)}></span></div>
-    </li>
-  )
-}
-
-function CustomQuestionSetting ({question, onToggle, getSetting}) {
-  return (
-    <li className="setting">
-      <div>{question}</div>
-      <div><span onClick={onToggle (`show-custom-question-${question}`)} className={getSetting (`show-custom-question-${question}`) ? 'toggle on' : 'toggle'} /></div>
-    </li>
+    <b onBlur={e => setValue (e.target.innerText)} contentEditable>{value}</b>
   )
 }
 
 export default function CustomQuestion () {
 
   // 
-  const {writing: {questions, createQuestion}, settings: {toggle, getSetting}, metrix: {metrix, createMetrix}, freeze} = useApp ();
+  const {writing: {questions, createQuestion, deleteQuestion}, settings: {toggle, getSetting}, metrix: {metrix, createMetrix, deleteMetrix}, freeze} = useApp ();
   const [prompt, setQuestion] = useState ('?')
   const [metricType, setMetricType] = useState (null);
   const [rangeFrom, setRangeFrom] = useState (1);
   const [rangeTo, setRangeTo] = useState (10);
   const [stepInterval, setStepInterval] = useState (1);
   const [frequency, setFrequency] = useState ('as needed');
+  const [unitLabel, setUnitLabel] = useState (null);
 
   // call api to create new question
   const runCreateQuestion = async () => {
@@ -80,6 +69,7 @@ export default function CustomQuestion () {
         unit: metricType,
         frequency
       }
+      if (unitLabel) obj.unitLabel = unitLabel;
       if (metricType === 'number') {
         obj.range = [rangeFrom, rangeTo];
         obj.step = stepInterval;
@@ -94,16 +84,29 @@ export default function CustomQuestion () {
 
   const [currentStep, setStep] = useState (0);
   const steps = [
+    // initial step - enter prompt
     (
       <>
-        <b>Create a Prompt</b>
+        <b>Write a Custom Prompt</b>
         <div contentEditable className="add-question-input" onInput={e => setQuestion (e.target.innerText)}>?</div>
         <span>
-          <button onClick={runCreateQuestion}>Create Question</button>
-          <button onClick={() => setStep (currentStep + 1)}>Add Metric</button>
+          <button onClick={() => setStep (currentStep + 1)}>Next</button>
         </span>
       </>
     ),
+    // user chooses whether to create a metrix or question
+    (
+      <>
+        <b>Add a Metric?</b>
+        <p>{prompt}</p>
+        <span>
+          <button onClick={() => setStep (currentStep - 1)}>Back</button>
+          <button onClick={() => setStep (currentStep + 1)}>Yes, Add Metric</button>
+          <button onClick={runCreateQuestion}>No, Create Question</button>
+        </span>
+      </>
+    ),
+    // if metrix user selects type
     (
       <>
         <b>Select Metric Type</b>
@@ -121,19 +124,29 @@ export default function CustomQuestion () {
         </span>
       </>
     ),
+    // if number select range and unit title
     (
       <>
         <b>Numeric Metric Details</b>
         <p>{prompt}</p>
         <p>
-          Number <INI value={rangeFrom} setValue={setRangeFrom} /> to <INI value={rangeTo} setValue={setRangeTo} />   in intervals of <INI value={stepInterval} setValue={setStepInterval} />.
+          {
+          unitLabel ?
+            (
+              <>
+                Measured with unit <CES value={unitLabel} setValue={setUnitLabel} /> from
+              </>
+            ) : 'From'}
+          {' '}<INI value={rangeFrom} setValue={setRangeFrom} /> to <INI value={rangeTo} setValue={setRangeTo} />   in intervals of <INI value={stepInterval} setValue={setStepInterval} />.
         </p>
+        <label><input type="checkbox" defaultChecked={unitLabel} onChange={e => setUnitLabel (e.target.checked ? '...' : false)} /> has unit label</label>
         <span>
           <button onClick={() => setStep (currentStep - 1)}>Back</button>
           <button onClick={() => setStep (currentStep + 1)}>Set Frequency</button>
         </span>
       </>
     ),
+    // set how often it should be answered
     (
       <>
         <b>Set Frequency</b>
@@ -153,6 +166,7 @@ export default function CustomQuestion () {
         </span>
       </>
     ),
+    // review the metrix and create (or go back)
     (
       <>
         <b>{prompt}</b>
@@ -176,13 +190,29 @@ export default function CustomQuestion () {
       <b>Custom Questions</b>
       <ul className="prompt-list">
         {
-          questions.map (q => <li className="manage-default-question" key={`manage-default-questions-${q.prompt}`}>{q.prompt}</li>)
+          questions.map (q => (
+            <li key={`manage-custom-question-${q.id}`} className="manage-custom-question">
+              <span></span>
+              <span>{q.prompt}</span>
+              <span style={{cursor: 'pointer'}} onClick={() => deleteQuestion (q.id.split ('-') [2])}>
+                <img src={trash} />
+              </span>
+            </li>
+          ))
         }
       </ul>
       <b>Metrix</b>
       <ul className="prompt-list">
         {
-          metrix.map (q => <li className="manage-default-question" key={`manage-default-questions-${q.prompt}`}>{q.prompt}</li>)
+          metrix.map (q => (
+            <li key={`manage-custom-metrix-${q.id}`} className="manage-custom-metrix">
+              <span></span>
+              <span>{q.prompt}</span>
+              <span style={{cursor: 'pointer'}} onClick={() => deleteMetrix (q.id)}>
+                <img src={trash} />
+              </span>
+            </li>
+          ))
         }
       </ul>
       <div>
