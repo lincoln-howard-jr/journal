@@ -26,6 +26,10 @@ export default function SingleMetrix () {
     let single = metrix.find (m => m.id === metricId);
     let _data = measurements.filter (m => m.metric === metricId).map (m => Object.assign (m, {measuredAt: new Date (m.measuredAt)})).sort ((a, b) => a.measuredAt - b.measuredAt);
     if (single.unit === 'boolean') _data = _data.map (m => Object.assign (m, {value: m.value === 'Yes' ? 1 : 0}));
+    if (!data.length) {
+      setIndex ((metricIdIndex + 1) % metrix.length);
+      return;
+    }
     setData (_data);
     setPrompt (single.prompt);
     setDomain0 (_data [0].measuredAt);
@@ -44,9 +48,6 @@ export default function SingleMetrix () {
         <span onClick={() => setIndex ((metricIdIndex + 1) % metrix.length)}>{'>'}</span>
       </figcaption>
       <svg className="single-metrix" viewBox={`0 0 ${width} ${height}`}>
-        <marker id="dot" viewBox="0 0 5 5" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5">
-          <circle cx="2.5" cy="2.5" r="2.5" />
-        </marker>
         <g className="single-metrix-axis">
           <line x1={xscale (domain_0)} x2={xscale (domain_0)} y1={yscale (range_n)} y2={yscale (range_0)} />
           <line x1={xscale (domain_0)} x2={xscale (domain_n)} y1={yscale (range_0)} y2={yscale (range_0)} />
@@ -57,15 +58,8 @@ export default function SingleMetrix () {
         </g>
         <g className="single-metrix-data">
           {
-            data.map ((d, i) => i === data.length - 1 ? null : (
-              <line
-                markerStart="url(#dot)"
-                markerEnd="url(#dot)"
-                x1={xscale (d.measuredAt)}
-                x2={xscale (data [i + 1].measuredAt)}
-                y1={yscale (d.value)}
-                y2={yscale (data [i + 1].value)}
-              />
+            data.map (d => (
+              <circle cx={xscale (d.measuredAt)} cy={yscale (d.value)} r={3} className="metrix-point" />
             ))
           }
         </g>

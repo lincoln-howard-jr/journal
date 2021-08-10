@@ -79,7 +79,7 @@ export default function WordCount () {
         <section className="keyword-container">
           <form onSubmit={addKeyword} className="keyword-search">
             <input name="keyword" placeholder="keyword" autoComplete="off" />
-            <span><img src={SearchIcon} /></span>
+            <label><input type="submit" hidden /> <img src={SearchIcon} /></label>
           </form>
         </section>
         <svg className="keyword-chart" viewBox={`0 0 ${width} ${height}`} key='keyword-chart'>

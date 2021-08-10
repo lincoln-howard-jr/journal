@@ -29,6 +29,9 @@ svg text {
   }
 }
 /* dashboard html styling */
+main.dashboard * {
+  user-select: none;
+}
 main.dashboard div.row {
   display: grid;
   align-items: center;
@@ -125,11 +128,11 @@ line.trendline-4 {
   margin: 0;
   padding: 0;
 }
-.keyword-search span {
+.keyword-search :is(span, label) {
   display: grid;
   align-items: center;
 }
-.keyword-search span img {
+.keyword-search label img {
   width: calc(0.75 * var(--body-text-size));
 }
 .keyword-search input {
@@ -137,13 +140,13 @@ line.trendline-4 {
   border: none;
   width: 80%;
 }
-.bar-chart-bar > rect:first-child {
+.bar-chart-bar rect:first-child {
   fill: var(--color-3);
 }
-.bar-chart-bar > rect:nth-child(2) {
+.bar-chart-bar rect:nth-child(2) {
   fill: var(--color-2);
 }
-.bar-chart-bar > rect:nth-child(3) {
+.bar-chart-bar rect:nth-child(3) {
   fill: var(--color-1);
 }
 .bar-chart-text > text:first-child {
@@ -154,6 +157,20 @@ line.trendline-4 {
 }
 .bar-chart-text > text:nth-child(3) {
   stroke: var(--color-3);
+}
+@media (hover: hover) {
+  .bar-chart-bar-group + text {
+    opacity: 0;
+    transition: 0.1s;
+  }
+  .bar-chart-bar-group:hover + text {
+    opacity: 1;
+  }
+}
+@media (hover: none) {
+  .bar-chart-bar-label {
+    transform: rotate(60deg) scale(0.7) translate(-5%, -5%);
+  }
 }
 /* reset the dashboard layout when on smaller devices */
 @media (max-width: 1100px) {
@@ -174,15 +191,12 @@ line.trendline-4 {
   }
 }
 /* Single Metrix Graph */
-.single-metrix marker {
-  fill: var(--accent-color);
+.single-metrix-graph circle {
+  stroke: var(--color-1);
+  fill: none;
 }
-.single-metrix .single-metrix-axis line {
-  stroke: var(--accent-color);
-  stroke-width: 0;
-}
-.single-metrix .single-metrix-data line {
-  stroke: var(--accent-color-light);
+.single-metrix-graph .single-metrix-axis line {
+  stroke: var(--color-1);
   stroke-width: 1px;
 }
 /* Pie Chart */

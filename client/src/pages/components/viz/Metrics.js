@@ -6,6 +6,8 @@ import Bar from './Bar';
 import {width, height, padding} from './dimensions';
 import SingleMetrix from './SingleMetrix';
 import { EntriesThisWeek, QuestionsThisWeek, SkillCount, TotalEntryCount } from './Stats';
+import TimeOfDayBarChart from './TimeOfDayBarChart';
+import SingleMetrixCarousel from './MetrixCarousel';
 
 // calculate days between 2 dates
 const oneDay = 1000 * 60 * 60 * 24
@@ -76,22 +78,7 @@ export default function Metrics () {
   let metrics = [
     // time of day bar chart
     (
-      <figure className="time-of-day">
-        <figcaption>Entries By Time Of Day</figcaption>
-        <svg key='time-of-day-svg' viewBox={`0 0 ${width} ${height}`}>
-          {/** axis */}
-          <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} />
-          {/* hour based bars */}
-          {
-            indexed.map ((time, i) => <Bar key={`bar-chart-bar-${i}`} time={time} i={i} height={height} width={width} hourlyMax={hourlyMax} onClick={onBarClick (i)} />)
-          }
-          <g className="bar-chart-text">
-            <text x={width / 9} y={height / 10}>Questions</text>
-            <text x={4 * width / 9} y={height / 10}>Freeform</text>
-            <text x={7 * width / 9} y={height / 10}>Audio</text>
-          </g>
-        </svg>
-      </figure>
+      <TimeOfDayBarChart />
     ),
     // type of entry pie chart
     (
@@ -102,6 +89,9 @@ export default function Metrics () {
     ),
     (
       <WordCount />
+    ),
+    (
+      <SingleMetrixCarousel />
     )
   ]
   // return the dashboard
@@ -114,8 +104,11 @@ export default function Metrics () {
         <SkillCount />
       </div>
       <div className="row two-items">
-        {metrics [0]}
         {metrics [1]}
+        {metrics [0]}
+      </div>
+      <div className="row one-item">
+        {metrics [3]}
       </div>
       <div className="row one-item">
         {metrics [2]}
