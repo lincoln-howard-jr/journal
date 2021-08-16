@@ -8,15 +8,14 @@ const metricTypeDict = {
   number: 'Number Range'
 }
 
-const isNumber = keycode => keycode < 58 && keycode > 47;
-const isBackspace = keycode => keycode === 8;
-const isLeftArrow = keycode => keycode === 37;
-const isRightArrow = keycode => keycode === 39;
-const isTab = keycode => keycode === 9;
-const isDot = keycode => keycode === 190;
+const isNumber = key => new RegExp (/[0-9]/, 'g').test (key);
+const isBackspace = key => key === 'Backspace';
+const isLeftArrow = key => key === 'Left' || key === 'ArrowLeft';
+const isRightArrow = key => key === 'Right' || key === 'ArrowRight';
+const isDot = key => key === '.';
 
 const prevent = e => {
-  return [isNumber, isBackspace, isLeftArrow, isRightArrow, isTab, isDot].filter (fn => fn (e.keyCode)).length === 0;
+  return [isNumber, isBackspace, isLeftArrow, isRightArrow, isDot].filter (fn => fn (e.key)).length === 0;
 }
 
 const INI = ({value, setValue}) => {
@@ -24,7 +23,7 @@ const INI = ({value, setValue}) => {
     if (prevent (e)) return e.preventDefault ();
   }
   return (
-    <b onBlur={e => setValue (parseFloat (e.target.innerText))} contentEditable onKeyDown={okd}>{value}</b>
+    <b type="tel" onBlur={e => setValue (parseFloat (e.target.innerText))} contentEditable onKeyDown={okd}>{value}</b>
   )
 }
 

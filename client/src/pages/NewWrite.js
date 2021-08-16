@@ -7,7 +7,6 @@ import CancelSVG from '../img/cancel.svg'
 import TrashSVG from '../img/trash.svg'
 import defualtPrompts from "../lib/defaultQuestions";
 import defaultQuestions from "../lib/defaultQuestions";
-import TimePicker from "./components/TimePicker";
 
 export default function Write () {
 
@@ -108,7 +107,7 @@ export default function Write () {
           getActivePromts ().map (prompt => {
             const Metric = MetrixType [prompt.unit];
             const dv = {
-              defaultValue: prompt.unit === 'string' ? (session.getSetting (prompt.id) || '...') : getMeasureValue (prompt)
+              defaultValue: session.getSetting (prompt.id)
             }
             return (
               <React.Fragment key={`prompt-${prompt.unit}-${prompt.id}`}>

@@ -1,5 +1,6 @@
 svg {
   --color-1: #4b4486;
+  --color-1-transparent: #4b448600;
   --color-2: #CA054D;
   --color-3: #80b190;
   --color-4: #daa873;
@@ -192,8 +193,15 @@ line.trendline-4 {
 }
 /* Single Metrix Graph */
 .single-metrix-graph circle {
+  transition: 0.3s;
   stroke: var(--color-1);
-  fill: none;
+  stroke-width: 2px;
+  fill: var(--color-1-transparent);
+  cursor: pointer;
+}
+.single-metrix-graph circle:hover {
+  fill: var(--color-1);
+  stroke-width: 0;
 }
 .single-metrix-graph .single-metrix-axis line {
   stroke: var(--color-1);

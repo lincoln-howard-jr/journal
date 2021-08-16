@@ -289,7 +289,6 @@ export const measurements = {
   },
   get post () {
     return (metric, body) => {
-      console.log (metric, body);
       fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/metrix/${metric}`, {
         method: 'post',
         headers: new Headers ({
@@ -299,5 +298,15 @@ export const measurements = {
         body: JSON.stringify (body)
       })
     }
-  }
+  },
+  get put () {
+    return (id, value) => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/measurements/${id}`, {
+      method: 'put',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify ({value})
+    })
+  },
 }

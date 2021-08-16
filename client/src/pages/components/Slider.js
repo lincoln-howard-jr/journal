@@ -23,7 +23,6 @@ const calcValue = (min, max, _width=width) => {
 
 export default function Slider ({range: [min, max], step, defaultValue, onChange}) {
   const svgref = useRef ();
-  const [init, setInit] = useState (true);
   const [value, setValue] = useState (defaultValue || min);
   const [mouseIsDown, setMouseIsDown] = useState (false);
   const roundToNearestStep = () => {
@@ -45,11 +44,7 @@ export default function Slider ({range: [min, max], step, defaultValue, onChange
     setValue (newVal);
   }
   useEffect (() => {
-    if (init) {
-      setInit (false);
-    } else {
-      onChange && onChange (roundToNearestStep ())
-    }
+    onChange && onChange (roundToNearestStep ())
   }, [value])
   return (
     <svg ref={svgref} onTouchMove={drag} onTouchCancel={() => setMouseIsDown (false)} onMouseMove={drag} onMouseLeave={() => setMouseIsDown (false)} onMouseUp={() => setMouseIsDown (false)} viewBox={`0 0 ${width} ${height}`} className="component-slider-svg">

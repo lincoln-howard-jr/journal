@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useApp } from "../../../AppProvider";
+import { caretdown } from "../../../img/images";
 import { dateShortHand } from "../../../lib/indexing";
 import { height, padding, width } from "./dimensions";
 
 export default function SingleMetrixCarousel () {
-  const {metrix: {metrix, measurements}} = useApp ();
+  const {metrix: {metrix, setSingleMetrix, setSingleMeasurement, measurements}, router: {redirect}} = useApp ();
   const [numberMetrix, setNumberMetrix] = useState (null);
   const [currentMetrixIndex, setCurrentMetrixIndex] = useState (null);
   const [domain, setDomain] = useState (null);
+  const [select, setSelect] = useState (false);
   
   const contentWidth = width - 2 * padding;
   const contentHeight = height - 2 * padding;
@@ -15,14 +17,18 @@ export default function SingleMetrixCarousel () {
   const currentMeasurements = () => measurements.filter (mez => mez.metric === numberMetrix [currentMetrixIndex].id).sort ((a, b) => a.measuredAt - b.measuredAt);
   const construct_xscale = () => {
     let [min, max] = domain;
-    return value => padding + contentWidth * (value - min) / (max - min)
+    return measurement => padding + contentWidth * (measurement - min) / (max - min)
   }
   const construct_yscale = () => {
     let [min, max] = currentMetrix ().range;
-    return value => padding + (contentHeight - contentHeight * (value - min) / (max - min));
+    return measurement => padding + (contentHeight - contentHeight * (measurement - min) / (max - min));
   }
-  const next = () => setCurrentMetrixIndex ((currentMetrixIndex + 1) % numberMetrix.length);
-  const prev = () => currentMetrixIndex === 0 ? numberMetrix.length - 1 : currentMetrixIndex - 1;
+
+  const onClick = (mez) => () => {
+    setSingleMetrix (numberMetrix [currentMetrixIndex]);
+    setSingleMeasurement (mez);
+    redirect ('/?page=metrix');
+  }
 
   useEffect (() => {
     if (!metrix || !measurements) return;
@@ -49,7 +55,28 @@ export default function SingleMetrixCarousel () {
   return (
     <figure className="single-metrix-carousel">
       <figcaption>
-        <span>{current.prompt}</span>
+        {
+          select &&
+          <>
+            Switch to another metrix:
+            <br/>
+            <select onChange={e => {setCurrentMetrixIndex (e.target.value); setSelect (false)}}>
+              <option value={currentMetrixIndex}></option>
+              {
+                numberMetrix.filter (m => m.id !== current.id).map (m => (
+                  <option key={`metrix-carousel-select-${m.id}`} value={numberMetrix.findIndex (met => met.id === m.id)}>{m.prompt}</option>
+                ))
+              }
+            </select>
+          </>
+        }
+        {
+          !select &&
+          <>
+            {current.prompt}
+            <span onClick={setSelect}><img style={{cursor: 'pointer', marginInline: '1ch', width: 'var(--body-text-size)'}} src={caretdown} /></span>
+          </>
+        }
       </figcaption>
       <svg className="single-metrix-graph" viewBox={`0 0 ${width} ${height}`}>
         <g className="single-metrix-axis">
@@ -63,7 +90,7 @@ export default function SingleMetrixCarousel () {
         <g>
           {
             mezs.map (mez => (
-              <circle cx={xscale (mez.measuredAt)} cy={yscale (mez.value)} r={3} />
+              <circle onClick={onClick (mez)} cx={xscale (mez.measuredAt)} cy={yscale (mez.measurement)} r={5} />
             ))
           }
         </g>

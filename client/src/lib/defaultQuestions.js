@@ -1,9 +1,16 @@
+export const measurementMap = {
+  'default-5': 1,
+  'default-6': 8,
+  'default-7': null
+} 
 export const settingMap =  {
   'default-0': '...',
   'default-1': '...',
-  'default-2': '...'
+  'default-2': '...',
+  // 'default-4': '...',
+  // ...measurementMap
 }
-export default [
+export const defaultQuestions = [
   {
     id: 'default-0',
     unit: 'string',
@@ -21,5 +28,39 @@ export default [
     unit: 'string',
     prompt: 'What else am I going to do today?',
     frequency: 'as needed'
-  }
+  },
+  // {
+  //   id: 'default-4',
+  //   unit: 'string',
+  //   prompt: 'What are my goals this week?',
+  //   frequency: 'weekly'
+  // }
+]
+export const defaultMetrix = [
+  {
+    id: 'default-5',
+    unit: 'number',
+    range: [1, 10],
+    step: 1,
+    prompt: 'How would I rate how I feel right now?',
+    frequency: 'as needed'
+  },
+  {
+    id: 'default-6',
+    unit: 'number',
+    range: [0, 16],
+    step: 0.25,
+    prompt: 'How much sleep did I get last night?',
+    frequency: 'daily'
+  },
+  {
+    id: 'default-7',
+    unit: 'boolean',
+    prompt: 'Did I accomplish my goals this week?',
+    frequency: 'weekly'
+  },
+]
+export default [
+  ...defaultQuestions,
+  // ...defaultMetrix
 ]

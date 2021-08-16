@@ -64,3 +64,45 @@ export const wordCount = entry => {
   if (entry.entryType === 'freeform') return entry.freeform.split (' ').length;
   return 0;
 }
+
+
+export const oneDay = 24 * 60 * 60 * 1000;
+export const isInDay = (reference, date) => ((date >= reference) && ((date.getTime () - reference.getTime ()) < oneDay));
+export const generateDailyDateRange = (_start, _end=new Date ()) => {
+  let start = new Date (_start);
+  start = new Date (start.getFullYear (), start.getMonth (), start.getDate ());
+  let end = new Date (_end.getFullYear (), _end.getMonth (), _end.getDate ());
+  const arr = [];
+  while (start <= end) {
+    arr.splice (0, 0, start);
+    start = new Date (start.getFullYear (), start.getMonth (), start.getDate () + 1);
+  }
+  return arr;
+}
+
+export const oneWeek = 7 * oneDay;
+export const isInWeek = (reference, date) => date >= reference && (date.getTime () - reference.getTime ()) < oneWeek;
+export const generateWeeklyDateRange = (_start, _end=new Date ()) => {
+  let start = new Date (_start);
+  start = new Date (start.getFullYear (), start.getMonth (), start.getDate () - start.getDay ());
+  let end = new Date (_end.getFullYear (), _end.getMonth (), _end.getDate ());
+  const arr = [];
+  while (start <= end) {
+    arr.splice (0, 0, start);
+    start = new Date (start.getFullYear (), start.getMonth (), start.getDate () + 7);
+  }
+  return arr;
+}
+
+export const isInMonth = (reference, date) => date.getFullYear () === reference.getFullYear () && date.getMonth () === reference.getMonth ();
+export const generateMonthlyDateRange = (_start, _end=new Date ()) => {
+  let start = new Date (_start);
+  start = new Date (start.getFullYear (), start.getMonth (), 0);
+  let end = new Date (_end.getFullYear (), _end.getMonth (), _end.getDate ());
+  const arr = [];
+  while (start <= end) {
+    arr.splice (0, 0, start);
+    start = new Date (start.getFullYear (), start.getMonth () + 1, 0);
+  }
+  return arr;
+}

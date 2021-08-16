@@ -1,0 +1,69 @@
+main.single-metrix div.single-metrix-info {
+  display: grid;
+  align-items: center;
+  margin: auto;
+  grid-template-columns: 1fr min(80vw, 450px) 1fr;
+}
+main.single-metrix div.single-metrix-info span {
+  color: var(--accent-color);
+} 
+main.single-metrix div.single-metrix-info p {
+  min-height: var(--h2-font-size);;
+  grid-column: 2;
+  display: grid;
+  justify-content: center;
+  gap: var(--body-text-size);
+  align-items: center;
+  grid-template-columns: var(--body-text-size) 1fr var(--body-text-size);
+  text-align: center;
+}
+main.single-metrix div.single-metrix-info p > :first-child {
+  grid-column: 2;
+}
+main.single-metrix ul.metrix-history {
+  display: grid;
+  align-items: center;
+}
+main.single-metrix ul.metrix-history li {
+  display: grid;
+  padding: 15px calc(var(--body-text-size) / 2);
+  grid-template-columns: 1fr 1fr 2fr var(--body-text-size);
+  text-align: center;
+  background-color: var(--accent-color-transparent);
+  transition: 0.3s;
+}
+main.single-metrix li.metrix-history-header {
+  border-bottom: 1px solid var(--accent-color);
+}
+main.single-metrix li.metrix-history-header span {
+  color: var(--accent-color);
+}
+main.single-metrix span.metrix-more {
+  transition: 0.2s;
+  cursor: pointer;
+  opacity: 0.6;
+}
+main.single-metrix li:hover span.metrix-more {
+  opacity: 1;
+}
+main.single-metrix li.metrix-measurement:hover {
+  background-color: var(--accent-color-half-transparent);
+}
+main.single-metrix li.metrix-measurement.selected {
+  background-color: var(--accent-color-half-transparent);
+}
+main.single-metrix li.metrix-measurement.selected:not(:focus-within):hover {
+  background-color: var(--accent-color-quarter-transparent);
+}
+main.single-metrix li div {
+  text-align: center;
+}
+main.single-metrix li p {
+  display: inline-block;
+  margin: 0;
+  width: 5ch;
+}
+main.single-metrix li div img {
+  width: var(--body-text-size);
+  cursor: pointer;
+}

@@ -24,6 +24,9 @@ nav > ul {
   align-items: center;
   justify-items: center;
 }
+nav.view-only > ul {
+  grid-template-columns: repeat(5, 48px);
+}
 nav > ul > li {
   height: 40px;
   width: 48px;

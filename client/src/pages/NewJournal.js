@@ -4,7 +4,7 @@ import { dateShortHand, getTime, printDate } from "../lib/indexing";
 import { H1, H2, H3 } from "./components/Headers";
 import Query from "./components/Query";
 import AnalogClock from "./components/viz/AnalogClock";
-import TrashSVG from '../img/trash.svg'
+import {trash} from '../img/images';
 
 function RemoveEntryModal ({entry, resolve, reject}) {
   const app = useApp ();
@@ -65,7 +65,7 @@ function JournalCard ({idx}) {
               <H3 short={getTime (entry.start)}>
                 {getTime (entry.start)} - {getTime (entry.end)}
               </H3>
-              <span onClick={remove (entry)}><img src={TrashSVG} /></span>
+              <span onClick={remove (entry)}><img src={trash} /></span>
             </header>
             {
               (entry.entryType === 'questions' || !entry.entryType) &&

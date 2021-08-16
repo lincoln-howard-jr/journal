@@ -7,6 +7,7 @@ import Nav from './pages/components/Nav'
 import Auth from './pages/Auth'
 import Dashboard from './pages/Dashboard'
 import './App.css'
+import MetrixHistory from './pages/MetrixHistory'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Journal />
       <Settings />
       <Dashboard />
+      <MetrixHistory />
       <Nav />
     </>
   );

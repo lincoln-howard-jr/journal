@@ -16,6 +16,9 @@
   --error-color: red;
   --error-bg: #ff000011;
   --accent-color: #4b4486;
+  --accent-color-half-transparent: #4b448644;
+  --accent-color-quarter-transparent: #4b448622;
+  --accent-color-transparent: #4b448600;
   --accent-color-light: #aba4d6a0;
   --accent-color-lighter: #aba4d640;
   --h1-font-size: clamp(24px, 4.4vmin, 32px);
@@ -47,6 +50,7 @@ main {
   row-gap: var(--body-text-size);
   width: min(84vw, 900px);
   margin: 0 auto;
+  padding-top: calc(var(--h1-font-size) / 2);
   padding-bottom: 80px;
 }
 main > div {
@@ -182,4 +186,7 @@ br {
 hr {
   margin: calc(var(--body-text-size) / 2) auto;
   width: 25vw;
+}
+select {
+  max-width: 70vw;
 }
