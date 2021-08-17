@@ -16,7 +16,7 @@ const filterTypes = {
 export default function Query () {
   
   // state mgmt
-  const {journal: {query, filters, filterIterator, setQuery, setFilters}, router: {redirect}} = useApp ();
+  const {journal: {query, filters, filterIterator, setQuery, setFilters}, router: {redirect}, viewMode: {isViewOnly}} = useApp ();
   const [open, setOpen] = useState (false);
   const [dateFilters, setDateFilters] = useState ([]);
   const [timeFilters, setTimeFilters] = useState ([]);
@@ -78,7 +78,14 @@ export default function Query () {
   return (
     <>
       <div className="grid search-container">
-        <span onClick={() => redirect ('/?page=write')}><img src={plus} /></span>
+        {
+          isViewOnly &&
+          <span />
+        }
+        {
+          !isViewOnly &&
+          <span onClick={() => redirect ('/?page=write')}><img src={plus} /></span>
+        }
         <form className="search-bar" onSubmit={e => e.preventDefault ()}>
           <input value={query} onChange={e => setQuery (e.target.value)} placeholder="Search..." />
           <img src={SearchIcon} />

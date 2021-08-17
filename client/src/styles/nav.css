@@ -60,6 +60,9 @@ nav > ul > li.active > label {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(5, 48px) 1fr;
   }
+  nav.view-only > ul {
+    grid-template-columns:  1fr;
+  }
 }
 /* settings gears icon */
 #settings-menu-icon {

@@ -29,6 +29,14 @@ svg text {
     opacity: 1;
   }
 }
+@keyframes slideUpFromBottom {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
 /* dashboard html styling */
 main.dashboard * {
   user-select: none;
@@ -58,6 +66,20 @@ main.dashboard figure figcaption {
   text-align: center;
   color: var(--accent-color);
   font-size: var(--h3-font-size);
+  min-height: calc(2 * var(--h2-font-size));
+}
+main.dashboard figure figcaption p {
+  display: grid;
+  gap: var(--body-text-size);
+  grid-template-columns: 1fr var(--body-text-size) 25ch var(--body-text-size) 1fr;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+main.dashboard figure figcaption p span:first-child {
+  color: var(--accent-color);
+  font-size: var(--h3-font-size);
+  grid-column: 3;
 }
 main.dashboard img {
   width: min(100%, 32px);
@@ -114,7 +136,6 @@ line.trendline-4 {
   overflow: visible;
 }
 .keyword-search {
-  transform: translateY(1vw);
   display: grid;
   grid-template-columns: calc(0.8 * var(--body-text-size)) 1fr calc(0.8 * var(--body-text-size));
   height: calc(1.8 * var(--body-text-size));
@@ -159,6 +180,9 @@ line.trendline-4 {
 .bar-chart-text > text:nth-child(3) {
   stroke: var(--color-3);
 }
+.bar-chart-bar-label {
+  transform: rotate(60deg) scale(0.7) translate(-5%, -5%);
+}
 @media (hover: hover) {
   .bar-chart-bar-group + text {
     opacity: 0;
@@ -166,11 +190,6 @@ line.trendline-4 {
   }
   .bar-chart-bar-group:hover + text {
     opacity: 1;
-  }
-}
-@media (hover: none) {
-  .bar-chart-bar-label {
-    transform: rotate(60deg) scale(0.7) translate(-5%, -5%);
   }
 }
 /* reset the dashboard layout when on smaller devices */
@@ -198,6 +217,9 @@ line.trendline-4 {
   stroke-width: 2px;
   fill: var(--color-1-transparent);
   cursor: pointer;
+  animation: slideUpFromBottom;
+  animation-duration: 1.2s;
+  animation-timing-function: ease-out;
 }
 .single-metrix-graph circle:hover {
   fill: var(--color-1);
