@@ -143,7 +143,7 @@ function Settings () {
           }
           <Setting setting="default-questions" title="Show Default Questions" />
           <Setting setting="custom-questions" title="Show Custom Questions" />
-          <Setting setting="use-metrix" title="Show Metrix" />
+          <Setting setting="use-metrix" title="Show Custom Metrix" />
         </SettingGroup>
         <SettingGroup shortTitle="Prompts" longTitle="Manage Prompts">
           <CustomQuestion />

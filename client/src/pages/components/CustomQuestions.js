@@ -210,7 +210,7 @@ export default function CustomQuestion () {
 
   return (
     <>
-      <b>Default Questions</b>
+      <b>Default Prompts</b>
       <ul className="prompt-list">
         {
           defaultQuestions.map (q => <li className="manage-default-question" key={`manage-default-questions-${q.prompt}`}>{q.prompt}</li>)
@@ -230,10 +230,10 @@ export default function CustomQuestion () {
           ))
         }
       </ul>
-      <b>Metrix</b>
+      <b>Custom Metrix</b>
       <ul className="prompt-list">
         {
-          metrix.map (q => (
+          metrix.filter (m => !m.isDefault).map (q => (
             <li key={`manage-custom-metrix-${q.id}`} className="manage-custom-metrix">
               <span></span>
               <span>{q.prompt}</span>

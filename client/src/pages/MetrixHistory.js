@@ -175,7 +175,11 @@ export default function MetrixHistory () {
         }
       </div>
       {
-        instances.length &&
+        instances.length === 0 &&
+        <p className="text-center">No measurements yet!</p>
+      }
+      {
+        instances.length > 0 &&
         <ul className="metrix-history">
           <li className="metrix-history-header">
             <span>Date</span>

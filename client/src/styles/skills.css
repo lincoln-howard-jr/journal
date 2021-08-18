@@ -28,6 +28,8 @@ section.skill-category-container h2 {
 }
 section.skill-category-container div:nth-child(2n + 5):last-child {
   grid-column: 1 / 3;
+  width: 50%;
+  margin: auto;
 }
 section.skill-category-container div {
   user-select: none;
@@ -62,6 +64,21 @@ section.skill-category-container:hover h2, section.skill-category-container.open
 }
 section.skill-category-container:hover div, section.skill-category-container.open div {
   color: var(--background-color);
+}
+section.skill-category-container div.single-skill {
+  display: grid;
+  grid-template-columns: var(--body-text-size) 1fr var(--body-text-size);
+  gap: var(--body-text-size);
+}
+section.skill-category-container.open div span {
+  color: var(--background-color);
+}
+section.skill-category-container div.single-skill span:first-child {
+  grid-column: 2;
+}
+section.skill-category-container div.single-skill img {
+  filter: invert(1);
+  cursor: pointer;
 }
 /* creating a skill */
 .new-skill-form {

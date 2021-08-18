@@ -18,7 +18,7 @@ const isThisMonth = date => date > thisMonth;
 export default function useMetrix () {
   
   // relevant state
-  const [metrix, setMetrix] = useState ([]);
+  const [metrix, setMetrix] = useState (defaultMetrix);
   const [measurements, setMeasurements] = useState ([])
   const [newMeasurements, setNew] = useState ([]);
   const [captured, setCaptured] = useState ([]);
@@ -30,7 +30,7 @@ export default function useMetrix () {
     try {
       const req = await metrixApi.get (userId);
       let data = await req.json ();
-      setMetrix (data);
+      setMetrix ([...defaultMetrix, ...data]);
     } catch (e) {
       console.log ('#getMetrix', e);
     }

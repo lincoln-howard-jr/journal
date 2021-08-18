@@ -34,18 +34,8 @@ export default function useSkills () {
       reject (e);
     }
   })
-  const stageForRemoval = id => {
-    setStaged ([...staged, id]);
-  }
-  const unstage = id => {
-    setStaged (staged.filter (_id => _id !== id));
-  }
-  const isStaged = id => {
-    return staged.includes (id);
-  }
   const removeSkill = id => new Promise (async (resolve, reject) => {
     try {
-      if (!isStaged (id)) return;
       await api.del (id);
       await getSkills ();
       resolve ();
@@ -53,6 +43,6 @@ export default function useSkills () {
       reject (e);
     }
   });
-  return {skills, getSkills, submitSkill, stageForRemoval, unstage, isStaged, removeSkill}
+  return {skills, getSkills, submitSkill, removeSkill}
 
 }

@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
 import { useApp } from "../AppProvider";
+import { trash } from "../img/images";
 import { H1, H2, H3 } from "./components/Headers";
 
 export default function Skills () {
-  const {auth: {user}, router: {page}, skills: {skills, submitSkill}, freeze} = useApp ();
+  const {auth: {user}, router: {page}, skills: {skills, submitSkill, removeSkill}, freeze} = useApp ();
   const [open, setOpen] = useState (null);
   const [submitError, setError] = useState (null);
   const categoryRef = useRef ();
@@ -56,18 +57,22 @@ export default function Skills () {
           <label>Skill:</label>
           <p style={{padding: 7.5}} ref={skillRef} contentEditable>...</p>
         </div>
-        <button onClick={onSubmit}>Add A Coping Skill</button>
+        <button onClick={onSubmit}>Add Skill</button>
       </form>
       {
         skills.map (category => (
-          <section onClick={() => open === category.meta.category ? setOpen (null) : setOpen (category.meta.category)} className={`skill-category-container${open === category.meta.category ? ' open' : ''}`} key={`cat-${category.meta.category}`}>
-            <header>
+          <section className={`skill-category-container${open === category.meta.category ? ' open' : ''}`} key={`cat-${category.meta.category}`}>
+            <header style={{cursor: 'pointer'}} onClick={() => open === category.meta.category ? setOpen (null) : setOpen (category.meta.category)}>
               <H2>{category.meta.category}</H2>
             </header>
             {
               category.list.map (skill => (
-                <div>
-                  {skill.skill}
+                <div className="single-skill">
+                  <span>{skill.skill}</span>
+                  {
+                    open === category.meta.category &&
+                    <span onClick={() => removeSkill (skill.id)}><img src={trash} /></span>
+                  }
                 </div>
               ))
             }

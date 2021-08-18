@@ -23,6 +23,7 @@ function monthsAfter (date) {
 
 const BooleanMetrixGraph = memo (
   function _BooleanMetrixGraph ({mezs, metric}) {
+    if (!mezs.length) return <p>No measurements yet!</p>
     const yesCount = mezs.filter (mez => mez.measurement === 'Yes').length;
     const noCount = mezs.filter (mez => mez.measurement === 'No').length;
     let blankCount = 0;
@@ -60,6 +61,7 @@ const BooleanMetrixGraph = memo (
 )
 const NumberMetrixGraph = memo (
   function _NumberMetrixGraph ({mezs, onClick, metric}) {
+    if (!mezs.length) return <p>No measurements yet!</p>
     const domain = [mezs [0].measuredAt, midnight];
     const xscale = date => padding + contentWidth * (date - domain [0]) / (domain [1] - domain [0]);
     const range = metric.range;
