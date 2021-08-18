@@ -30,6 +30,9 @@
   stroke: var(--font-color);
   opacity: 1;
 }
+.analog-clock.large {
+  width: min(12vw, 104px);
+}
 /* number counter */
 .number-counter {
   cursor: pointer;

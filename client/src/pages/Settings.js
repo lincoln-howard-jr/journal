@@ -148,9 +148,6 @@ function Settings () {
         <SettingGroup shortTitle="Prompts" longTitle="Manage Prompts">
           <CustomQuestion />
         </SettingGroup>
-        <SettingGroup longTitle="Manage Your Notifications" shortTitle="Notifications">
-          <Notifications />
-        </SettingGroup>
         <SettingGroup shortTitle="Sharing" longTitle="Manage Journal Sharing">
           <p>
             View journals shared with you and who you've shared your journal with.

@@ -135,6 +135,29 @@ input:focus {
 input::placeholder {
   color: var(--input-border-color);
 }
+.inline-input > input {
+  border: 0;
+  outline: none;
+  margin: 0 0 0 calc(1.5 * var(--body-text-size));
+  width: 14ch;
+}
+.inline-input > input[type="tel"] {
+  width: 5ch;
+}
+.inline-input::before {
+  content: "";
+  box-shadow: none;
+  outline: none;
+  position: absolute;
+  transform: translate(calc(var(--body-text-size) * .75), calc(var(--body-text-size) / 2));
+  width: calc(var(--body-text-size) * .75);
+  height: calc(var(--body-text-size) * .75);
+  background-size: cover;
+  background-image: url('../img/pen-small.png');
+  filter: drop-shadow(
+    0px 0px 2px #ffffff
+  );
+}
 /*
   helpers
 */

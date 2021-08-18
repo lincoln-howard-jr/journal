@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useApp } from "../../AppProvider";
 import defaultQuestions from "../../lib/defaultQuestions";
-import { trash } from "../../img/images";
+import { leftarrow, trash } from "../../img/images";
 
 const metricTypeDict = {
   boolean: 'Yes/No',
@@ -18,18 +18,23 @@ const prevent = e => {
   return [isNumber, isBackspace, isLeftArrow, isRightArrow, isDot].filter (fn => fn (e.key)).length === 0;
 }
 
-const INI = ({value, setValue}) => {
-  const okd = e => {
-    if (prevent (e)) return e.preventDefault ();
-  }
+const INI = ({value, setValue, placeholder}) => {
   return (
-    <b type="tel" onBlur={e => setValue (parseFloat (e.target.innerText))} contentEditable onKeyDown={okd}>{value}</b>
+    <span className="inline-input">
+      <input placeholder={placeholder} type="tel" defaultValue={value} onBlur={e => {
+        if (!prevent (e)) return e.preventDefault ();
+        if (!e.target.value.length) return setValue (0);
+        setValue (parseFloat (e.target.value))
+      }} />
+    </span>
   )
 }
 
-const CES = ({value, setValue}) => {
+const CES = ({value, setValue, placeholder}) => {
   return (
-    <b onBlur={e => setValue (e.target.innerText)} contentEditable>{value}</b>
+    <span className="inline-input">
+      <input placeholder={placeholder} onChange={e => setValue (e.target.value)} value={value} />
+    </span>
   )
 }
 
@@ -39,11 +44,22 @@ export default function CustomQuestion () {
   const {writing: {questions, createQuestion, deleteQuestion}, settings: {toggle, getSetting}, metrix: {metrix, createMetrix, deleteMetrix}, freeze} = useApp ();
   const [prompt, setQuestion] = useState ('?')
   const [metricType, setMetricType] = useState (null);
-  const [rangeFrom, setRangeFrom] = useState (1);
-  const [rangeTo, setRangeTo] = useState (10);
-  const [stepInterval, setStepInterval] = useState (1);
+  const [rangeFrom, setRangeFrom] = useState ('');
+  const [rangeTo, setRangeTo] = useState ('');
+  const [stepInterval, setStepInterval] = useState ('');
   const [frequency, setFrequency] = useState ('as needed');
   const [unitLabel, setUnitLabel] = useState (null);
+  const [unitDescriptionError, setDescError] = useState ('');
+  
+  const calculateDescError = () => {
+    let errors = [];
+    if (typeof rangeFrom !== 'number') errors.push ('min value must be a number');
+    if (typeof rangeTo !== 'number') errors.push ('max value must be a number');
+    if (rangeFrom >= rangeTo) errors.push ('max value must be greater than min value');
+    if (typeof stepInterval !== 'number' || stepInterval <= 0) errors.push ('step interval must be a positive number');
+    if (errors.length) setDescError ('Error: ' + errors.join (', '));
+    return errors.length === 0;
+  }
 
   // call api to create new question
   const runCreateQuestion = async () => {
@@ -75,6 +91,13 @@ export default function CustomQuestion () {
       }
       await createMetrix (obj);
       setStep (0);
+      setQuestion ('?');
+      setMetricType (null);
+      setRangeFrom ('');
+      setRangeTo ('');
+      setStepInterval ('');
+      setFrequency ('as needed');
+      setUnitLabel ('');
       unfreeze ();
     } catch (e) {
       unfreeze ();
@@ -82,6 +105,9 @@ export default function CustomQuestion () {
   }
 
   const [currentStep, setStep] = useState (0);
+  useEffect (() => {
+    setDescError ('');
+  }, [currentStep]);
   const steps = [
     // initial step - enter prompt
     (
@@ -128,20 +154,24 @@ export default function CustomQuestion () {
       <>
         <b>Numeric Metric Details</b>
         <p>{prompt}</p>
+        {
+          unitDescriptionError && unitDescriptionError.length > 0 &&
+          <p className="error">{unitDescriptionError}</p>
+        }
         <p>
           {
-          unitLabel ?
+          unitLabel !== null ?
             (
               <>
-                Measured with unit <CES value={unitLabel} setValue={setUnitLabel} /> from
+                Measured with unit <CES placeholder='unit label' value={unitLabel} setValue={setUnitLabel} /> from
               </>
             ) : 'From'}
-          {' '}<INI value={rangeFrom} setValue={setRangeFrom} /> to <INI value={rangeTo} setValue={setRangeTo} />   in intervals of <INI value={stepInterval} setValue={setStepInterval} />.
+          {' '}<INI placeholder='min' value={rangeFrom} setValue={setRangeFrom} /> to <INI placeholder='max' value={rangeTo} setValue={setRangeTo} />   in intervals of <INI placeholder='step' value={stepInterval} setValue={setStepInterval} />.
         </p>
-        <label><input type="checkbox" defaultChecked={unitLabel} onChange={e => setUnitLabel (e.target.checked ? '...' : false)} /> has unit label</label>
+        <label><input type="checkbox" defaultChecked={unitLabel} onChange={e => setUnitLabel (e.target.checked ? '' : null)} /> has unit label</label>
         <span>
           <button onClick={() => setStep (currentStep - 1)}>Back</button>
-          <button onClick={() => setStep (currentStep + 1)}>Set Frequency</button>
+          <button onClick={() => {if (calculateDescError ()) setStep (currentStep + 1)}}>Set Frequency</button>
         </span>
       </>
     ),
@@ -160,7 +190,7 @@ export default function CustomQuestion () {
           </select>.
         </p>
         <span>
-          <button onClick={() => setStep (currentStep - 2)}>Back</button>
+          <button onClick={() => setStep (currentStep - 1)}>Back</button>
           <button onClick={() => setStep (currentStep + 1)}>Review</button>
         </span>
       </>
