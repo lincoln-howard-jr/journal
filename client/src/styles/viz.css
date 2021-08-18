@@ -218,12 +218,20 @@ line.trendline-4 {
   fill: var(--color-1-transparent);
   cursor: pointer;
   animation: slideUpFromBottom;
-  animation-duration: 1.2s;
+  animation-duration: 0.8s;
   animation-timing-function: ease-out;
+}
+.single-metrix-graph circle + text {
+  transition: 0.1s;
+  opacity: 0;
+}
+.single-metrix-graph circle:hover + text {
+  opacity: 1;
 }
 .single-metrix-graph circle:hover {
   fill: var(--color-1);
-  stroke-width: 0;
+  stroke: var(--color-1-transparent);
+  stroke-width: 4px;
 }
 .single-metrix-graph .single-metrix-axis line {
   stroke: var(--color-1);

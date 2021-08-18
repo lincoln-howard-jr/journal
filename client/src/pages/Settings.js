@@ -127,7 +127,7 @@ export function Setting ({setting, title, relationships=[], onToggle}) {
 }
 
 function Settings () {
-  const {router: {page, redirect}, settings: {getSetting, iter}, auth: {user, logout}} = useApp ();
+  const {router: {page}, settings: {getSetting, iter}, auth: {user, logout}} = useApp ();
   const [attributionId, setAttributionId] = useState ('attributions');
   if (!user) return null;
   return page === 'settings' ? (

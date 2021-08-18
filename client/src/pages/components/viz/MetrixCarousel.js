@@ -75,11 +75,19 @@ const NumberMetrixGraph = memo (
           <text x={xscale (domain [0]) - padding} y={yscale (range [1])}textAnchor="start">{range [1]}</text>
           <text x={xscale (domain [0]) + padding} y={yscale (range [0]) + padding} textAnchor="middle">{dateShortHand (domain [0])}</text>
           <text x={xscale (domain [1]) - padding} y={yscale (range [0]) + padding} textAnchor="middle">{dateShortHand (domain [1])}</text>
+          {/* label */}
+          {
+            !!metric.unitLabel &&
+            <text style={{transform: 'rotate(-90deg) scale(0.8)', transformOrigin: `${100 * (padding / height) / 2}% ${50}%`}} x={padding / 2} y={height / 2} textAnchor="middle">{metric.unitLabel}</text>
+          }
         </g>
         <g>
           {
             mezs.map (mez => (
-              <circle style={{transformOrigin:`${100 * xscale (mez.measuredAt) / width}% ${100 * (height - padding) / height}%`}} key={`metrix-graph-circle-${mez.id}`} onClick={onClick (mez)} cx={xscale (mez.measuredAt)} cy={yscale (mez.measurement)} r={8} />
+              <>
+                <circle style={{transformOrigin:`${100 * xscale (mez.measuredAt) / width}% ${100 * (height - padding) / height}%`}} key={`metrix-graph-circle-${mez.id}`} onClick={onClick (mez)} cx={xscale (mez.measuredAt)} cy={yscale (mez.measurement)} r={6} />
+                <text x={(xscale (mez.measuredAt) > 5 * padding) ? xscale (mez.measuredAt) - 2.25 : xscale (mez.measuredAt) + 2.25 * padding} y={(yscale (mez.measurement) < 4 * padding) ? yscale (mez.measurement) + .5 * padding : yscale (mez.measurement) - 0.5 * padding} textAnchor="middle">{dateShortHand (mez.measuredAt)} - {mez.measurement}</text>
+              </>
             ))
           }
         </g>

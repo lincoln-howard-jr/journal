@@ -17,7 +17,7 @@ export default function Write () {
     journal: {createEntry},
     settings: {getSetting},
     writing: {questions},
-    metrix: {metrix, getMeasureValue, createMeasurements, measure, isCaptured},
+    metrix: {metrix, createMeasurements, measure, isCaptured},
     session,
     freeze
   } = useApp ();
@@ -29,9 +29,9 @@ export default function Write () {
   // get all prompts
   const allPrompts = () => {
     let arr = [];
-    if (setty [0]) arr = defualtPrompts;
+    if (setty [0]) arr = defualtPrompts.filter (p => !isCaptured (p.id));
     if (setty [1]) arr = [...arr, ...questions];
-    if (setty [2]) arr = [...arr, ...metrix];
+    if (setty [2]) arr = [...arr, ...metrix.filter (p => !isCaptured (p.id))];
     return arr;
   }
 
