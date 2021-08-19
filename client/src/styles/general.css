@@ -30,6 +30,7 @@
   --button-border-color: #322B6D;
   --article-bg-color-primary: #aba4d660;
   --article-bg-color-secondary: #aba4d630;
+  --invert: 1;
 }
 /*
   reset
@@ -212,4 +213,24 @@ hr {
 }
 select {
   max-width: 70vw;
+}
+@media (hover: none) {
+  .hide-on-not-hover {
+    display: none;
+  }
+}
+@media (hover: hover) {
+  .hide-on-hover {
+    display: none;
+  }
+}
+@media (min-width: 1100px) {
+  .hide-on-large {
+    display: none;
+  }
+}
+@media (max-width: 1100px) {
+  .hide-on-small {
+    display: none;
+  }
 }

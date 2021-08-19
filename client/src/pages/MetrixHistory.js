@@ -75,6 +75,11 @@ export default function MetrixHistory () {
   useEffect (() => {
     if (singleMetrix && singleMetrix.id) {
       const arr = measurements.filter (mez => mez.metric === singleMetrix.id).sort ((a, b) => b.measuredAt - a.measuredAt);
+      if (arr.length === 0) {
+        setMez (arr);
+        setInstances ([])
+        return;
+      }
       if (singleMetrix.frequency === 'as needed') {
         setMez (arr);
         setInstances (arr.map (mez => ({

@@ -1,25 +1,36 @@
 import React, { useRef, useState } from "react";
-import sanitizePhoneNumber from '../lib/sanitizePhoneNumber'
-import {H1, H2, H3} from "./components/Headers";
+import {H1, H3} from "./components/Headers";
 import attributions from '../lib/attributions'
 import {useApp} from '../AppProvider';
-import Notifications from "./components/TextNotifications";
 import CaretSVG from '../img/caret-down.svg';
 import CustomQuestion from "./components/CustomQuestions";
+import sanitizePhoneNumber, {stripPhoneNumber} from '../lib/sanitizePhoneNumber';
+
+const fmtRawPhoneNumber = number => {
+  let stripped = stripPhoneNumber (number);
+  if (stripped.length > 10) stripped = stripped.substr (0, 10);
+  console.log (stripped);
+  if (stripped.length === 0) return stripped;
+  if (stripped.length < 4) return `(${stripped}`;
+  if (stripped.length < 7) return `(${stripped.substr (0, 3)}) ${stripped.substr (3)}`;
+  return `(${stripped.substr (0, 3)}) ${stripped.substr (3, 3)}-${stripped.substr (6)}`;
+}
 
 function ShareJournal () {
   const {sharing: {shareJournal}, settings} = useApp ();
-  const numRef = useRef ();
+  const [rawPhoneNumber, _setPhoneNumber] = useState ('');
+  const setPhoneNumber = (number) => _setPhoneNumber (fmtRawPhoneNumber (number));
   const nameRef = useRef ();
   const swnRef = useRef ();
   const onClick = async () => {
-    let phone = numRef.current.value;
+    console.log (rawPhoneNumber);
+    return;
+    let phone = rawPhoneNumber;
     phone = sanitizePhoneNumber (phone);
     let name = nameRef.current.value;
     let shareWithName = swnRef.current.value;
     let share = await shareJournal (phone, name, shareWithName);
-    settings.addSetting (`share-${share.id}`, true);
-    numRef.current.value = '';
+    _setPhoneNumber ('');
     swnRef.current.value = '';
   }
   return (
@@ -28,13 +39,13 @@ function ShareJournal () {
       <br/>
       <input ref={swnRef} placeholder="James Allen" />
       <br/>
-      <input type="tel" ref={numRef} placeholder="123-456-7890" />
+      <input type="tel" placeholder="123-456-7890" value={rawPhoneNumber} onChange={e => setPhoneNumber (e.target.value)} />
       <br/>
       <b style={{textDecoration: 'none'}}>Your Name</b>
       <br/>
       <input ref={nameRef} />
       <br />
-      <span onClick={onClick}>Submit</span>
+      <button onClick={onClick}>Share Your Journal</button>
     </div>
   )
 }
@@ -150,7 +161,8 @@ function Settings () {
         </SettingGroup>
         <SettingGroup shortTitle="Sharing" longTitle="Manage Journal Sharing">
           <p>
-            View journals shared with you and who you've shared your journal with.
+            View journals shared with you and manage who you shared your journal with.
+            You can always disable someone from seeing your journal once you share it with them.
           </p>
           <SharedWithMe/>
           <SharedByMe/>

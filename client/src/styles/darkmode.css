@@ -18,6 +18,7 @@
     --button-border-color: #a298ff;
     --article-bg-color-primary: #000000;
     --article-bg-color-secondary: #000000;
+    --invert: 0;
   }
   img {
     filter: invert(1);

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useApp } from "../AppProvider";
-import { trash } from "../img/images";
+import { pensmall, trash } from "../img/images";
 import { H1, H2, H3 } from "./components/Headers";
 
 export default function Skills () {

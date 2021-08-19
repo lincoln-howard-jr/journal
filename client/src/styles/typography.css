@@ -80,7 +80,7 @@ b {
   color: var(--error-color);
   text-align: center;
   text-decoration: underline;
-  margin: var(--h1-font-size);
+  margin: var(--body-text-size);
 }
 /* accent color stuff */
 h1, h4, b {

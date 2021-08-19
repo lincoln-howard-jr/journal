@@ -72,6 +72,3 @@ nav > ul > li.active > label {
   width: var(--h1-font-size);
   height: var(--h1-font-size);
 }
-main > h1:first-child, main > h1:first-child + h1.short {
-  margin-top: calc(var(--h1-font-size) / 2);
-}
