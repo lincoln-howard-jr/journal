@@ -40,7 +40,7 @@ section.skill-category-container div {
   gap: calc(var(--body-text-size) / 4);
   padding: var(--body-text-size) calc(var(--body-text-size) / 2);
   margin-top: calc(3 * var(--body-text-size) / 4);
-  grid-template-columns: 1fr var(--body-text-size) 30vw var(--body-text-size) 1fr;
+  grid-template-columns: 1fr var(--body-text-size) 27vw var(--body-text-size) 1fr;
 }
 section.skill-category-container.open div {
   color: var(--background-color);
