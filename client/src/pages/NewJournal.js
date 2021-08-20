@@ -99,7 +99,7 @@ export default function Journal () {
   const {auth: {user}, router: {page}, journal: {entries, clearSearch}} = useApp ();
 
   useEffect (() => {
-    clearSearch ();
+    if (page !== 'journal') clearSearch ();
   }, [page]);
 
   if (!user || page !== 'journal') return null;
