@@ -19,6 +19,7 @@
     --article-bg-color-primary: #000000;
     --article-bg-color-secondary: #000000;
     --invert: 0;
+    --frozen-color: #9b91f1;
   }
   img {
     filter: invert(1);

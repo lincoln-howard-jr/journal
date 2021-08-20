@@ -1,27 +1,24 @@
 import { useRef, useState } from "react";
 import { useApp } from "../AppProvider";
-import { pensmall, trash } from "../img/images";
+import { trash } from "../img/images";
 import { H1, H2, H3 } from "./components/Headers";
 
 export default function Skills () {
-  const {auth: {user}, router: {page}, skills: {skills, submitSkill, removeSkill}, freeze} = useApp ();
+  const {auth: {user}, router: {page}, skills: {skills, submitSkill, removeSkill}} = useApp ();
   const [open, setOpen] = useState (null);
   const [submitError, setError] = useState (null);
   const categoryRef = useRef ();
   const skillRef = useRef ();
   const onSubmit = async e => {
     if (e.preventDefault) e.preventDefault ();
-    let unfreeze = freeze ();
     try {
       const category = categoryRef.current.value;
       const skill = skillRef.current.innerText;
       await submitSkill ({category, skill});
       categoryRef.current.value = 'Tools For ...';
       skillRef.current.innerText = '...';
-      unfreeze ();
     } catch (e) {
       setError ('Error while submitting skill, try again in a few...');
-      unfreeze ();
     }
     
   }

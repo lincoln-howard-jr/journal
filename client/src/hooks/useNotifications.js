@@ -13,7 +13,7 @@ const compareTimes = (a, b) => {
   return mina - minb;
 }
 
-export default function useNotifications () {
+export default function useNotifications (freeze) {
 
   const [notifications, setNotifications] = useState ([]);
   const getNotifications = async () => new Promise (async (resolve, reject) => {
@@ -28,21 +28,27 @@ export default function useNotifications () {
     }
   })
   const createNotification = body => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       await api.post (body);
       await getNotifications ();
       resolve ();
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   })
   const deleteNotification = id => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       await api.del (id);
       await getNotifications ();
       resolve ();
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   });
   return {notifications, getNotifications, createNotification, deleteNotification}

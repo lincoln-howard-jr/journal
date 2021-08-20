@@ -15,7 +15,7 @@ let thisMonth = new Date ();
 thisMonth = new Date (thisWeek.getFullYear (), thisWeek.getMonth (), 0);
 const isThisMonth = date => date > thisMonth;
 
-export default function useMetrix () {
+export default function useMetrix (freeze) {
   
   // relevant state
   const [metrix, setMetrix] = useState (defaultMetrix);
@@ -39,6 +39,7 @@ export default function useMetrix () {
 
   // create a metrix
   const createMetrix = async body => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       const req = await metrixApi.post (body);
       if (!req.ok) throw new Error ('request not ok');
@@ -47,16 +48,21 @@ export default function useMetrix () {
     } catch (e) {
       console.log ('#createMetrix', e);
       reject (e);
+    } finally {
+      unfreeze ();
     }
   })
 
   const deleteMetrix = async id => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       await metrixApi.del (id);
       await getMetrix ();
       resolve ();
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   })
 
@@ -85,13 +91,14 @@ export default function useMetrix () {
   }
 
   const measureHistoric = async (metric, measurement, measuredAt) => {
-    await measurementsApi.post (metric.id, {measurement, unit: metric.unit, measuredAt});
+    
   }
 
   const getMeasureValue = (prompt) => newMeasurements.find (mez => mez.metricId === prompt?.id)?.body?.measurement;
 
   // create a metrix
   const createMeasurements = async () => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       await Promise.all (newMeasurements.map (mez => measurementsApi.post (mez.metricId, mez.body)));
       setNew ([]);
@@ -100,11 +107,18 @@ export default function useMetrix () {
     } catch (e) {
       console.log ('#createMeasurements', e);
       reject (e);
+    } finally {
+      unfreeze ();
     }
   })
 
   const updateMeasurement = async (mez, value) => {
-    await measurementsApi.put (mez, value);
+    let unfreeze = freeze ();
+    try {
+      await measurementsApi.put (mez, value);
+    } finally {
+      unfreeze ();
+    }
   }
 
   const isCaptured = (metricId) => captured.includes (metricId);

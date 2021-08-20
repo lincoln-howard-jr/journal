@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {shares as api} from '../lib/auth';
 import {runIndexEntries} from '../lib/indexing';
 
-export default function useSharing (settings) {
+export default function useSharing (freeze, settings) {
 
   const [sharedWithMe, setSharedWithMe] = useState ([]);
   const [sharedByMe, setSharedByMe] = useState ([]);
@@ -32,16 +32,20 @@ export default function useSharing (settings) {
   })
 
   const toggleFreeze = async id => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       await api.toggleFreeze (id);
       await getShares ();
       resolve ();
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   });
 
   const shareJournal = async (phone, name, shareWithName) => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       let shareWith = (phone.length === 10) ? `+1${phone}` : phone;
       await api.post ({shareWith, name, shareWithName});
@@ -49,6 +53,8 @@ export default function useSharing (settings) {
       resolve ();
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   })
 

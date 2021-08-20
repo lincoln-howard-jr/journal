@@ -31,6 +31,7 @@
   --article-bg-color-primary: #aba4d660;
   --article-bg-color-secondary: #aba4d630;
   --invert: 1;
+  --frozen-color: #333;
 }
 /*
   reset
@@ -183,7 +184,7 @@ input::placeholder {
   width: 100vw;
   height: 100vh;
   z-index: 10;
-  background-color: #666;
+  background-color: var(--frozen-color);
   opacity: 0.4;
 }
 /* 

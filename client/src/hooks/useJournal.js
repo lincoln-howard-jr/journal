@@ -3,7 +3,7 @@ import {entries as api, shares} from '../lib/auth';
 import constructFilterList from '../lib/filters';
 import {runIndexEntries} from '../lib/indexing';
 
-export default function useJournal () {
+export default function useJournal (freeze) {
 
   // just journal stuff
   const [entryList, setEntryList] = useState ([]); 
@@ -27,38 +27,31 @@ export default function useJournal () {
   }
   // create
   const createEntry = async body => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       await api.post (body);
       await getEntries ();
       resolve ();
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   })
 
-  // stage for removal
-  const toggleStageForRemoval = id => {
-    if (shouldRemove (id)) {
-      setToRemove (rem => rem.filter (entry => entry.id !== id));
-    }
-    setToRemove (rem => [...rem, id]);
-  }
-
   // delete
   const hideEntry = async id => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       await api.hide (id);
       await getEntries ();
       resolve ();
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   });
-
-  // returns a boolean value if the id is staged to remove
-  const shouldRemove = id => {
-    return toRemove.includes (id);
-  }
 
   // calculate filter state
   const setFilters = filters => {
@@ -101,6 +94,6 @@ export default function useJournal () {
     runQuery ();
   }, [entryList, filters.length, query, filterIterator]);
 
-  return {entries, entryList, filters, filterIterator, getEntries, createEntry, hideEntry, toggleStageForRemoval, shouldRemove, setQuery, clearSearch, setFilters};
+  return {entries, entryList, filters, filterIterator, getEntries, createEntry, hideEntry, setQuery, clearSearch, setFilters};
 
 }

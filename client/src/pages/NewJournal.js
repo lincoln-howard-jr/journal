@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useApp } from "../AppProvider";
 import { dateShortHand, getTime, printDate } from "../lib/indexing";
 import { H1, H2, H3 } from "./components/Headers";
@@ -71,7 +71,8 @@ function JournalCard ({idx}) {
               (entry.entryType === 'questions' || !entry.entryType) &&
               entry.questions.map ((q, i) => (
                 <p key={`${entry.id}-question-${i}`}>
-                  <b>{q} </b>
+                  <b>{q}</b>
+                  <br />
                   {entry.answers [i]}
                 </p>
               ))
@@ -95,7 +96,11 @@ function JournalCard ({idx}) {
 }
 
 export default function Journal () {
-  const {auth: {user}, router: {page}, journal: {entries, clearSearch, hideEntry}, freeze} = useApp ();
+  const {auth: {user}, router: {page}, journal: {entries, clearSearch}} = useApp ();
+
+  useEffect (() => {
+    clearSearch ();
+  }, [page]);
 
   if (!user || page !== 'journal') return null;
   return (

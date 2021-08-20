@@ -9,10 +9,9 @@ const findIndex = (indexedArr, key, value, meta={}) => {
   return index.list;
 }
 
-export default function useSkills () {
+export default function useSkills (freeze) {
 
   const [skills, setSkills] = useState ([]);
-  const [staged, setStaged] = useState ([]);
   const getSkills = async userId => {
     try {
       let req = await api.get (userId);
@@ -26,21 +25,27 @@ export default function useSkills () {
     }
   }
   const submitSkill = (body) => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       await api.post (body);
       await getSkills ();
       resolve ();
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   })
   const removeSkill = id => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       await api.del (id);
       await getSkills ();
       resolve ();
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   });
   return {skills, getSkills, submitSkill, removeSkill}

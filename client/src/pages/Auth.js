@@ -15,7 +15,7 @@ const fmtRawPhoneNumber = number => {
 
 export default function Auth () {
   // important global state
-  const {auth: {user, login, register}} = useApp ();
+  const {auth: {user, login, register, err}} = useApp ();
   // auth flow
   const [rawPhoneNumber, _setPhoneNumber] = useState ('');
   const [prompt, setPrompt] = useState (false);
@@ -35,8 +35,8 @@ export default function Auth () {
   const onRegisterClick = async () => {
     try {
       let phoneNumber = sanitizePhoneNumber (rawPhoneNumber);
-      await register (phoneNumber, promptForCode, onCodeSent);
       setAuthError (null);
+      await register (phoneNumber, promptForCode, onCodeSent);
     } catch (e) {
       setAuthError (e);
     }
@@ -44,8 +44,8 @@ export default function Auth () {
   const onLogInClick = async () => {
     try {
       let phoneNumber = sanitizePhoneNumber (rawPhoneNumber);
-      await login (phoneNumber, promptForCode, onCodeSent);
       setAuthError (null);
+      await login (phoneNumber, promptForCode, onCodeSent);
     } catch (e) {
       setAuthError (e);
     }
@@ -57,6 +57,7 @@ export default function Auth () {
       <div className="grid">
         <h3>{codeSent ? 'Your secret code in on the way!' : 'Enter your phone number:'}</h3>
         <span style={{display: (onAuthError !== null ? 'grid' : 'none')}} className="error">{onAuthError?.message}</span>
+        <span style={{display: (err !== null ? 'grid' : 'none')}} className="error">{err?.message}</span>
       </div>
       <div className="phone-number-input">
         <input autoComplete="tel-local" type="tel" placeholder="123-456-7890" value={rawPhoneNumber} onChange={e => setPhoneNumber (e.target.value)} disabled={!!prompt} />

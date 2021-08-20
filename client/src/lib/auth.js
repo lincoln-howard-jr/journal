@@ -32,6 +32,7 @@ export const login = (Username) => new Promise ((resolve, reject) => {
     cognitoUser = new AmazonCognitoIdentity.CognitoUser ({Username, Pool});
     resolve ();
   } catch (e) {
+    console.log (e);
     reject (e);
   }
 });
@@ -94,16 +95,20 @@ export const register = async (phoneNumber) => new Promise (async (resolve, reje
   })
 });
 
-export const customFlow = (phoneNumber, cb, onCodeSent) => new Promise (async (resolve, reject) => {
-  await login (phoneNumber);
+export const customFlow = (phoneNumber, cb, onCodeSent, onSuccess) => new Promise (async (resolve, reject) => {
+  try {
+    await login (phoneNumber);
+  } catch (e) {
+    return reject (e);
+  }
   cognitoUser.setAuthenticationFlowType ('CUSTOM_CHALLENGE');
-  console.log (cognitoUser, authDetails);
   cognitoUser.initiateAuth (authDetails, {
-    onSuccess: r => resolve (r),
+    onSuccess: r => onSuccess (r),
     onFailure: e => reject (e),
     customChallenge: function (challengeParameters) {
       onCodeSent ();
       cb (answer => cognitoUser.sendCustomChallengeAnswer (answer, this))
+      resolve ();
     }
   });
 });

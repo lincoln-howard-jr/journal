@@ -5,8 +5,7 @@ import {H1, H2, H3} from './components/Headers'
 import {printDate, getTime} from '../lib/indexing';
 import CancelSVG from '../img/cancel.svg'
 import TrashSVG from '../img/trash.svg'
-import defualtPrompts from "../lib/defaultQuestions";
-import defaultQuestions from "../lib/defaultQuestions";
+import defualtPrompts, {defaultQuestions, defaultMetrix} from "../lib/defaultQuestions";
 
 export default function Write () {
 
@@ -31,7 +30,7 @@ export default function Write () {
     let arr = [];
     if (setty [0]) arr = defualtPrompts.filter (p => !isCaptured (p.id));
     if (setty [1]) arr = [...arr, ...questions];
-    if (setty [2]) arr = [...arr, ...metrix.filter (p => !isCaptured (p.id))];
+    if (setty [2]) arr = [...arr, ...metrix.filter (p => !defaultMetrix.find (m => m.id === p.id)).filter (p => !isCaptured (p.id))];
     return arr;
   }
 
@@ -52,7 +51,7 @@ export default function Write () {
       const qa = session.getAll ();
       let questions = Object.keys (qa).filter (id => (qa [id] !== null && qa [id] !== undefined)).map (id => all.find (p => p.id === id)).filter (a => a);
       let answers = questions.map (question => qa [question.id]);
-      questions = questions.map (question => question.prompt)
+      questions = questions.map (question => {return `${question.prompt}${question.unitLabel ? ` (${question.unitLabel})` : ''}`})
       const body = {
         entryType: 'questions',
         start,
@@ -131,7 +130,7 @@ export default function Write () {
                 <select autoFocus onChange={e => e.target.value ? (addPromptById (e.target.value) || setIsSelecting ('')) : setIsSelecting ('')}>
                   <option value={null} defaultChecked></option>
                   {
-                    allPrompts ().filter (m => !isCaptured (m)).filter (m => !getActivePromts ().find (_m => m.id === _m.id)).map (metric => (
+                    allPrompts ().filter (m => !getActivePromts ().find (_m => m.id === _m.id)).map (metric => (
                       <option key={`option-${prompt.unit}-${prompt.id}`} value={metric.id}>{metric.prompt}</option>
                     ))
                   }

@@ -54,13 +54,8 @@ export default function MetrixHistory () {
   const submitEdit = measuredAt => async () => {
     if (editError) return;
     if (editId?.startsWith ('__')) await measureHistoric (singleMetrix, editValue, measuredAt);
-    console.log (editId?.startsWith ('__') ? 'done with measuring' : 'have not measured yet');
     if (!(editId?.startsWith ('__'))) await updateMeasurement (editId, editValue);
-    console.log ('done with measuring');
-    setTimeout (async () => {
-      await getMeasurements ();
-      console.log ('updated measurements')
-    }, 2500)
+    await getMeasurements ();
     setEditError (null);
     setEditValue (null);
     setEditMode (null);

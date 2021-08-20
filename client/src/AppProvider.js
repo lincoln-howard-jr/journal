@@ -35,14 +35,14 @@ export default function AppProvider ({children}) {
   // instantiate hooks
   value.settings = hooks.useSettings (defaultSettings);
   value.session = hooks.useSettings (defaultQuestions, sessionStorage);
-  value.skills = hooks.useSkills ();
-  value.journal = hooks.useJournal ();
-  value.sharing = hooks.useSharing (value.settings);
-  value.writing = hooks.useWriting ();
-  value.metrix = hooks.useMetrix ();
-  value.router = hooks.useRouter ();
+  value.skills = hooks.useSkills (value.freeze);
+  value.journal = hooks.useJournal (value.freeze);
+  value.sharing = hooks.useSharing (value.freeze, value.settings);
+  value.writing = hooks.useWriting (value.freeze);
+  value.metrix = hooks.useMetrix (value.freeze);
+  value.router = hooks.useRouter (value.freeze);
   value.audio = hooks.useAudio (value.freeze);
-  value.notifications = hooks.useNotifications ();
+  value.notifications = hooks.useNotifications (value.freeze);
 
   // switch to viewing a shared journal
   value.viewSharedJournal = id => {
@@ -81,7 +81,7 @@ export default function AppProvider ({children}) {
   }
 
   // auth hook
-  value.auth = hooks.useAuth (onAuth);
+  value.auth = hooks.useAuth (value.freeze, onAuth);
 
   // just wrap the whole app component in this
   return (

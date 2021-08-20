@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {questions as api} from '../lib/auth';
 
-export default function useWriting () {
+export default function useWriting (freeze) {
 
   const [questions, setQuestions] = useState ([]);
   
@@ -17,6 +17,7 @@ export default function useWriting () {
   });
 
   const createQuestion = async q => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       let req = await api.post (q);
       let nq = await req.json ();
@@ -24,10 +25,13 @@ export default function useWriting () {
       resolve (nq);
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   });
 
   const deleteQuestion = async q => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
     try {
       let req = await api.del (q);
       if (!req.ok) throw new Error ('Could not delete question');
@@ -35,6 +39,8 @@ export default function useWriting () {
       resolve ();
     } catch (e) {
       reject (e);
+    } finally {
+      unfreeze ();
     }
   })
 
