@@ -23,7 +23,6 @@ export default function useAuth (freeze, onSessionActive) {
 
   // retrieve locally stored user
   const retrieveSession = async () => new Promise (async (resolve, reject) => {
-    console.log ('retrive session called');
     try {
       await getCurrentUser ();
       await retrieveAccessToken ();

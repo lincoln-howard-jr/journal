@@ -54,7 +54,22 @@
 }
 .add-question-input {
   padding: 5px 12px;
-  max-width: 80%;
+  margin: auto;
+  max-width: min(80%, 35ch);
+}
+.add-question-input::before {
+  content: "";
+  box-shadow: none;
+  outline: none;
+  position: absolute;
+  margin-left: calc(-2 * var(--body-text-size));
+  width: var(--body-text-size);
+  height: var(--body-text-size);
+  background-size: cover;
+  background-image: url('../img/pen-small.png');
+  filter: drop-shadow(
+    0px 0px 2px #ffffff
+  );
 }
 .add-a-section {
   user-select: none;
@@ -103,4 +118,11 @@
 }
 .prompt-divider:last-of-type {
   display: none;
+}
+.prompt-prompt.freeform {
+  height: 0;
+  padding: 0;
+}
+.questions > div.freeform-entry[contentEditable]::before {
+  margin-top: calc(-0.5 * var(--body-text-size));
 }

@@ -14,7 +14,6 @@ function App() {
     <>
       <Auth />
       <Skills />
-      <Write />
       <NewWrite />
       <Journal />
       <Settings />

@@ -19,10 +19,9 @@ export default function useWriting (freeze) {
   const createQuestion = async q => new Promise (async (resolve, reject) => {
     let unfreeze = freeze ();
     try {
-      let req = await api.post (q);
-      let nq = await req.json ();
-      setQuestions (questions => [...questions, q]);
-      resolve (nq);
+      await api.post (q);
+      await getQuestions ();
+      resolve ();
     } catch (e) {
       reject (e);
     } finally {

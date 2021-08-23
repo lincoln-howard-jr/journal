@@ -149,7 +149,7 @@ function Settings () {
           <p>Make journal entries the way you want to make them. These settings are specific to your device, so you can have different preferences on your phone, tablet, laptop or whatever else you use!</p>
           <Setting setting="freeform" title="Enable Freeform" />
           {
-            getSetting ('freeform') &&
+            false && getSetting ('freeform') &&
             <Setting setting="audio-recording" title="Enable Audio Recording" />
           }
           <Setting setting="default-questions" title="Show Default Questions" />

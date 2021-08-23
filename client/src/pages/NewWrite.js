@@ -5,7 +5,29 @@ import {H1, H2, H3} from './components/Headers'
 import {printDate, getTime} from '../lib/indexing';
 import CancelSVG from '../img/cancel.svg'
 import TrashSVG from '../img/trash.svg'
-import defualtPrompts, {defaultQuestions, defaultMetrix} from "../lib/defaultQuestions";
+import defaultPrompts, {defaultQuestions, defaultMetrix} from "../lib/defaultQuestions";
+
+const typeDict = {
+  boolean: '(metric) ',
+  number: '(metric) ',
+  string: '',
+  freeform: '[freeform]',
+  audio: '[audio]'
+}
+
+const freeformPrompt = {
+  id: 'freeform',
+  unit: 'freeform',
+  frequency: 'as needed',
+  prompt: ''
+}
+
+const audioPrompt = {
+  id: 'audio',
+  unit: 'audio',
+  frequency: 'as needed',
+  prompt: ''
+}
 
 export default function Write () {
 
@@ -20,19 +42,30 @@ export default function Write () {
     session,
     freeze
   } = useApp ();
-  const setty = ['default-questions', 'custom-questions', 'use-metrix'].map (k => getSetting (k));
+  const setty = ['default-questions', 'custom-questions', 'use-metrix', 'freeform'].map (k => getSetting (k));
   const [start, setStart] = useState (new Date ());
-  const [autoFocusPrompt, setAFP] = useState (defaultQuestions [0].id);
+  const [autoFocusPrompt, setAFP] = useState ('');
   const [isSelecting, setIsSelecting] = useState ('');
 
   // get all prompts
   const allPrompts = () => {
     let arr = [];
-    if (setty [0]) arr = defualtPrompts.filter (p => !isCaptured (p.id));
+    if (setty [3]) arr = [...arr, freeformPrompt];
+    if (setty [0]) arr = [...arr, ...defaultPrompts.filter (p => !isCaptured (p.id))];
     if (setty [1]) arr = [...arr, ...questions];
     if (setty [2]) arr = [...arr, ...metrix.filter (p => !defaultMetrix.find (m => m.id === p.id)).filter (p => !isCaptured (p.id))];
     return arr;
   }
+
+  useEffect (() => {
+    session.clearSettings ();
+    const prompts = allPrompts ().filter (p => getSetting (`starred-${p.unit}-${p.id}`));
+    let all = prompts.map (p => {
+      measure (p, null);
+      return {key: p.id, value: null};
+    });
+    session.setAll (all);
+  }, [metrix, questions]);
 
   // get active prompts
   const getActivePromts = () => {
@@ -73,7 +106,8 @@ export default function Write () {
   const addPromptById = id => {
     let prompt = allPrompts ().find (m => id === m.id);
     if (!prompt) return;
-    session.set (prompt.id, null);
+    session.set (prompt.id, '...');
+    measure (prompt, null);
     setAFP (prompt.id);
   }
 
@@ -85,6 +119,7 @@ export default function Write () {
 
   // remove prompt
   const removePrompt = (prompt) => {
+    console.log (`remove prompt id=${prompt.id}`)
     measure (prompt, undefined);
     session.removeSetting (prompt.id);
   }
@@ -95,7 +130,6 @@ export default function Write () {
 
   // only render if authenticated & on write page
   if (!user || page !== 'write') return null;
-  if (getSetting ('freeform')) return null;
   return (
     <main id="question-answer-entry">
       <H1 short={'New Entry'}>{'New Question & Answer Entry'}</H1>
@@ -110,7 +144,7 @@ export default function Write () {
             }
             return (
               <React.Fragment key={`prompt-${prompt.unit}-${prompt.id}`}>
-                <span className="prompt-prompt">
+                <span className={`prompt-prompt ${prompt.unit}`}>
                   <b>{prompt.prompt}{prompt.unitLabel ? ` (${prompt.unitLabel})` : ''}</b>
                   <span onClick={() => removePrompt (prompt)}><img src={TrashSVG} /></span>
                 </span>
@@ -131,7 +165,7 @@ export default function Write () {
                   <option value={null} defaultChecked></option>
                   {
                     allPrompts ().filter (m => !getActivePromts ().find (_m => m.id === _m.id)).map (metric => (
-                      <option key={`option-${prompt.unit}-${prompt.id}`} value={metric.id}>{metric.prompt}</option>
+                      <option key={`option-${prompt.unit}-${prompt.id}`} value={metric.id}>{typeDict [metric.unit]}{metric.prompt}</option>
                     ))
                   }
                 </select>

@@ -31,7 +31,7 @@ export const defaultQuestions = [
     id: 'default-4',
     unit: 'string',
     prompt: 'What are my goals this week?',
-    frequency: 'weekly'
+    frequency: 'as needed'
   }
 ]
 export const defaultMetrix = [

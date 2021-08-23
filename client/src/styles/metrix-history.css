@@ -46,14 +46,8 @@ main.single-metrix span.metrix-more {
 main.single-metrix li:hover span.metrix-more {
   opacity: 1;
 }
-main.single-metrix li.metrix-measurement:hover {
+main.single-metrix li.metrix-measurement.editing {
   background-color: var(--accent-color-half-transparent);
-}
-main.single-metrix li.metrix-measurement.selected {
-  background-color: var(--accent-color-half-transparent);
-}
-main.single-metrix li.metrix-measurement.selected:not(:focus-within):hover {
-  background-color: var(--accent-color-quarter-transparent);
 }
 main.single-metrix li div {
   text-align: center;

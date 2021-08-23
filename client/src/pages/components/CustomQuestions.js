@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useApp } from "../../AppProvider";
 import defaultQuestions from "../../lib/defaultQuestions";
-import { leftarrow, trash } from "../../img/images";
+import { star, starfilled, trash } from "../../img/images";
 
 const metricTypeDict = {
   boolean: 'Yes/No',
@@ -111,6 +111,9 @@ export default function CustomQuestion () {
   const steps = [
     // initial step - enter prompt
     (
+      <button onClick={() => setStep (currentStep + 1)}>Create a Custom Prompt</button>
+    ),
+    (
       <>
         <b>Write a Custom Prompt</b>
         <div contentEditable className="add-question-input" onInput={e => setQuestion (e.target.innerText)}>?</div>
@@ -212,16 +215,21 @@ export default function CustomQuestion () {
     <>
       <b>Default Prompts</b>
       <ul className="prompt-list">
-        {
-          defaultQuestions.map (q => <li className="manage-default-question" key={`manage-default-questions-${q.prompt}`}>{q.prompt}</li>)
+      {
+          defaultQuestions.map (q => (
+            <li key={`manage-default-questions-${q.prompt}`} className={`manage-custom-question ${getSetting (`starred-${q.unit}-${q.id}`) ? 'starred' : ''}`}>
+              <span onClick={toggle (`starred-${q.unit}-${q.id}`)} style={{cursor: 'pointer'}}><img src={getSetting (`starred-${q.unit}-${q.id}`) ? starfilled : star} /></span>
+              <span>{q.prompt}</span>
+            </li>
+          ))
         }
       </ul>
       <b>Custom Questions</b>
       <ul className="prompt-list">
         {
           questions.map (q => (
-            <li key={`manage-custom-question-${q.id}`} className="manage-custom-question">
-              <span></span>
+            <li key={`manage-custom-question-${q.id}`} className={`manage-custom-question ${getSetting (`starred-${q.unit}-${q.id}`) ? 'starred' : ''}`}>
+              <span onClick={toggle (`starred-${q.unit}-${q.id}`)} style={{cursor: 'pointer'}}><img src={getSetting (`starred-${q.unit}-${q.id}`) ? starfilled : star} /></span>
               <span>{q.prompt}</span>
               <span style={{cursor: 'pointer'}} onClick={() => deleteQuestion (q.id.split ('-') [2])}>
                 <img src={trash} />
@@ -234,8 +242,8 @@ export default function CustomQuestion () {
       <ul className="prompt-list">
         {
           metrix.filter (m => !m.isDefault).map (q => (
-            <li key={`manage-custom-metrix-${q.id}`} className="manage-custom-metrix">
-              <span></span>
+            <li key={`manage-custom-metrix-${q.id}`} className={`manage-custom-question ${getSetting (`starred-${q.unit}-${q.id}`) ? 'starred' : ''}`}>
+              <span onClick={toggle (`starred-${q.unit}-${q.id}`)} style={{cursor: 'pointer'}}><img src={getSetting (`starred-${q.unit}-${q.id}`) ? starfilled : star} /></span>
               <span>{q.prompt}</span>
               <span style={{cursor: 'pointer'}} onClick={() => deleteMetrix (q.id)}>
                 <img src={trash} />

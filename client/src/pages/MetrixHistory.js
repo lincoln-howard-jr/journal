@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useApp } from "../AppProvider";
-import { dateShortHand, getTime, generateDailyDateRange, generateWeeklyDateRange, generateMonthlyDateRange, isInDay } from "../lib/indexing";
+import { dateShortHand, getTime, generateDailyDateRange, generateWeeklyDateRange, generateMonthlyDateRange, isInDay, isInWeek, isInMonth } from "../lib/indexing";
 import {H1} from './components/Headers';
 import { cancel, caretdown, checkmark, pensmall } from "../img/images";
 
 export default function MetrixHistory () {
-  const {auth: {user}, router: {page}, metrix: {metrix, measurements, getMeasurements, singleMetrix, setSingleMetrix, updateMeasurement, measureHistoric}} = useApp ();
+  const {auth: {user}, router: {page}, metrix: {metrix, measurements, singleMeasurement, getMeasurements, singleMetrix, setSingleMetrix, setSingleMeasurement, updateMeasurement, measureHistoric}} = useApp ();
 
   const [singleMetrixMeasurements, setMez] = useState ([]);
   const [instances, setInstances] = useState ([]);
@@ -30,19 +30,20 @@ export default function MetrixHistory () {
     if (singleMetrixMeasurements.length) setAllSelected (selected.length === singleMetrixMeasurements.length);
   }, [selected]);
 
-  const [editId, setEditMode] = useState (null);
-  const [editValue, setEditValue] = useState (null);
+  const [editId, setEditMode] = useState (singleMeasurement ? singleMeasurement.id : null);
+  const [editValue, setEditValue] = useState (singleMeasurement ? singleMeasurement.measurement : null);
   const [editError, setEditError] = useState (null);
   const editingRef = useRef ();
-  const startEditing = mez => () => {
+  const startEditing = mez => {
     setEditValue (mez.measurement);
     setEditMode (mez.id);
+    setEditError (null);
   }
   const updateValue = () => {
     let measurement = editingRef.current.innerText;
     if (singleMetrix.unit === 'number') {
       measurement = parseFloat (measurement);
-      if (measurement < singleMetrix.range [0] || measurement > singleMetrix.range [1] || (measurement - singleMetrix.range [0]) % singleMetrix.step > 0) setEditError (`Number must be between ${singleMetrix.range [0]} and ${singleMetrix.range [1]} in increments of ${singleMetrix.step}`);
+      if (measurement < singleMetrix.range [0] || measurement > singleMetrix.range [1]) setEditError (`Number must be between ${singleMetrix.range [0]} and ${singleMetrix.range [1]} in increments of ${singleMetrix.step}`);
     }
     if (singleMetrix.unit === 'boolean') {
       if (measurement !== 'Yes' && measurement !== 'No') {
@@ -55,7 +56,7 @@ export default function MetrixHistory () {
     if (editError) return;
     if (editId?.startsWith ('__')) await measureHistoric (singleMetrix, editValue, measuredAt);
     if (!(editId?.startsWith ('__'))) await updateMeasurement (editId, editValue);
-    await getMeasurements ();
+    setTimeout (getMeasurements, 500);
     setEditError (null);
     setEditValue (null);
     setEditMode (null);
@@ -65,7 +66,16 @@ export default function MetrixHistory () {
     if (editingRef.current) editingRef.current.innerText = mez.measurement;
     setEditValue (null);
     setEditMode (null);
+    setEditError (null);
   }
+
+  useEffect (() => {
+    if (page === 'metrix' && editingRef.current) editingRef.current.scrollIntoView ();
+  }, [page, editingRef.current])
+
+  useEffect (() => {
+    if (singleMeasurement) startEditing (singleMeasurement);
+  }, [singleMeasurement]);
 
   useEffect (() => {
     if (singleMetrix && singleMetrix.id) {
@@ -88,6 +98,54 @@ export default function MetrixHistory () {
       if (singleMetrix.frequency === 'daily') {
         let range = generateDailyDateRange (arr [arr.length - 1].measuredAt);
         let mezs = range.map (day => arr.find (mez => isInDay (day, mez.measuredAt)));
+        setMez (arr);
+        setInstances (mezs.map ((mez, i) =>
+          !mez ? {
+            mez: {
+              id: `__${singleMetrix.id}-${i}`,
+              measurement: '...'
+            },
+            id: `__${singleMetrix.id}-${i}`,
+            date: dateShortHand (range [i]),
+            time: '...',
+            measurement: '...',
+            dateObj: range [i]
+          } : {
+            mez,
+            id: mez.id,
+            date: dateShortHand (mez.measuredAt),
+            time: mez.isHistoric ? 'N/A' : getTime (mez.measuredAt),
+            measurement: mez.measurement || mez.value
+          }
+        ))
+      }
+      if (singleMetrix.frequency === 'weekly') {
+        let range = generateWeeklyDateRange (arr [arr.length - 1].measuredAt);
+        let mezs = range.map (day => arr.find (mez => isInWeek (day, mez.measuredAt)));
+        setMez (arr);
+        setInstances (mezs.map ((mez, i) =>
+          !mez ? {
+            mez: {
+              id: `__${singleMetrix.id}-${i}`,
+              measurement: '...'
+            },
+            id: `__${singleMetrix.id}-${i}`,
+            date: dateShortHand (range [i]),
+            time: '...',
+            measurement: '...',
+            dateObj: range [i]
+          } : {
+            mez,
+            id: mez.id,
+            date: dateShortHand (mez.measuredAt),
+            time: mez.isHistoric ? 'N/A' : getTime (mez.measuredAt),
+            measurement: mez.measurement || mez.value
+          }
+        ))
+      }
+      if (singleMetrix.frequency === 'montly') {
+        let range = generateMonthlyDateRange (arr [arr.length - 1].measuredAt);
+        let mezs = range.map (day => arr.find (mez => isInMonth (day, mez.measuredAt)));
         setMez (arr);
         setInstances (mezs.map ((mez, i) =>
           !mez ? {
@@ -188,19 +246,26 @@ export default function MetrixHistory () {
           </li>
           {
             instances.map (({mez, id, date, time, measurement, dateObj}) => (
-              <li className={`metrix-measurement ${status (mez)}`} key={`single-metrix-measurement-${id}`}>
+              <li className={`metrix-measurement ${editId === id ? 'editing' : ''}`} key={`single-metrix-measurement-${id}`}>
                 <span>{date}</span>
                 <span>{time}</span>
                 <div>
                   <p onBlur={updateValue} {...{ref: editId === id ? editingRef : null}} contentEditable={id === editId}>{editId === id ? editValue : measurement}</p> 
                   {
-                    editId === mez.id &&
+                    editId === id &&
                     <span onClick={submitEdit (dateObj)}>
                       <img src={checkmark} />
                     </span>
                   }
+                  {
+                    editError && editId === id &&
+                    <>
+                      <br />
+                      <p style={{width: '100%'}} className="error">{editError}</p>
+                    </>
+                  }
                 </div>
-                <span onClick={editId === mez.id ? cancelEdit : startEditing (mez)} className="metrix-more">
+                <span onClick={editId === id ? cancelEdit : () => setSingleMeasurement (mez)} className="metrix-more">
                   {
                     editId !== mez.id &&
                     <img src={pensmall} />

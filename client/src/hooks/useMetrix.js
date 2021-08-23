@@ -91,7 +91,12 @@ export default function useMetrix (freeze) {
   }
 
   const measureHistoric = async (metric, measurement, measuredAt) => {
-    
+    let unfreeze = freeze ();
+    try {
+      await measurementsApi.post (metric.id, {measurement, measuredAt, unit: metric.unit});
+    } finally {
+      unfreeze ();
+    }
   }
 
   const getMeasureValue = (prompt) => newMeasurements.find (mez => mez.metricId === prompt?.id)?.body?.measurement;

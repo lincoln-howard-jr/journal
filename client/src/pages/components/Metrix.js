@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useApp } from "../../AppProvider";
+import { trash } from "../../img/images";
 import MoreSVG from '../../img/more.svg';
+import AudioRecorder from "./AudioRecorder";
 import Slider from "./Slider";
 
 export const units = {
@@ -47,10 +49,36 @@ export function StringMetric ({onChange, autofocus, defaultValue='...'}) {
   )
 }
 
+export function FreeformMetric ({onChange, autofocus, defaultValue='...', remove}) {
+  const ref = useRef ();
+  const [isFirstFocus, setIsFirstFocus] = useState (defaultValue === '...');
+  const onFirstFocus = () => {
+    if (!isFirstFocus) return;
+    ref.current.innerText = '';
+    setIsFirstFocus (false);
+  }
+  useEffect (() => {
+    if (ref.current && autofocus) {
+      ref.current.focus ();
+    }
+  }, [ref]);
+  return (
+    <div className="freeform-entry" ref={ref} onFocus={onFirstFocus} contentEditable onBlur={e => onChange (e.target.innerText)}>{defaultValue}</div>
+  )
+}
+
+export function AudioMetric ({onChange}) {
+  return (
+    <AudioRecorder />
+  )
+}
+
 export const MetrixType = {
   boolean: BooleanMetric,
   number: NumberMetric,
-  string: StringMetric
+  string: StringMetric,
+  freeform: FreeformMetric,
+  audio: AudioMetric
 }
 
 export default function MetrixToggles () {

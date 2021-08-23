@@ -223,6 +223,7 @@ line.trendline-4 {
 }
 .single-metrix-graph circle + text {
   transition: 0.1s;
+  font-size: 16px;
   opacity: 0;
 }
 .single-metrix-graph circle:hover + text {
