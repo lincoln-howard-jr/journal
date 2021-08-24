@@ -61,8 +61,11 @@ export default function Write () {
     session.clearSettings ();
     const prompts = allPrompts ().filter (p => getSetting (`starred-${p.unit}-${p.id}`));
     let all = prompts.map (p => {
-      measure (p, null);
-      return {key: p.id, value: null};
+      let value = null;
+      if (p.unit === 'string') value = '...';
+      if (p.unit === 'number') value = p.range [0];
+      measure (p, value);
+      return {key: p.id, value};
     });
     session.setAll (all);
   }, [metrix, questions]);
@@ -105,9 +108,12 @@ export default function Write () {
   // add a prompt
   const addPromptById = id => {
     let prompt = allPrompts ().find (m => id === m.id);
+    let value = null;
+    if (prompt.unit === 'string') value = '...';
+    if (prompt.unit === 'number') value = prompt.range [0];
     if (!prompt) return;
-    session.set (prompt.id, '...');
-    measure (prompt, null);
+    session.set (prompt.id, value);
+    measure (prompt, value);
     setAFP (prompt.id);
   }
 

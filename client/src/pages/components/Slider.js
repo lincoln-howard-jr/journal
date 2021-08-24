@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 const width = 400;
 const height = 100;
 const padding = 25;
@@ -15,10 +15,11 @@ const scaleX = (min, max) => {
   }
 }
 
-const calcValue = (min, max, _width=width) => {
+const calcValue = (min, max, clientWidth) => {
+  const size = (clientWidth / width);
+  const w = size * (width - 2 * padding);
   const range = max - min;
-  const w = _width - 2 * (padding * _width / width);
-  return position => (position - padding) * range / w;
+  return function (position) {return (position - (size * padding)) * range / (w);}
 }
 
 export default function Slider ({range: [min, max], step, defaultValue, onChange}) {
@@ -34,10 +35,15 @@ export default function Slider ({range: [min, max], step, defaultValue, onChange
     if (newVal > max) newVal = max;
     return newVal;
   }
+
+  const [clientWidth, setClientWidth] = useState (width);
+  const inv = useCallback (calcValue (min, max, clientWidth), [clientWidth]);
+  useEffect (() => {
+    if (svgref.current) setClientWidth (svgref.current.clientWidth);
+  }, [svgref.current?.clientWidth])
   const pos = scaleX (min, max);
   const drag = e => {
     if (!mouseIsDown) return;
-    const inv = calcValue (min, max, svgref.current.clientWidth);
     let newVal = e.movementX ? value + (e.movementX * (max - min) / (svgref.current.clientWidth - (svgref.current.clientWidth * radius / width) * 10)) : (e.touches && e.touches.length) ? inv (e.touches [0].clientX): value;
     if (newVal < min) newVal = min; 
     if (newVal > max) newVal = max;

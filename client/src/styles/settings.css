@@ -159,6 +159,7 @@ main.settings div.action > span:not(:last-child) {
 }
 .manage-custom-question, .manage-custom-metrix {
   display: grid;
+  gap: var(--body-text-size);
   margin-bottom: var(--body-text-size);
   grid-template-columns: var(--body-text-size) 1fr var(--body-text-size);
 }
