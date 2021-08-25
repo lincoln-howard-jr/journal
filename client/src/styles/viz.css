@@ -132,8 +132,11 @@ line.trendline-4 {
   display: grid;
   align-items: center;
   justify-items: center;
-  height: 0;
   overflow: visible;
+}
+.keywords figcaption {
+  min-height: unset !important;
+  margin-bottom: 0;
 }
 .keyword-search {
   display: grid;
@@ -145,6 +148,7 @@ line.trendline-4 {
   background-color: var(--input-background-color);
   width: min(100%, 22ch);
   padding: 0 2.5%;
+  transform: translateY(calc(0.9 * var(--body-text-size)));
 }
 .keyword-search * {
   margin: 0;

@@ -69,6 +69,7 @@ export default function WordCount () {
   // event handlers
   const addKeyword = e => {
     e.preventDefault ();
+    if (e.target.elements.keyword.value.trim () === '') return;
     toggleKeyword (e.target.elements.keyword.value)
     e.target.elements.keyword.value = '';
   }
@@ -95,7 +96,10 @@ export default function WordCount () {
             <g className="keyword-chart-labels">
               {
                 keywords.map ((word, i) => (
-                  <text textAnchor="middle" x={padding + ((i + 0.5) * width / 4)} y={marginTop} onClick={() => toggleKeyword (word)}>{word}</text>
+                  <>
+                    <rect x={padding + (i * width / 4)} width={width / 4} y={marginTop - 30} height={50} fill="transparent" stroke="transparent" onClick={() => toggleKeyword (word)} />
+                    <text textAnchor="middle" x={padding + ((i + 0.5) * width / 4)} y={marginTop} onClick={() => toggleKeyword (word)} >{word}</text>
+                  </>
                 ))
               }
             </g>
