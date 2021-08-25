@@ -30,7 +30,8 @@ export default function AppProvider ({children}) {
 
   // view only mode for shared journals
   const [isViewOnly, setIsViewOnly] = useState (false);
-  value.viewMode = {isViewOnly, setIsViewOnly};
+  const [scope, setScope] = useState ([]);
+  value.viewMode = {isViewOnly, setIsViewOnly, scope};
 
   // instantiate hooks
   value.settings = hooks.useSettings (defaultSettings);
@@ -45,15 +46,26 @@ export default function AppProvider ({children}) {
   value.notifications = hooks.useNotifications (value.freeze);
 
   // switch to viewing a shared journal
-  value.viewSharedJournal = id => {
-    value.journal.getEntries (id);
-    value.skills.getSkills (id);
+  value.viewSharedJournal = (id, share) => {
+    let scope = (share.shareScope ? [...share.shareScope] : ['skills', 'journal', 'metrix']);
+    if (scope.indexOf ('journal') >= 0 && scope.indexOf ('metrix') >= 0) scope.push ('dashboard');
+    setScope (scope);
+    if (!scope || scope.indexOf ('journal') !== '-1') {
+      value.journal.getEntries (id);
+    }
+    if (scope || scope.indexOf ('skills') !== '-1') value.skills.getSkills (id);
+    if (scope || scope.indexOf ('metrix') !== '-1') {
+      value.metrix.getMetrix (id);
+      value.metrix.getMeasurements (id);
+    }
     value.viewMode.setIsViewOnly (true);
-    value.router.redirect ('/?page=journal')
+    value.router.redirect (`/?page=${(scope.indexOf ('journal') > -1 ? 'journal' : scope [0])}`)
   }
   value.viewMyJournal = () => {
     value.journal.getEntries ();
     value.skills.getSkills ();
+    value.metrix.getMetrix ();
+    value.metrix.getMeasurements ();
     value.viewMode.setIsViewOnly (false);
     value.router.redirect ('/?page=settings');
   }

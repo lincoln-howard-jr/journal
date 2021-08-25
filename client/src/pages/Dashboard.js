@@ -6,8 +6,9 @@ import AnalogClock from './components/viz/AnalogClock'
 
 
 function Analytics () {
-  const {router: {page}, journal: {entryList}} = useApp ();
+  const {router: {page}, journal: {entryList}, viewMode: {isViewOnly, scope}} = useApp ();
 
+  if (isViewOnly && (scope.indexOf ('dashboard') === -1)) return null;
   if (page !== 'dashboard') return null;
   if (entryList.length < 10) return (
     <main>

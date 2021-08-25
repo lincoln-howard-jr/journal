@@ -1,9 +1,9 @@
 /* slider */
 .component-slider-svg {
-  max-width: 400px;
+  max-width: 500px;
 }
 .component-slider-svg text {
-  font-size: clamp(var(--body-text-size), calc((525px - 100vw)), var(--h1-font-size));
+  font-size: clamp(calc(0.8 * var(--body-text-size)), calc(635px - 100vw), var(--h2-font-size));
 }
 .component-slider-svg .slider-base :is(circle, text, line) {
   stroke: var(--accent-color);
@@ -32,6 +32,9 @@
 }
 .analog-clock.large {
   width: min(12vw, 104px);
+}
+.analog-clock.xl {
+  width: min(18vw, 156px);
 }
 /* number counter */
 .number-counter {

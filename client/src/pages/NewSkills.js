@@ -4,7 +4,7 @@ import { trash } from "../img/images";
 import { H1, H2, H3 } from "./components/Headers";
 
 export default function Skills () {
-  const {auth: {user}, router: {page}, skills: {skills, submitSkill, removeSkill}} = useApp ();
+  const {auth: {user}, router: {page}, skills: {skills, submitSkill, removeSkill}, viewMode: {isViewOnly, scope}} = useApp ();
   const [open, setOpen] = useState (null);
   const [submitError, setError] = useState (null);
   const categoryRef = useRef ();
@@ -23,6 +23,7 @@ export default function Skills () {
     
   }
   if (!user) return null;
+  if (isViewOnly && scope.indexOf ('skills') === -1) return null;
   if (page !== 'skills') return null;
   return (
     <main>
@@ -67,7 +68,7 @@ export default function Skills () {
                 <div className="single-skill">
                   <span>{skill.skill}</span>
                   {
-                    open === category.meta.category &&
+                    open === category.meta.category && !isViewOnly &&
                     <span onClick={() => removeSkill (skill.id)}><img src={trash} /></span>
                   }
                 </div>

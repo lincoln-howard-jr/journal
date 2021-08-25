@@ -13,7 +13,14 @@ export default function useSharing (freeze, settings) {
       let {sharedWithMe, sharedByMe} = await req.json ();
       setSharedByMe (sharedByMe);
       setSharedWithMe (sharedWithMe);
-      let sett = sharedByMe.map (sbm => {return {key: `share-${sbm.id}`, value: !sbm.frozen}});
+      let sett = sharedByMe.map (sbm => {return {key: `share-${sbm.id}-frozen`, value: !sbm.frozen}});
+      let scopes = sharedByMe.reduce ((acc, sbm) => {
+        let shareScope = sbm.shareScope || [];
+        let s = ['skills', 'journal', 'metrix'];
+        return [...acc, ...s.map (type => ({key: `share-${sbm.id}-scope-${type}`, value: shareScope.indexOf (type) !== -1}))]
+      }, [])
+      sett = [...sett, ...scopes];
+      console.log (sett);
       settings.setAll (sett);
     } catch (e) {
       console.log (e);
@@ -44,6 +51,26 @@ export default function useSharing (freeze, settings) {
     }
   });
 
+  const updateShareScope = (id, scope) => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
+    try {
+      await api.scope (id, scope)
+      await getShares ();
+    } finally {
+      unfreeze ();
+    }
+  })
+
+  const deleteShare = id => new Promise (async (resolve, reject) => {
+    let unfreeze = freeze ();
+    try {
+      await api.del (id)
+      await getShares ();
+    } finally {
+      unfreeze ();
+    }
+  })
+
   const shareJournal = async (phone, name, shareWithName) => new Promise (async (resolve, reject) => {
     let unfreeze = freeze ();
     try {
@@ -58,6 +85,6 @@ export default function useSharing (freeze, settings) {
     }
   })
 
-  return {sharedByMe, sharedWithMe, sharedJournal, getShareById, getShares, shareJournal, toggleFreeze};
+  return {sharedByMe, sharedWithMe, sharedJournal, getShareById, getShares, shareJournal, toggleFreeze, updateShareScope, deleteShare};
 
 }

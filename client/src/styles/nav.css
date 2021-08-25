@@ -27,6 +27,15 @@ nav > ul {
 nav.view-only > ul {
   grid-template-columns: repeat(5, 48px);
 }
+nav.view-only.count-2 > ul {
+  grid-template-columns: repeat(5, 48px);
+}
+nav.view-only.count-3 > ul {
+  grid-template-columns: repeat(3, 48px);
+}
+nav.view-only.count-4 > ul {
+  grid-template-columns: repeat(4, 48px);
+}
 nav > ul > li {
   height: 40px;
   width: 48px;

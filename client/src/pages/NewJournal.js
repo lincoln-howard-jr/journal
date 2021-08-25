@@ -96,12 +96,13 @@ function JournalCard ({idx}) {
 }
 
 export default function Journal () {
-  const {auth: {user}, router: {page}, journal: {entries, clearSearch}} = useApp ();
+  const {auth: {user}, router: {page}, journal: {entries, clearSearch}, viewMode: {isViewOnly, scope}} = useApp ();
 
   useEffect (() => {
     if (page !== 'journal') clearSearch ();
   }, [page]);
 
+  if (isViewOnly && scope.indexOf ('journal') === -1) return null;
   if (!user || page !== 'journal') return null;
   return (
     <main className="view-journal">

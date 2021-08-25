@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import {H1, H3} from "./components/Headers";
+import React, { Children, useRef, useState } from "react";
+import {H1, H2, H3} from "./components/Headers";
 import attributions from '../lib/attributions'
 import {useApp} from '../AppProvider';
 import CaretSVG from '../img/caret-down.svg';
@@ -23,13 +23,11 @@ function ShareJournal () {
   const nameRef = useRef ();
   const swnRef = useRef ();
   const onClick = async () => {
-    console.log (rawPhoneNumber);
-    return;
     let phone = rawPhoneNumber;
     phone = sanitizePhoneNumber (phone);
     let name = nameRef.current.value;
     let shareWithName = swnRef.current.value;
-    let share = await shareJournal (phone, name, shareWithName);
+    await shareJournal (phone, name, shareWithName);
     _setPhoneNumber ('');
     swnRef.current.value = '';
   }
@@ -51,21 +49,22 @@ function ShareJournal () {
 }
 
 function SharedByMe () {
-  const {freeze, sharing: {sharedByMe, toggleFreeze}} = useApp ();
+  const {settings: {getSetting}, sharing: {sharedByMe, toggleFreeze, updateShareScope}} = useApp ();
 
-  const onToggle = (share) => async () => {
-    let unfreeze = freeze ('');
-    try {
-      await toggleFreeze (share.id);
-      unfreeze ();
-    } catch (e) {
-      unfreeze ();
+  const toggle = (share) => () => {
+    toggleFreeze (share.id);
+  }
+  const toggleScope = (share, type) => () => {
+    if (share.shareScope && share.shareScope.indexOf (type) !== -1) {
+      updateShareScope (share.id, share.shareScope.filter (a => a !== type));
+    } else {
+      updateShareScope (share.id, [...(share.shareScope || []), type]);
     }
   }
   return (
     <div>
       <b style={{textDecoration: 'none'}}>Who You Share Your Journal With</b>
-      <hr style={{width: '25vw'}}/>
+      <hr/>
       {
         sharedByMe.length === 0 &&
         <span style={{textDecoration: 'none'}}>You haven't shared your journal - no pressure</span>
@@ -73,7 +72,19 @@ function SharedByMe () {
       {
         sharedByMe.map (share => (
           <React.Fragment key={`share-${share.id}`}>
-            <Setting onToggle={onToggle (share)} title={share.shareWithName || share.shareWith} setting={`share-${share.id}`} />
+            <>
+              <H2>{share.shareWithName || share.shareWith}</H2>
+              {
+                getSetting (`share-${share.id}-frozen`) &&
+                ['skills', 'journal', 'metrix'].map (type => (
+                  <>
+                    <Setting onToggle={toggleScope (share, type)} title={`Share ${type}`} setting={`share-${share.id}-scope-${type}`} />
+                    <br />
+                  </>
+                ))
+              }
+              <Setting onToggle={toggle (share)} title={'Is frozen'} setting={`share-${share.id}-frozen`} />
+            </>
             <br/>
           </React.Fragment>
         ))
@@ -93,7 +104,7 @@ function SharedWithMe () {
       {
         shares.map (share => (
           <React.Fragment key={`share-${share.id}`}>
-            <span onClick={() => viewSharedJournal (share.userId)}>{share.name}</span>
+            <span onClick={() => viewSharedJournal (share.userId, share)}>{share.name}</span>
             <br />
           </React.Fragment>
         ))
@@ -111,7 +122,11 @@ export function SettingGroup ({longTitle, shortTitle, children}) {
         <H3 short={shortTitle}>{longTitle}</H3>
         <span><img src={CaretSVG} /></span>
       </header>
-      {children}
+      {Children.map (children, child => child && (
+        <>
+          {React.cloneElement(child, {open})}
+        </>
+      ))}
       <div></div>
     </div>
   )

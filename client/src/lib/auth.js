@@ -186,6 +186,23 @@ export const shares = {
         'x-amz-access-token': accessToken
       })
     });
+  },
+  get scope () {
+    return (id, shareScope) => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/shares/${id}`, {
+      method: 'PATCH',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      }),
+      body: JSON.stringify ({shareScope})
+    });
+  },
+  get del () {
+    return id => fetch (`https://akqxdqgf7l.execute-api.us-east-1.amazonaws.com/Prod/shares/${id}`, {
+      method: 'delete',
+      headers: new Headers ({
+        'x-amz-access-token': accessToken
+      })
+    });
   }
 }
 

@@ -13,15 +13,13 @@ export default function useJournal (freeze) {
   const [filterList, setFilterList] = useState ([]);
   const [query, setQuery] = useState ('');
   const [entries, setIdx] = useState ([]);
-  // stage for removal
-  const [toRemove, setToRemove] = useState ([]);
-  
+
   // read
   const getEntries = async userId => {
     try {
       let req = await api.get (userId);
       let arr = await req.json ();
-      setEntryList (arr);
+      if (req.ok) setEntryList (arr);
     } catch (e) {
     }
   }

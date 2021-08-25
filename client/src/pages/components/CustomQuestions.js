@@ -21,7 +21,7 @@ const prevent = e => {
 const INI = ({value, setValue, placeholder}) => {
   return (
     <span className="inline-input">
-      <input placeholder={placeholder} type="tel" defaultValue={value} onBlur={e => {
+      <input placeholder={placeholder} type="number" defaultValue={value} onBlur={e => {
         if (!prevent (e)) return e.preventDefault ();
         if (!e.target.value.length) return setValue (0);
         setValue (parseFloat (e.target.value))
@@ -38,7 +38,7 @@ const CES = ({value, setValue, placeholder}) => {
   )
 }
 
-export default function CustomQuestion () {
+export default function CustomQuestion ({open}) {
 
   // 
   const {writing: {questions, createQuestion, deleteQuestion}, settings: {toggle, getSetting}, metrix: {metrix, createMetrix, deleteMetrix}, freeze} = useApp ();
@@ -210,7 +210,7 @@ export default function CustomQuestion () {
       </>
     )
   ]
-
+  if (!open) return null;
   return (
     <>
       <b>Default Prompts</b>

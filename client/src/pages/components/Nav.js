@@ -1,21 +1,43 @@
 import {skill, book, dashboard, settings, ruler, leftarrow} from '../../img/images';
 import { useApp } from "../../AppProvider"
 
+const dict = {
+  skills: skill,
+  journal: book,
+  metrix: ruler,
+  dashboard
+}
+const labels = {
+  skills: 'Skills',
+  journal: 'Journal',
+  metrix: 'Metrix',
+  dashboard: 'Dash'
+}
+
 export default function Nav () {
-  const {auth: {user}, router: {page, redirect}, viewMode: {isViewOnly}, viewMyJournal} = useApp ();
+  const {auth: {user}, router: {page, redirect}, viewMode: {isViewOnly, scope}, viewMyJournal} = useApp ();
+  if (isViewOnly) return (
+    <nav className={`view-only count-${1 + scope.length}`}>
+      <ul>
+        <li onClick={viewMyJournal}>
+          <img alt="" width="32" height="32" src={leftarrow} />
+          <label>Go Back</label>
+        </li>
+        {
+          scope.map (type => (
+            <li className={page === type ? 'active' : ''} onClick={() => redirect (`/?page=${type}`)}>
+              <img src={dict [type]} />
+              <label>{labels [type]}</label>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  )
   return (
     <>
-      <nav className={isViewOnly ? 'view-only' : ''}>
+      <nav>
         <ul>
-          {
-            isViewOnly &&
-            <>
-              <li className={page === 'write' ? 'active' : ''} onClick={viewMyJournal}>
-                <img alt="" width="32" height="32" src={leftarrow} />
-                <label>Go Back</label>
-              </li>
-            </>
-          }
           <li className={page === 'skills' ? 'active' : ''} onClick={() => {redirect (`/?page=skills`)}}>
             <img alt="" width="32" height="32" src={skill} />
             <label>Skills</label>
