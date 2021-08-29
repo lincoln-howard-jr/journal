@@ -12,14 +12,14 @@ export default function MetrixHistory () {
   const [selected, setSelected] = useState ([]);
   const [allSelected, setAllSelected] = useState (false);
   const [isSelecting, setIsSelecting] = useState (false);
-  const isSelected = ({id}) => {
-    return selected.filter (mez => mez === id).length > 0;
-  }
-  const status = ({id}) => {
-    let s = isSelected ({id}) ? ' selected' : ' ';
-    let e = editId === id ? ' editing' : '';
-    return `${s}${e}`
-  }
+  // const isSelected = ({id}) => {
+  //   return selected.filter (mez => mez === id).length > 0;
+  // }
+  // const status = ({id}) => {
+  //   let s = isSelected ({id}) ? ' selected' : ' ';
+  //   let e = editId === id ? ' editing' : '';
+  //   return `${s}${e}`
+  // }
   // const toggleSelected = ({id}) => () => {
   //   if (selected.filter (mez => mez === id).length) return setSelected (selected.filter (mez => mez !== id));
   //   setSelected ([...selected, id]);
@@ -70,10 +70,6 @@ export default function MetrixHistory () {
   }
 
   useEffect (() => {
-    if (page === 'metrix' && editingRef.current) editingRef.current.scrollIntoView ();
-  }, [page, editingRef.current])
-
-  useEffect (() => {
     if (singleMeasurement) startEditing (singleMeasurement);
   }, [singleMeasurement]);
 
@@ -103,12 +99,12 @@ export default function MetrixHistory () {
           !mez ? {
             mez: {
               id: `__${singleMetrix.id}-${i}`,
-              measurement: '...'
+              measurement: ''
             },
             id: `__${singleMetrix.id}-${i}`,
             date: dateShortHand (range [i]),
             time: '...',
-            measurement: '...',
+            measurement: '',
             dateObj: range [i]
           } : {
             mez,
@@ -127,12 +123,12 @@ export default function MetrixHistory () {
           !mez ? {
             mez: {
               id: `__${singleMetrix.id}-${i}`,
-              measurement: '...'
+              measurement: ''
             },
             id: `__${singleMetrix.id}-${i}`,
             date: dateShortHand (range [i]),
             time: '...',
-            measurement: '...',
+            measurement: '',
             dateObj: range [i]
           } : {
             mez,
@@ -151,12 +147,12 @@ export default function MetrixHistory () {
           !mez ? {
             mez: {
               id: `__${singleMetrix.id}-${i}`,
-              measurement: '...'
+              measurement: ''
             },
             id: `__${singleMetrix.id}-${i}`,
             date: dateShortHand (range [i]),
             time: '...',
-            measurement: '...',
+            measurement: '',
             dateObj: range [i]
           } : {
             mez,

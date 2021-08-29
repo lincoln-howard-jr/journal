@@ -9,7 +9,6 @@ import sanitizePhoneNumber, {stripPhoneNumber} from '../lib/sanitizePhoneNumber'
 const fmtRawPhoneNumber = number => {
   let stripped = stripPhoneNumber (number);
   if (stripped.length > 10) stripped = stripped.substr (0, 10);
-  console.log (stripped);
   if (stripped.length === 0) return stripped;
   if (stripped.length < 4) return `(${stripped}`;
   if (stripped.length < 7) return `(${stripped.substr (0, 3)}) ${stripped.substr (3)}`;
@@ -17,7 +16,7 @@ const fmtRawPhoneNumber = number => {
 }
 
 function ShareJournal () {
-  const {sharing: {shareJournal}, settings} = useApp ();
+  const {sharing: {shareJournal}} = useApp ();
   const [rawPhoneNumber, _setPhoneNumber] = useState ('');
   const setPhoneNumber = (number) => _setPhoneNumber (fmtRawPhoneNumber (number));
   const nameRef = useRef ();
@@ -83,7 +82,7 @@ function SharedByMe () {
                   </>
                 ))
               }
-              <Setting onToggle={toggle (share)} title={'Is frozen'} setting={`share-${share.id}-frozen`} />
+              <Setting onToggle={toggle (share)} title={'Active'} setting={`share-${share.id}-frozen`} />
             </>
             <br/>
           </React.Fragment>
@@ -153,7 +152,7 @@ export function Setting ({setting, title, relationships=[], onToggle}) {
 }
 
 function Settings () {
-  const {router: {page}, settings: {getSetting, iter}, auth: {user, logout}} = useApp ();
+  const {router: {page}, settings: {getSetting}, auth: {user, logout}} = useApp ();
   const [attributionId, setAttributionId] = useState ('attributions');
   if (!user) return null;
   return page === 'settings' ? (

@@ -4,6 +4,7 @@ import { dateShortHand, getTime, printDate } from "../lib/indexing";
 import { H1, H2, H3 } from "./components/Headers";
 import Query from "./components/Query";
 import AnalogClock from "./components/viz/AnalogClock";
+import {scrollToTop} from '../lib/scrolling'
 import {trash} from '../img/images';
 
 function RemoveEntryModal ({entry, resolve, reject}) {
@@ -100,6 +101,7 @@ export default function Journal () {
 
   useEffect (() => {
     if (page !== 'journal') clearSearch ();
+    else scrollToTop ();
   }, [page]);
 
   if (isViewOnly && scope.indexOf ('journal') === -1) return null;

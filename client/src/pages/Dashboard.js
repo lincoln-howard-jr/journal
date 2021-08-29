@@ -1,13 +1,14 @@
 import { useApp } from "../AppProvider"
-import Metrics from './components/viz/Metrics'
+import Metrics from './components/viz/Viz'
 import {H1, H3} from './components/Headers'
 import { key } from "../img/images";
 import AnalogClock from './components/viz/AnalogClock'
 
 
 function Analytics () {
-  const {router: {page}, journal: {entryList}, viewMode: {isViewOnly, scope}} = useApp ();
+  const {auth: {user}, router: {page}, journal: {entryList}, viewMode: {isViewOnly, scope}} = useApp ();
 
+  if (!user) return null;
   if (isViewOnly && (scope.indexOf ('dashboard') === -1)) return null;
   if (page !== 'dashboard') return null;
   if (entryList.length < 10) return (

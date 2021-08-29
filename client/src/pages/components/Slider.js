@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef, useState, memo} from 'react';
+import {useEffect, useRef, useState, memo} from 'react';
 const width = 400;
 const height = 100;
 const padding = 25;
@@ -9,7 +9,6 @@ const _scaleX = (min, max, clientWidth) => {
   const range = max - min;
   const p = (clientWidth * padding / width);
   const w = clientWidth - 2 * p;
-  console.log ('scale x generated', {range, p, w, min, max, clientWidth})
   return function (value) {
     if (value < min) value = min;
     if (value > max) value = max;
@@ -59,8 +58,8 @@ export default function Slider ({range: [min, max], step, defaultValue, onChange
     }
   }, [clientWidth]);
   useEffect (() => {
-    (!mouseIsDown && onChange) && onChange (roundToNearestStep ())
-  }, [mouseIsDown])
+    onChange && onChange (roundToNearestStep ())
+  }, [value])
   return (
     <svg ref={svgref} onTouchStart={() => setMouseIsDown (true)} onMouseDown={() => setMouseIsDown (true)} onTouchMove={drag} onTouchCancel={() => setMouseIsDown (false)} onMouseMove={drag} onMouseLeave={() => setMouseIsDown (false)} onMouseUp={() => setMouseIsDown (false)} viewBox={`0 0 ${width} ${height}`} className="component-slider-svg">
       <g className="slider-base">

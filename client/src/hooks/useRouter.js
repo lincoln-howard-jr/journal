@@ -1,6 +1,5 @@
 import {useState} from 'react';
 import base from '../lib/base';
-import {scrollToTop} from '../lib/scrolling';
 
 export default function useRouter () {
   // router section
@@ -13,7 +12,6 @@ export default function useRouter () {
     window.history.pushState ({previous: page, next: nextPage}, 'Journal', `${base}${url}`)
     setPage (nextPage);
     if (arr.length > 1) setParams (new URLSearchParams (`?${arr [1]}`));
-    scrollToTop (100);
   }
 
   return {page, params, redirect};

@@ -38,10 +38,43 @@ const CES = ({value, setValue, placeholder}) => {
   )
 }
 
+function RemovePromptModal ({prompt, resolve, reject}) {
+  const app = useApp ();
+  const handleYes = async () => {
+    try {
+      if (prompt.unit === 'string') await app.writing.deleteQuestion (prompt.id.split ('-') [2]);
+      else await app.metrix.deleteMetrix (prompt.id);
+      resolve ();
+    } catch (e) {
+      reject ('Couldn\'t  successfully hide entry!')
+    }
+  }
+  const handleNo = () => reject ('Cancelled');
+  return (
+    <div className="grid remove-entry-modal">
+      <p>
+        Are you sure you want to remove the custom prompt
+        -
+        <b> {prompt.prompt} </b>
+        -
+        {
+          prompt.unit !== 'string' &&
+          ' and all measurements made from this metrix '
+        }
+        from your Journal?
+      </p>
+      <div>
+        <button onClick={handleYes}>Yes, delete it!</button>
+        <button onClick={handleNo}>No, don't!</button>
+      </div>
+    </div>
+  )
+}
+
 export default function CustomQuestion ({open}) {
 
   // 
-  const {writing: {questions, createQuestion, deleteQuestion}, settings: {toggle, getSetting}, metrix: {metrix, createMetrix, deleteMetrix}, freeze} = useApp ();
+  const {writing: {questions, createQuestion, deleteQuestion}, settings: {toggle, getSetting}, metrix: {metrix, createMetrix}, freeze, setModal, closeModal} = useApp ();
   const [prompt, setQuestion] = useState ('?')
   const [metricType, setMetricType] = useState (null);
   const [rangeFrom, setRangeFrom] = useState ('');
@@ -50,7 +83,20 @@ export default function CustomQuestion ({open}) {
   const [frequency, setFrequency] = useState ('as needed');
   const [unitLabel, setUnitLabel] = useState (null);
   const [unitDescriptionError, setDescError] = useState ('');
-  
+
+  // remove modal
+  const openRemoveModal = prompt => new Promise (async (resolve, reject) => {
+    setModal (
+      <RemovePromptModal prompt={prompt} resolve={resolve} reject={reject} />
+    )
+  });
+  const remove = prompt => async () => {
+    try {
+      await openRemoveModal (prompt);
+    } finally {
+      closeModal ();
+    }
+  }
   const calculateDescError = () => {
     let errors = [];
     if (typeof rangeFrom !== 'number') errors.push ('min value must be a number');
@@ -65,10 +111,9 @@ export default function CustomQuestion ({open}) {
   const runCreateQuestion = async () => {
     let unfreeze = null;
     try {
-      unfreeze = freeze ();
       await createQuestion (prompt);
       setQuestion ('?')
-      unfreeze ();
+      setStep (0);
     } catch (e) {
       unfreeze ();
     }
@@ -118,6 +163,7 @@ export default function CustomQuestion ({open}) {
         <b>Write a Custom Prompt</b>
         <div contentEditable className="add-question-input" onInput={e => setQuestion (e.target.innerText)}>?</div>
         <span>
+          <button onClick={() => setStep (currentStep - 1)}>Cancel</button>
           <button onClick={() => setStep (currentStep + 1)}>Next</button>
         </span>
       </>
@@ -129,8 +175,8 @@ export default function CustomQuestion ({open}) {
         <p>{prompt}</p>
         <span>
           <button onClick={() => setStep (currentStep - 1)}>Back</button>
-          <button onClick={() => setStep (currentStep + 1)}>Yes, Add Metric</button>
-          <button onClick={runCreateQuestion}>No, Create Question</button>
+          <button onClick={() => setStep (currentStep + 1)}>Add Metric</button>
+          <button onClick={runCreateQuestion}>Create Prompt</button>
         </span>
       </>
     ),
@@ -224,28 +270,14 @@ export default function CustomQuestion ({open}) {
           ))
         }
       </ul>
-      <b>Custom Questions</b>
+      <b>Custom Prompts</b>
       <ul className="prompt-list">
         {
-          questions.map (q => (
+          [...questions, ...metrix.filter (m => !m.isDefault)].map (q => (
             <li key={`manage-custom-question-${q.id}`} className={`manage-custom-question ${getSetting (`starred-${q.unit}-${q.id}`) ? 'starred' : ''}`}>
               <span onClick={toggle (`starred-${q.unit}-${q.id}`)} style={{cursor: 'pointer'}}><img src={getSetting (`starred-${q.unit}-${q.id}`) ? starfilled : star} /></span>
               <span>{q.prompt}</span>
-              <span style={{cursor: 'pointer'}} onClick={() => deleteQuestion (q.id.split ('-') [2])}>
-                <img src={trash} />
-              </span>
-            </li>
-          ))
-        }
-      </ul>
-      <b>Custom Metrix</b>
-      <ul className="prompt-list">
-        {
-          metrix.filter (m => !m.isDefault).map (q => (
-            <li key={`manage-custom-metrix-${q.id}`} className={`manage-custom-question ${getSetting (`starred-${q.unit}-${q.id}`) ? 'starred' : ''}`}>
-              <span onClick={toggle (`starred-${q.unit}-${q.id}`)} style={{cursor: 'pointer'}}><img src={getSetting (`starred-${q.unit}-${q.id}`) ? starfilled : star} /></span>
-              <span>{q.prompt}</span>
-              <span style={{cursor: 'pointer'}} onClick={() => deleteMetrix (q.id)}>
+              <span style={{cursor: 'pointer'}} onClick={remove (q)}>
                 <img src={trash} />
               </span>
             </li>

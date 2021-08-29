@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useApp } from "../AppProvider";
 import { trash } from "../img/images";
+import { scrollToTop } from "../lib/scrolling";
 import { H1, H2, H3 } from "./components/Headers";
 
 export default function Skills () {
@@ -22,6 +23,9 @@ export default function Skills () {
     }
     
   }
+  useEffect (() => {
+    if (page === 'skills') scrollToTop ();
+  }, [page]);
   if (!user) return null;
   if (isViewOnly && scope.indexOf ('skills') === -1) return null;
   if (page !== 'skills') return null;

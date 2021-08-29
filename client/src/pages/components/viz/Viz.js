@@ -2,9 +2,6 @@ import { useEffect, useState } from 'react';
 import { useApp } from '../../../AppProvider';
 import PieChart from './PieChart';
 import WordCount from './WordCount';
-import Bar from './Bar';
-import {width, height, padding} from './dimensions';
-import SingleMetrix from './SingleMetrix';
 import { EntriesThisWeek, QuestionsThisWeek, SkillCount, TotalEntryCount } from './Stats';
 import TimeOfDayBarChart from './TimeOfDayBarChart';
 import SingleMetrixCarousel from './MetrixCarousel';
@@ -40,41 +37,15 @@ const runIndexByType = entries => {
 }
 
 export default function Metrics () {
-  const {journal: {entryList, setFilters}, router: {redirect}} = useApp ();
-  const [indexed, setIndexed] = useState (null);
+  const {journal: {entryList}} = useApp ();
   const [typeIndex, setTypeIndex] = useState (null);
-  const [hourlyMax, setMax] = useState (-1);
-
-  // goto a specific time
-  const onBarClick = time => async () => {
-    setFilters ([
-      {
-        type: 'time',
-        value: {
-          mode: 'after',
-          time: `${time % 12 || 12}:00 ${time < 12 ? 'am' : 'pm'}`
-        }
-      },
-      {
-        type: 'time',
-        value: {
-          mode: 'before',
-          time: `${(time + 1) % 12 || 12}:00 ${(time + 1) < 12 ? 'am' : 'pm'}`
-        }
-      }
-    ]);
-    redirect ('/?page=journal');
-  }
 
   // process entry list on change
   useEffect (() => {
-    let idx = runIndexByTime (entryList);
-    setMax (idx.reduce ((acc, val) => val.length > acc ? val.length : acc , 1) ) 
-    setIndexed (idx);
     setTypeIndex (runIndexByType (entryList));
   }, [entryList]);
 
-  if (!indexed) return null;
+  if (!typeIndex) return null;
   let metrics = [
     // time of day bar chart
     (

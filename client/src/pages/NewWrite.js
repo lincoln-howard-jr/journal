@@ -6,6 +6,7 @@ import {printDate, getTime} from '../lib/indexing';
 import CancelSVG from '../img/cancel.svg'
 import TrashSVG from '../img/trash.svg'
 import defaultPrompts, {defaultQuestions, defaultMetrix} from "../lib/defaultQuestions";
+import { scrollToTop } from "../lib/scrolling";
 
 const typeDict = {
   boolean: '(metric) ',
@@ -131,7 +132,10 @@ export default function Write () {
   }
 
   useEffect (() => {
-    setAFP ('');
+    if (page === 'write') {
+      setAFP ('');
+      scrollToTop ()
+    }
   }, [page])
 
   // only render if authenticated & on write page

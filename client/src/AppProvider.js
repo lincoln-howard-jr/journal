@@ -38,11 +38,11 @@ export default function AppProvider ({children}) {
   value.session = hooks.useSettings (defaultQuestions, sessionStorage);
   value.skills = hooks.useSkills (value.freeze);
   value.journal = hooks.useJournal (value.freeze);
-  value.sharing = hooks.useSharing (value.freeze, value.settings);
   value.writing = hooks.useWriting (value.freeze);
   value.metrix = hooks.useMetrix (value.freeze);
   value.router = hooks.useRouter (value.freeze);
   value.audio = hooks.useAudio (value.freeze);
+  value.sharing = hooks.useSharing (value.freeze, value.settings);
   value.notifications = hooks.useNotifications (value.freeze);
 
   // switch to viewing a shared journal

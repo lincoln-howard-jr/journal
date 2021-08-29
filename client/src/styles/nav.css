@@ -20,7 +20,7 @@ nav > ul {
   padding: 0;
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(4, 48px);
+  grid-template-columns: repeat(5, 48px);
   align-items: center;
   justify-items: center;
 }

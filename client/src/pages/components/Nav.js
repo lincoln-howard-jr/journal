@@ -1,4 +1,4 @@
-import {skill, book, dashboard, settings, ruler, leftarrow} from '../../img/images';
+import {skill, book, dashboard, settings, ruler, leftarrow, plus} from '../../img/images';
 import { useApp } from "../../AppProvider"
 
 const dict = {
@@ -45,6 +45,10 @@ export default function Nav () {
           <li className={page === 'journal' ? 'active' : ''} onClick={() => {redirect (`/?page=journal`)}}>
             <img alt="" width="32" height="32" src={book} />
             <label>Journal</label>
+          </li>
+          <li className={page === 'write' ? 'active' : ''} onClick={() => {redirect (`/?page=write`)}}>
+            <img alt="" width="32" height="32" src={plus} />
+            <label>Write</label>
           </li>
           <li className={page === 'metrix' ? 'active' : ''} onClick={() => {redirect (`/?page=metrix`)}}>
             <img alt="" width="32" height="32" src={ruler} />

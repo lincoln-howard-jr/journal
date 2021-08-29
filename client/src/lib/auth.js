@@ -95,19 +95,41 @@ export const register = async (phoneNumber) => new Promise (async (resolve, reje
   })
 });
 
-export const customFlow = (phoneNumber, cb, onCodeSent, onSuccess) => new Promise (async (resolve, reject) => {
+export const customFlow = (phoneNumber, cb, onCodeSent, onSuccess, freeze) => new Promise (async (resolve, reject) => {
   try {
     await login (phoneNumber);
   } catch (e) {
     return reject (e);
   }
+  let unfreeze = () => {console.log ('unfreeze')};
   cognitoUser.setAuthenticationFlowType ('CUSTOM_CHALLENGE');
   cognitoUser.initiateAuth (authDetails, {
-    onSuccess: r => onSuccess (r),
-    onFailure: e => reject (e),
+    onSuccess: r => {
+      console.log ('success')
+      onSuccess (r);
+      unfreeze ();
+    },
+    onerror: e => {
+      console.log ('failure')
+      reject (e);
+      unfreeze ();
+    },
+    onError: e => {
+      console.log ('failure')
+      reject (e);
+      unfreeze ();
+    },
+    onFailure: e => {
+      console.log ('failure')
+      reject (e);
+      unfreeze ();
+    },
     customChallenge: function (challengeParameters) {
       onCodeSent ();
-      cb (answer => cognitoUser.sendCustomChallengeAnswer (answer, this))
+      cb (answer => {
+        unfreeze = freeze ();
+        cognitoUser.sendCustomChallengeAnswer (answer, this);
+      })
       resolve ();
     }
   });

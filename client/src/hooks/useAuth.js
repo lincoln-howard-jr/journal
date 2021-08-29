@@ -11,11 +11,12 @@ export default function useAuth (freeze, onSessionActive) {
     return new Promise (async (resolve, reject) => {
       let unfreeze = freeze ();
       try {
-        await customFlow (Username, cb, onCodeSent, init, setErr);
+        await customFlow (Username, cb, onCodeSent, init, freeze);
         resolve ();
-        unfreeze ();
       } catch (e) {
         reject (e);
+        setErr (e);
+      } finally {
         unfreeze ();
       }
     })
@@ -28,7 +29,6 @@ export default function useAuth (freeze, onSessionActive) {
       await retrieveAccessToken ();
       resolve ();
     } catch (e) {
-      console.log (e);
       reject (e);
     }
   });
@@ -63,7 +63,7 @@ export default function useAuth (freeze, onSessionActive) {
     let unfreeze = freeze ();
     try {
       await _register (phoneNumber);
-      await customFlow (phoneNumber, cb, onCodeSent, init, setErr);
+      await customFlow (phoneNumber, cb, onCodeSent, init, freeze);
       resolve ();
     } catch (e) {
       setErr (e);
