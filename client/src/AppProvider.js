@@ -1,5 +1,5 @@
 // create a context usable across the whole application
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import hooks from './hooks';
 import {settingMap as defaultQuestions} from "./lib/defaultQuestions";
 import defaultSettings from './lib/defaultSettings';

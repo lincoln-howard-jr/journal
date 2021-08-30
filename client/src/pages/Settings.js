@@ -5,6 +5,7 @@ import {useApp} from '../AppProvider';
 import CaretSVG from '../img/caret-down.svg';
 import CustomQuestion from "./components/CustomQuestions";
 import sanitizePhoneNumber, {stripPhoneNumber} from '../lib/sanitizePhoneNumber';
+import { trash } from "../img/images";
 
 const fmtRawPhoneNumber = number => {
   let stripped = stripPhoneNumber (number);
@@ -48,7 +49,7 @@ function ShareJournal () {
 }
 
 function SharedByMe () {
-  const {settings: {getSetting}, sharing: {sharedByMe, toggleFreeze, updateShareScope}} = useApp ();
+  const {settings: {getSetting}, sharing: {sharedByMe, toggleFreeze, updateShareScope, deleteShare}} = useApp ();
 
   const toggle = (share) => () => {
     toggleFreeze (share.id);
@@ -72,7 +73,10 @@ function SharedByMe () {
         sharedByMe.map (share => (
           <React.Fragment key={`share-${share.id}`}>
             <>
-              <H2>{share.shareWithName || share.shareWith}</H2>
+              <H2>
+                {share.shareWithName || share.shareWith}
+                <span style={{marginLeft: '8px'}} onClick={() => deleteShare (share.id)}><img src={trash} style={{width: 16, cursor: 'pointer'}}/></span>
+              </H2>
               {
                 getSetting (`share-${share.id}-frozen`) &&
                 ['skills', 'journal', 'metrix'].map (type => (

@@ -20,7 +20,6 @@ export default function useSharing (freeze, settings) {
         return [...acc, ...s.map (type => ({key: `share-${sbm.id}-scope-${type}`, value: shareScope.indexOf (type) !== -1}))]
       }, [])
       sett = [...sett, ...scopes];
-      console.log (sett);
       settings.setAll (sett);
     } catch (e) {
       console.log (e);

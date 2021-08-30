@@ -8,6 +8,7 @@ import Auth from './pages/Auth'
 import Dashboard from './pages/Dashboard'
 import './App.css'
 import MetrixHistory from './pages/MetrixHistory'
+import SharedWithMe from './pages/SharedWithMe'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Dashboard />
       <MetrixHistory />
       <Nav />
+      <SharedWithMe />
     </>
   );
 }
