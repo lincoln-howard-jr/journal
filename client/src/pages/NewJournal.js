@@ -45,7 +45,7 @@ function JournalCard ({idx}) {
     }
   }
   return (
-    <article className={open}>
+    <article className={'card ' + open}>
       <header onClick={() => {setOpen (open === '' ? 'open' : '')}}>
         <H2 short={dateShortHand (idx.list [0].start)}>{idx.meta.date}</H2>
         <ol>

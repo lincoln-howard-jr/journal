@@ -13,7 +13,7 @@ export const units = {
 
 export function BooleanMetric ({onChange, defaultValue}) {
   return (
-    <div>
+    <div className="capture-metrix capture-boolean-metrix">
       <select defaultValue={defaultValue} onChange={e => onChange (e.target.value === '' ? undefined : e.target.value)}>
         <option value={undefined}></option>
         <option>Yes</option>
@@ -25,7 +25,7 @@ export function BooleanMetric ({onChange, defaultValue}) {
 
 export function NumberMetric ({onChange, defaultValue, range, step}) {
   return (
-    <div>
+    <div className="capture-metrix capture-number-metrix">
       <Slider range={range} step={step} defaultValue={defaultValue} onChange={onChange} />
     </div>
   )
@@ -45,7 +45,7 @@ export function StringMetric ({onChange, autofocus, defaultValue='...'}) {
     }
   }, [ref]);
   return (
-    <div ref={ref} onFocus={onFirstFocus} contentEditable onBlur={e => onChange (e.target.innerText)}>{defaultValue}</div>
+    <div className="capture-metrix capture-string-metrix" ref={ref} onFocus={onFirstFocus} contentEditable onBlur={e => onChange (e.target.innerText)}>{defaultValue}</div>
   )
 }
 

@@ -24,8 +24,8 @@ header {
 }
 /* 
   Concept:
-    h[1-3] are desktop
-    h[4-6] are mobile
+    h[1-3].long are desktop
+    h[1-3].short are mobile
     Same font-size and color, but uses media query to change display
 */
 h1, h2, h3, h4, h5, h6 {
@@ -83,6 +83,6 @@ b {
   margin: var(--body-text-size);
 }
 /* accent color stuff */
-h1, h4, b {
+h1, b {
   color: var(--accent-color);
 }

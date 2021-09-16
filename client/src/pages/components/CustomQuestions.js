@@ -176,7 +176,10 @@ export default function CustomQuestion ({open}) {
         <span>
           <button onClick={() => setStep (currentStep - 1)}>Back</button>
           <button onClick={() => setStep (currentStep + 1)}>Add Metric</button>
-          <button onClick={runCreateQuestion}>Create Prompt</button>
+          <button onClick={() => {
+            setMetricType ('string');
+            setStep (currentStep + 3);
+          }}>Create Prompt</button>
         </span>
       </>
     ),

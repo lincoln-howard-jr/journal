@@ -89,8 +89,6 @@ main.dashboard img {
   cursor: pointer;
 }
 .time-of-day rect {
-  transform-origin: bottom;
-  animation: slideUp 1.5s;
   fill: var(--accent-color);
 }
 .time-of-day line {
@@ -166,25 +164,11 @@ line.trendline-4 {
   border: none;
   width: 80%;
 }
-.bar-chart-bar rect:first-child {
-  fill: var(--color-3);
-}
-.bar-chart-bar rect:nth-child(2) {
-  fill: var(--color-2);
-}
-.bar-chart-bar rect:nth-child(3) {
+.bar-chart-bar rect {
   fill: var(--color-1);
 }
-.bar-chart-text > text:first-child {
-  stroke: var(--color-1);
-}
-.bar-chart-text > text:nth-child(2) {
-  stroke: var(--color-2);
-}
-.bar-chart-text > text:nth-child(3) {
-  stroke: var(--color-3);
-}
-.bar-chart-bar-label {
+.bar-chart-bar-group + text {
+  font-size: 24px;
   transform: rotate(60deg) scale(0.7) translate(-5%, -5%);
 }
 @media (hover: hover) {
@@ -221,9 +205,6 @@ line.trendline-4 {
   stroke-width: 2px;
   fill: var(--color-1-transparent);
   cursor: pointer;
-  animation: slideUpFromBottom;
-  animation-duration: 0.8s;
-  animation-timing-function: ease-out;
 }
 .single-metrix-graph circle + text {
   transition: 0.1s;

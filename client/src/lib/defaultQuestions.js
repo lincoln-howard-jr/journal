@@ -8,7 +8,8 @@ export const settingMap =  {
   'default-1': '...',
   'default-2': '...'
 }
-export const defaultQuestions = [
+export const defaultQuestions = [];
+export const defaultMetrix = [
   {
     id: 'default-0',
     unit: 'string',
@@ -27,14 +28,6 @@ export const defaultQuestions = [
     prompt: 'What else am I going to do today?',
     frequency: 'as needed'
   },
-  {
-    id: 'default-4',
-    unit: 'string',
-    prompt: 'What are my goals this week?',
-    frequency: 'as needed'
-  }
-]
-export const defaultMetrix = [
   {
     id: 'default-5',
     unit: 'number',
@@ -61,8 +54,13 @@ export const defaultMetrix = [
     frequency: 'weekly',
     isDefault: true
   },
+  {
+    id: 'default-4',
+    unit: 'string',
+    prompt: 'What are my goals this week?',
+    frequency: 'weekly'
+  }
 ]
 export default [
-  ...defaultQuestions,
   ...defaultMetrix
 ]

@@ -68,18 +68,17 @@ export default function Metrics () {
   // return the dashboard
   return (
     <>
-      <div className="row two-items">
-        {metrics [1]}
-        {metrics [0]}
-      </div>
-      <div className="row one-item">
-        {metrics [3]}
-      </div>
       <div className="row four-items">
         <QuestionsThisWeek />
         <EntriesThisWeek />
         <TotalEntryCount />
         <SkillCount />
+      </div>
+      <div className="row one-item">
+        {metrics [0]}
+      </div>
+      <div className="row one-item">
+        {metrics [3]}
       </div>
       <div className="row one-item">
         {metrics [2]}

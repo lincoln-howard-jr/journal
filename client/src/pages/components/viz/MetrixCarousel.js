@@ -59,42 +59,42 @@ const BooleanMetrixGraph = memo (
     )
   }
 )
-const NumberMetrixGraph = memo (
-  function _NumberMetrixGraph ({mezs, onClick, metric}) {
-    if (!mezs.length) return <p>No measurements yet!</p>
-    const domain = [mezs [0].measuredAt, midnight];
-    const xscale = date => padding + contentWidth * (date - domain [0]) / (domain [1] - domain [0]);
-    const range = metric.range;
-    const yscale = measurement => padding + (contentHeight - contentHeight * (measurement - range [0]) / (range [1] - range [0]));
-    return (
-      <svg className="single-metrix-graph" viewBox={`0 0 ${width} ${height}`}>
-        <g className="single-metrix-axis">
-          <line x1={xscale (domain [0])} x2={xscale (domain [1])} y1={yscale (range [0])} y2={yscale (range [0])} />
-          <line x1={xscale (domain [0])} x2={xscale (domain [0])} y1={yscale (range [0])} y2={yscale (range [1])} />
-          <text x={xscale (domain [0]) - padding} y={yscale (range [0])}textAnchor="start">{range [0]}</text>
-          <text x={xscale (domain [0]) - padding} y={yscale (range [1])}textAnchor="start">{range [1]}</text>
-          <text x={xscale (domain [0]) + padding} y={yscale (range [0]) + padding} textAnchor="middle">{dateShortHand (domain [0])}</text>
-          <text x={xscale (domain [1]) - padding} y={yscale (range [0]) + padding} textAnchor="middle">{dateShortHand (domain [1])}</text>
-          {/* label */}
-          {
-            !!metric.unitLabel &&
-            <text style={{transform: 'rotate(-90deg) scale(0.8)', transformOrigin: `${100 * (padding / height) / 2}% ${50}%`}} x={padding / 2} y={height / 2} textAnchor="middle">{metric.unitLabel}</text>
-          }
-        </g>
-        <g>
-          {
-            mezs.map (mez => (
-              <>
-                <circle style={{transformOrigin:`${100 * xscale (mez.measuredAt) / width}% ${100 * (height - padding) / height}%`}} key={`metrix-graph-circle-${mez.id}`} onClick={onClick (mez)} cx={xscale (mez.measuredAt)} cy={yscale (mez.measurement)} r={6} />
-                <text x={(xscale (mez.measuredAt) > 5 * padding) ? xscale (mez.measuredAt) - 2.25 : xscale (mez.measuredAt) + 2.25 * padding} y={(yscale (mez.measurement) < 4 * padding) ? yscale (mez.measurement) + .5 * padding : yscale (mez.measurement) - 0.5 * padding} textAnchor="middle">{dateShortHand (mez.measuredAt)} - {mez.measurement}</text>
-              </>
-            ))
-          }
-        </g>
-      </svg>
-    )
-  }
-)
+function NumberMetrixGraph ({mezs, onClick, metric}) {
+  if (!mezs.length) return <p>No measurements yet!</p>
+  const domain = [mezs [0].measuredAt, midnight];
+  const xscale = date => padding + contentWidth * (date - domain [0]) / (domain [1] - domain [0]);
+  const range = metric.range;
+  const yscale = measurement => padding + (contentHeight - contentHeight * (measurement - range [0]) / (range [1] - range [0]));
+  return (
+    <svg className="single-metrix-graph" viewBox={`0 0 ${width} ${height}`}>
+      <g className="single-metrix-axis">
+        <line x1={xscale (domain [0])} x2={xscale (domain [1])} y1={yscale (range [0])} y2={yscale (range [0])} />
+        <line x1={xscale (domain [0])} x2={xscale (domain [0])} y1={yscale (range [0])} y2={yscale (range [1])} />
+        <text x={xscale (domain [0]) - padding} y={yscale (range [0])}textAnchor="start">{range [0]}</text>
+        <text x={xscale (domain [0]) - padding} y={yscale (range [1])}textAnchor="start">{range [1]}</text>
+        <text x={xscale (domain [0]) + padding} y={yscale (range [0]) + padding} textAnchor="middle">{dateShortHand (domain [0])}</text>
+        <text x={xscale (domain [1]) - padding} y={yscale (range [0]) + padding} textAnchor="middle">{dateShortHand (domain [1])}</text>
+        {/* label */}
+        {
+          !!metric.unitLabel &&
+          <text style={{transform: 'rotate(-90deg) scale(0.8)', transformOrigin: `${100 * (padding / height) / 2}% ${50}%`}} x={padding / 2} y={height / 2} textAnchor="middle">{metric.unitLabel}</text>
+        }
+      </g>
+      <g>
+        {
+          mezs.map (mez => (
+            <>
+              <circle key={`metrix-graph-circle-${mez.id}`} style={{transformOrigin:`${100 * xscale (mez.measuredAt) / width}% ${100 * (height - padding) / height}%`}} onClick={onClick (mez)} cx={xscale (mez.measuredAt)} cy={yscale (mez.measurement)} r={6}>
+                <animate attributeName="cy" from={yscale (range [0])} to={yscale (mez.measurement)} dur={`0.5s`} />
+              </circle>
+              <text x={(xscale (mez.measuredAt) > 5 * padding) ? xscale (mez.measuredAt) - 2.25 : xscale (mez.measuredAt) + 2.25 * padding} y={(yscale (mez.measurement) < 4 * padding) ? yscale (mez.measurement) + .5 * padding : yscale (mez.measurement) - 0.5 * padding} textAnchor="middle">{dateShortHand (mez.measuredAt)} - {mez.measurement}</text>
+            </>
+          ))
+        }
+      </g>
+    </svg>
+  )
+}
 
 const Graphs = {
   boolean: BooleanMetrixGraph,
@@ -103,25 +103,26 @@ const Graphs = {
 
 export default function SingleMetrixCarousel () {
   const {metrix: {metrix, setSingleMetrix, setSingleMeasurement, measurements}, router: {redirect}} = useApp ();
-  const [currentMetrixIndex, setCurrentMetrixIndex] = useState (null);
+  const [currentMetrixId, setCurrentMetrixId] = useState (null);
   const [select, setSelect] = useState (false);
   
-  const currentMetrix = () => metrix [currentMetrixIndex];
-  const currentMeasurements = () => measurements.filter (mez => mez.metric === metrix [currentMetrixIndex].id).sort ((a, b) => a.measuredAt - b.measuredAt);
+  const currentMetrix = () => metrix.find (m => m.id === currentMetrixId);
+  const currentMeasurements = () => measurements.filter (mez => mez.metric === currentMetrixId).sort ((a, b) => a.measuredAt - b.measuredAt);
 
   const onClick = (mez) => () => {
-    setSingleMetrix (metrix [currentMetrixIndex]);
+    setSingleMetrix (currentMetrix ());
     setSingleMeasurement (mez);
     redirect ('/?page=metrix');
   }
 
   useEffect (() => {
     if (metrix.length && measurements.length) {
-      setCurrentMetrixIndex (0);
+      let valid = metrix.filter (m => m.unit !== 'string');
+      if (valid.length) setCurrentMetrixId (valid [0].id);
     }
   }, [metrix, measurements])
 
-  if (currentMetrixIndex === null) return null;
+  if (currentMetrixId === null) return null;
   let current = currentMetrix ();
   let mezs = currentMeasurements ();
   let Graph = Graphs [current.unit];
@@ -133,11 +134,11 @@ export default function SingleMetrixCarousel () {
           <>
             Switch to another metrix:
             <br/>
-            <select onChange={e => {setCurrentMetrixIndex (e.target.value); setSelect (false)}}>
-              <option value={currentMetrixIndex}></option>
+            <select onChange={e => {setCurrentMetrixId (e.target.value); setSelect (false)}}>
+              <option value={currentMetrixId}></option>
               {
-                metrix.filter (m => m.id !== current.id).map (m => (
-                  <option key={`metrix-carousel-select-${m.id}`} value={metrix.indexOf (m)}>{m.prompt}</option>
+                metrix.filter (m => m.unit !== 'string').filter (m => m.id !== current.id).map (m => (
+                  <option key={`metrix-carousel-select-${m.id}`} value={m.id}>{m.prompt}</option>
                 ))
               }
             </select>
@@ -151,7 +152,7 @@ export default function SingleMetrixCarousel () {
           </p>
         }
       </figcaption>
-      <Graph onClick={onClick} metric={current} mezs={mezs} />
+      <Graph key={`metrix-carousel-graph-${currentMetrixId}`} onClick={onClick} metric={current} mezs={mezs} />
     </figure>
   )
 }

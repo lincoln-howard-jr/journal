@@ -73,10 +73,11 @@ export default function useMetrix (freeze) {
       let data = await req.json ();
       data = data.map (m => Object.assign (m, {measurement: (m.measurement || m.value), measuredAt: new Date (m.measuredAt)}));
       setMeasurements (data);
+    return Promise.resolve ();
     } catch (e) {
       console.log ('#getMeasurements', e);
+      return Promise.reject ();
     }
-    return Promise.resolve ();
   }
 
   const measure = (metric, measurement) => {

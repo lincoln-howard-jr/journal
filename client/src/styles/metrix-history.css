@@ -27,7 +27,7 @@ main.single-metrix ul.metrix-history {
 main.single-metrix ul.metrix-history li {
   display: grid;
   padding: 15px calc(var(--body-text-size) / 2);
-  grid-template-columns: 1fr 1fr 2fr var(--body-text-size);
+  grid-template-columns: var(--body-text-size) 1fr 1fr var(--body-text-size);
   text-align: center;
   background-color: var(--accent-color-transparent);
   transition: 0.3s;
@@ -47,15 +47,18 @@ main.single-metrix li:hover span.metrix-more {
   opacity: 1;
 }
 main.single-metrix li.metrix-measurement.editing {
-  background-color: var(--accent-color-half-transparent);
+  background-color: var(--accent-color-quarter-transparent);
+}
+main.single-metrix ul.metrix-history li :is(.capture-metrix, .toolbar) {
+  grid-column: 1 / 5;
 }
 main.single-metrix li div {
   text-align: center;
 }
 main.single-metrix li p {
-  display: inline-block;
-  margin: 0;
-  width: 5ch;
+  display: block;
+  width: min(84%, 30ch);
+  margin: auto;
 }
 main.single-metrix li div img {
   width: var(--body-text-size);
