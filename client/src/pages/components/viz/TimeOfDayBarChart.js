@@ -36,16 +36,6 @@ export default function () {
     redirect ('/?page=journal');
   }
 
-  const ref = useRef (null);
-  const callbacks = [];
-  const observer = new IntersectionObserver (([entry]) => {
-    console.log ('intersection detected', callbacks);
-    callbacks.forEach (cb => cb (entry.isIntersecting));
-  })
-  useEffect (() => {
-    if (ref.current) observer.observe (ref.current);
-  }, [ref.current]);
-    
   // process entry list on change
   useEffect (() => {
     let idx = runIndexByTime (entryList);
@@ -55,7 +45,7 @@ export default function () {
 
   if (max === null || !indexed) return null;
   return (
-    <figure ref={ref} className="time-of-day">
+    <figure className="time-of-day">
       <figcaption>Entries By Time Of Day</figcaption>
       <svg key='time-of-day-svg' viewBox={`0 0 ${width} ${height}`}>
         {/** axis */}
