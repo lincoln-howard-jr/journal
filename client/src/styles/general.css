@@ -6,16 +6,6 @@
   Declare variables for font color and text sizes
 */
 :root {
-  /* scalar values */
-  --med-width: min(900px, 84vw);
-  --transition-speed: 0.3s;
-  --invert: 1;
-  --default-font-weight: 200;
-  --h1-font-size: clamp(1.5rem, 1.7vmax + 0.01rem, 2rem);
-  --h2-font-size: clamp(1.25rem, 1.4vmax + 0.01rem, 1.5rem);
-  --h3-font-size: clamp(1.125rem, 1.3vmax + 0.01rem, 2rem);
-  --body-text-size: clamp(0.9rem, 1vmax + 0.01rem, 1rem);
-  /* colors */
   --font-color: #030303;
   --inverse-font-color: #f3f3f3;
   --background-color: #fcfcfc;
@@ -31,10 +21,16 @@
   --accent-color-transparent: #4b448600;
   --accent-color-light: #aba4d6a0;
   --accent-color-lighter: #aba4d640;
+  --h1-font-size: clamp(24px, 4.4vmin, 32px);
+  --h2-font-size: clamp(21px, 3.8vmin, 26px);
+  --h3-font-size: clamp(18px, 3vmin, 22px);
+  --body-text-size: clamp(14px, 2.6vmin, 16px);
+  --default-font-weight: 200;
   --button-background-color: #ffffff;
   --button-border-color: #322B6D;
   --article-bg-color-primary: #aba4d660;
   --article-bg-color-secondary: #aba4d630;
+  --invert: 1;
   --frozen-color: #333;
 }
 /*

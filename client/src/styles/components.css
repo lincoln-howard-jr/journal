@@ -70,7 +70,7 @@
 }
 /* main card */
 .card {
-  width: var(--med-width);
+  width: min(900px, 84vw);
   transition: 0.3s;
   margin: var(--body-text-size) auto;
   padding: 1em 0.75em;
